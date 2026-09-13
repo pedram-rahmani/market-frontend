@@ -1,0 +1,586 @@
+@import "tailwindcss";
+
+/* -------------------------------------------------------
+   Local Font & Core Base Style
+------------------------------------------------------- */
+@font-face {
+  font-family: "Dana";
+  src: url("/fonts/dana/dana-regular.ttf") format("truetype");
+  font-display: swap;
+}
+
+/* Dark mode variant for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
+/* -------------------------------------------------------
+   Design Tokens (CSS Variables)
+------------------------------------------------------- */
+:root {
+  --background: #f9fafb;
+  --foreground: #020420;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #f9fafb;
+    --foreground: #020420;
+  }
+}
+
+/* -------------------------------------------------------
+   Theme Section (Tailwind v4 Configuration)
+------------------------------------------------------- */
+@theme {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+
+  /* Fonts */
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+  --font-dana: "Dana", sans-serif;
+
+  /* Brand Colors */
+  --color-primary: #3b71ca;
+  --color-secondary: #9fa6b2;
+  --color-success: #14a44d;
+  --color-danger: #dc4c64;
+  --color-warning: #e4a11b;
+  --color-info: #54b4d3;
+  --color-light: #f9fafb;
+
+  --color-dark-600: #1e293b;
+  --color-dark-700: #18212c;
+  --color-dark-800: #0f172a;
+  --color-dark-900: #020420;
+
+  --color-text-on-dark: #e2e8f0;
+  --color-text-on-light: #63656b;
+
+  /* Grays */
+  --color-custom-gray-100: #dddcdc;
+  --color-custom-gray-200: #dbd2d2;
+  --color-custom-gray-300: #cccaca;
+  --color-custom-gray-400: #adadad;
+
+  /* UI Colors */
+  --color-ui-purple: #8362fd;
+  --color-ui-yellow: #dcbd3f;
+  --color-ui-orange: #fb7226;
+  --color-ui-pink: #f731db;
+
+  --color-ui-red-300: #fe6d58;
+  --color-ui-red-400: #f84384;
+  --color-ui-red-600: #f50057;
+  --color-ui-red-800: #bd0447;
+  --color-ui-red-900: #8e0135;
+
+  --color-ui-green-200: #dbfbe6;
+  --color-ui-green-300: #c2fbd7;
+  --color-ui-green-400: #81ff32;
+  --color-ui-green-500: #2fc51f;
+  --color-ui-green-600: #31e11e;
+  --color-ui-green-700: #2aa41c;
+  --color-ui-green-800: #16a34a;
+  --color-ui-green-900: #084d3b;
+
+  --color-ui-blue-300: #4896e9;
+  --color-ui-blue-400: #1d7fff;
+  --color-ui-blue-500: #2f80ed;
+  --color-ui-blue-600: #1d66b4;
+  --color-ui-blue-700: #12477f;
+  --color-ui-blue-800: #213f60;
+  --color-ui-blue-900: #072a50;
+
+  /* Breakpoints */
+  --breakpoint-xs: 475px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1420px;
+  --breakpoint-3xl: 1536px;
+  --breakpoint-4xl: 1797px;
+}
+
+/* -------------------------------------------------------
+   Base Styles & Dark Mode
+------------------------------------------------------- */
+@layer base {
+  :root {
+    --bg-body: #e4e3e3;
+    --text-body: var(--color-text-on-light);
+  }
+
+  .dark {
+    --bg-body: #111431;
+    --text-body: var(--color-text-on-dark);
+  }
+
+  body {
+    font-family: var(--font-dana);
+    background-color: var(--bg-body);
+    color: var(--text-body);
+    direction: rtl;
+    transition:
+      background-color 0.3s,
+      color 0.3s;
+  }
+}
+
+input[type="password"]::-ms-reveal,
+input[type="password"]::-ms-clear {
+  display: none !important;
+}
+
+input::-webkit-credentials-auto-fill-button {
+  visibility: hidden;
+  position: absolute;
+  right: 0;
+}
+
+input {
+  outline: none;
+  border: none;
+  background: transparent !important;
+  padding: 0;
+  margin: 0;
+  max-width: 24rem;
+  box-shadow: none;
+}
+
+input::placeholder {
+  color: color-mix(in srgb, currentColor 60%, transparent);
+  opacity: 1;
+}
+
+textarea {
+  outline: none;
+  border: none;
+  resize: none;
+  scrollbar-width: thin;
+  scrollbar-color: #64748b transparent;
+}
+
+textarea::-webkit-scrollbar {
+  width: 6px;
+}
+textarea::-webkit-scrollbar-thumb {
+  background-color: #64748b;
+  border-radius: 10px;
+}
+
+button {
+  outline: none;
+  cursor: pointer;
+}
+
+svg {
+  @apply size-6 fill-none;
+  stroke: currentColor;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 7%;
+}
+
+/* -------------------------------------------------------
+   Scrollbars
+------------------------------------------------------- */
+.scrollbar::-webkit-scrollbar {
+  width: 0.3rem;
+}
+.scrollbar::-webkit-scrollbar-track {
+  background: none;
+  border-radius: 10px;
+}
+.scrollbar::-webkit-scrollbar-thumb {
+  background: #adadad;
+  border-radius: 10px;
+}
+.scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #69707c;
+}
+
+.dark .scrollbar::-webkit-scrollbar-thumb {
+  background: #28323e;
+}
+.dark .scrollbar::-webkit-scrollbar-thumb:hover {
+  background: #190eb4dd;
+}
+
+body::-webkit-scrollbar {
+  width: 0.7rem;
+}
+body::-webkit-scrollbar-track {
+  background: rgb(179, 177, 177);
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-thumb {
+  background: rgb(136, 136, 136);
+  border-radius: 10px;
+}
+body::-webkit-scrollbar-thumb:hover {
+  background: rgb(100, 100, 100);
+}
+
+.dark body::-webkit-scrollbar-track {
+  background: #1f2937;
+}
+.dark body::-webkit-scrollbar-thumb {
+  background: #374151;
+}
+.dark body::-webkit-scrollbar-thumb:hover {
+  background: #4b5563;
+}
+
+.account-nav::-webkit-scrollbar {
+  width: 4px !important;
+}
+.account-nav::-webkit-scrollbar-track {
+  background: initial;
+}
+.account-nav:hover::-webkit-scrollbar-thumb {
+  background: rgb(100, 100, 100);
+  border-radius: 10px;
+  transition: all 300ms;
+}
+
+/* -------------------------------------------------------
+    Question Slider Scrollbar
+------------------------------------------------------- */
+.question-slider-scroll::-webkit-scrollbar {
+  height: 6px;
+  width: 6px;
+}
+
+.question-slider-scroll::-webkit-scrollbar-track {
+  background: transparent;
+  border-radius: 10px;
+}
+
+.question-slider-scroll::-webkit-scrollbar-thumb {
+  background: rgba(173, 173, 173, 0.5);
+  border-radius: 10px;
+  transition: all 300ms ease;
+}
+
+.question-slider-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(105, 112, 124, 0.8);
+}
+
+.dark .question-slider-scroll::-webkit-scrollbar-thumb {
+  background: rgba(40, 50, 62, 0.8);
+}
+
+.dark .question-slider-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(25, 14, 180, 0.8);
+}
+
+/* Utilities */
+.ltr {
+  direction: ltr;
+}
+.rtl {
+  direction: rtl;
+}
+
+/* -------------------------------------------------------
+   Layout Components (Fixed for v4 Pixels)
+------------------------------------------------------- */
+.main {
+  @apply max-w-480 mx-auto overflow-x-hidden mt-16 mb-20 pb-24 md:mt-10 md:mb-0;
+}
+
+.container {
+  @apply flex flex-col px-4 mx-auto
+         xs:max-w-475 sm:max-w-640
+         md:max-w-3xl lg:max-w-5xl xl:max-w-7xl;
+}
+
+.header {
+  @apply sticky top-0 z-30 transition-all duration-300
+         bg-light/80 dark:bg-ui-blue-900/80
+         backdrop-blur-2xl border-b border-custom-gray-200/50 dark:border-white/5
+         shadow-sm;
+}
+
+.sticky-header {
+  @apply shadow-lg;
+}
+
+/* -------------------------------------------------------
+   Components & Buttons
+------------------------------------------------------- */
+/* action btn (base) */
+.btn-action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-width: 1px;
+  box-shadow:
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000),
+    var(--tw-shadow);
+  transition: all 200ms cubic-bezier(0.4, 0, 0.2, 1);
+  cursor: pointer;
+}
+.btn-action:active {
+  transform: scale(0.95);
+}
+
+/* Add / Create Button */
+.btn-add {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-width: 1px;
+  cursor: pointer;
+  transition: all 200ms;
+  @apply text-blue-600 dark:text-blue-400 bg-blue-500/10 border-blue-500/20 active:scale-95;
+}
+.btn-add:hover {
+  background-color: rgb(59 130 246 / 0.25);
+}
+
+/* Edit Button */
+.btn-edit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-width: 1px;
+  cursor: pointer;
+  transition: all 200ms;
+  @apply text-violet-600 dark:text-violet-400 bg-violet-500/10 border-violet-500/20 active:scale-95;
+}
+.btn-edit:hover {
+  background-color: rgb(139 92 246 / 0.25);
+}
+
+/* Delete Button */
+.btn-delete {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.375rem;
+  padding: 0.375rem 0.875rem;
+  border-radius: 0.75rem;
+  font-size: 0.75rem;
+  font-weight: 500;
+  border-width: 1px;
+  cursor: pointer;
+  transition: all 200ms;
+  @apply text-rose-600 dark:text-rose-400 bg-rose-500/10 border-rose-500/20 active:scale-95;
+}
+.btn-delete:hover {
+  background-color: rgb(244 63 94 / 0.25);
+}
+
+/* Disabled State for All Action Btns */
+.btn-action:disabled,
+.btn-add:disabled,
+.btn-edit:disabled,
+.btn-delete:disabled {
+  background-color: rgb(243 244 246) !important;
+  color: rgb(156 163 175) !important;
+  opacity: 0.5 !important;
+  cursor: not-allowed !important;
+  border-color: transparent !important;
+  pointer-events: none !important;
+  transform: none !important;
+}
+.dark .btn-action:disabled,
+.dark .btn-add:disabled,
+.dark .btn-edit:disabled,
+.dark .btn-delete:disabled {
+  background-color: var(--color-dark-800) !important;
+  color: rgb(75 85 99) !important;
+}
+
+/* -------------------------------------------------------
+   Navigation Menu
+------------------------------------------------------- */
+.nav-menu-it-a {
+  @apply flex w-full py-2.5 pr-3 pl-2.5 items-center justify-between
+         border-l-2 border-l-transparent transition-all;
+}
+
+.menu-container > li > .active-menu {
+  @apply text-sky-500 bg-sky-500/10 border-l-4 border-sky-500;
+}
+
+/* Input  */
+.input-validation {
+  @apply w-full rounded-2xl bg-dark-700/40 border border-white/10 px-5 py-3.5 
+         text-white placeholder:text-gray-500 outline-hidden 
+         focus:border-ui-green-500 focus:ring-4 focus:ring-ui-green-500/10 
+         transition-all duration-200;
+}
+
+.input-validation.fail {
+  @apply border-red-500/50 focus:border-red-500 focus:ring-red-500/10;
+}
+
+.input-validation.success {
+  @apply border-green-500/50 focus:border-green-500 focus:ring-green-500/10;
+}
+
+.checkbox {
+  @apply flex items-center gap-2 cursor-pointer select-none;
+}
+.checkbox > input {
+  @apply sr-only;
+}
+.checkbox-input {
+  @apply w-5 h-5 flex items-center justify-center border-2 rounded-md transition-colors border-gray-400 bg-white;
+}
+
+.input-info {
+  @apply w-full px-4! py-2! rounded-xl text-sm! dark:text-text-on-dark border! border-custom-gray-200! dark:border-white/10! bg-light! dark:bg-dark-600! focus:border-violet-500! focus:ring-2! dark:focus:ring-violet-500/20! transition-all;
+}
+.checkbox svg {
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 3;
+  stroke: currentColor;
+}
+.checkbox span {
+  @apply text-sm text-gray-700 dark:text-gray-200;
+}
+
+.show_pass_btn {
+  @apply absolute left-3 top-3;
+}
+
+.success {
+  @apply border border-ui-green-600;
+}
+.fail {
+  @apply border border-ui-red-600;
+}
+
+.error-box {
+  @apply space-y-1 h-0 mt-2 overflow-hidden transition-all duration-300 ease-out;
+}
+.error-message {
+  @apply flex text-xs text-ui-yellow items-start gap-x-1 [&>svg]:size-3.5 [&>svg]:rotate-45 [&>p]:p-0.5 [&>p]:w-full;
+}
+
+/* Buttons */
+.h-btn {
+  @apply rounded-full flex items-center justify-center p-2
+         text-text-on-light dark:text-text-on-dark
+         bg-custom-gray-100/60 dark:bg-dark-600 shadow cursor-pointer
+         border border-custom-gray-300 dark:border-dark-800;
+}
+
+.btn {
+  @apply flex gap-x-2 items-center justify-center rounded-lg
+         font-semibold transition duration-300 ease-out cursor-pointer;
+}
+
+.btn--primary {
+  @apply bg-ui-blue-500 text-white;
+}
+.btn--success {
+  @apply bg-ui-green-500 text-white;
+}
+.btn--danger {
+  @apply bg-ui-red-400 text-text-on-dark dark:bg-ui-red-800;
+}
+.btn--ghost {
+  @apply bg-transparent border border-custom-gray-100 hover:bg-custom-gray-100/10;
+}
+
+.btn--logout {
+  @apply flex gap-x-2 items-center justify-center p-3 text-xs xs:text-sm font-semibold text-text-on-dark rounded-lg bg-ui-red-400 shadow dark:bg-ui-red-800 cursor-pointer transform hover:scale-105 hover:scale-y-105 transition duration-300 ease-out;
+}
+
+.btn--link {
+  @apply flex justify-between w-35.5 items-center py-2.5 px-4
+         text-xs xs:text-sm font-semibold text-center
+         text-text-on-light
+         bg-linear-to-br from-ui-green-500/90 to-ui-green-700/70
+         rounded-2xl shadow-md shadow-ui-green-400/30;
+}
+
+.btn--auth {
+  @apply mt-4 rounded-xl bg-linear-to-r from-blue-500 to-blue-600 py-3
+         text-white font-semibold shadow-lg shadow-blue-500/30 hover:scale-[1.02] hover:shadow-blue-500/50 active:scale-100 transition disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+}
+
+.btn--submit {
+  @apply mt-6 w-full rounded-2xl py-4
+         bg-linear-to-r from-ui-green-500/60 to-ui-green-600/70
+         text-white font-bold text-lg
+         shadow-xl shadow-ui-green-500/20 
+         hover:scale-[1.01] hover:shadow-ui-green-500/40 
+         active:scale-95 transition-all duration-200
+         disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer;
+}
+
+.nav-link {
+  @apply flex items-center justify-between text-sm md:text-base;
+}
+.nav-link.active {
+  @apply text-ui-blue-400 [&>svg]:rotate-90;
+}
+
+.progress-bar {
+  @apply absolute bottom-0 left-0 h-1.5 bg-linear-to-r from-rose-600 via-amber-400 transition-all ease-linear duration-100;
+}
+
+/* --------------------------------------- Gallery ----------------------------------------- */
+.gallery-header {
+  @apply flex items-center justify-between mx-5 py-4 duration-300 text-text-on-light dark:text-text-on-dark z-40;
+}
+
+.gallery-menu {
+  @apply flex p-1 overflow-hidden touch-none border rounded-xl border-ui-blue-500 bg-dark-700 z-10;
+}
+
+.gallery-menu > div:not(:last-child) {
+  @apply border-l border-l-gray-300;
+}
+
+.gallery-menu-item {
+  @apply px-4 py-2 cursor-pointer bg-dark-600 text-text-on-dark transition-all duration-200;
+}
+
+.gallery-menu > div:first-child {
+  @apply rounded-r-lg;
+}
+.gallery-menu > div:last-child {
+  @apply rounded-l-lg;
+}
+
+.gallery-menu-item.selected {
+  @apply bg-ui-blue-600 text-white shadow-inner;
+}
+
+/* --------------------------------------- Review Reply Smooth Dropdown ----------------------------------------- */
+.review-reply-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.3s ease-in-out,
+    opacity 0.3s ease-in-out,
+    visibility 0.3s ease-in-out;
+  opacity: 0;
+  visibility: hidden;
+}
+
+.review-reply-collapse.is-open {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  visibility: visible;
+}
+
+.review-reply-wrapper {
+  overflow: hidden;
+}
