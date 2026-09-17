@@ -4,6 +4,11 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
+        protocol: "https",
+        hostname: "my-market-backend.liara.run",
+        pathname: "/storage/**",
+      },
+      {
         protocol: "http",
         hostname: "localhost",
         port: "8000",
