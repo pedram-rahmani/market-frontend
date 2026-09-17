@@ -41,11 +41,10 @@ export default function LoginPage() {
       setIsPending(true);
 
       try {
-        const { identifier, password, rememberMe } = formState.inputs;
+        const { identifier, password } = formState.inputs;
         const response = await axiosInstance.post("/login", {
           identifier: identifier.value,
           password: password.value,
-          remember: rememberMe.value,
         });
 
         const token = response.data.token;
@@ -58,12 +57,10 @@ export default function LoginPage() {
         setResult({ status: 201 });
         dispatch(setUser({ user, token }));
 
-        const storage = rememberMe.value ? localStorage : sessionStorage;
-        
-        storage.setItem("token", token);
-        storage.setItem("user_role", user.role);
-        storage.setItem("user_id", String(user.id));
-        storage.setItem("user", JSON.stringify(user));
+        localStorage.setItem("token", token);
+        localStorage.setItem("user_role", user.role);
+        localStorage.setItem("user_id", String(user.id));
+        localStorage.setItem("user", JSON.stringify(user));
 
       } catch (err: any) {
         console.error("Login Error:", err);
