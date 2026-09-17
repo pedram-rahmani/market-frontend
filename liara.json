@@ -1,4 +1,7 @@
 {
+  "build": {
+    "location": "germany"
+  },
   "platform": "node",
   "port": 3000
 }
