@@ -39,7 +39,9 @@ export default function ProductModal({
             onClick={onClose}
             className="text-gray-400 hover:text-red-500"
           >
-            ✕
+            <svg viewBox="0 0 24 24" className="size-5!">
+              <path d="M6 18 18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
@@ -59,7 +61,7 @@ export default function ProductModal({
             >
               {isLoading ? (
                 <>
-                  <SpinnerLoader variant="simple" className="w-5 h-5" />
+                  <SpinnerLoader variant="simple" className="size-5!" />
                   <span>در حال ذخیره‌سازی اطلاعات...</span>
                 </>
               ) : (

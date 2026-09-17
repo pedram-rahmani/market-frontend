@@ -140,6 +140,7 @@ export default function ProductManagement() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={editingProduct ? "ویرایش محصول" : "افزودن محصول جدید"}
+        isLoading={loadingAction === "save"}
       >
         <ProductForm product={editingProduct} categories={categories} onSave={handleSave} />
       </ProductModal>

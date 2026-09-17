@@ -24,6 +24,8 @@ export default function CategoryManagement() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [deleteCategoryName, setDeleteCategoryName] = useState<string>("");
   const [isInitialLoading, setIsInitialLoading] = useState(true);
+  
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const [popup, setPopup] = useState<{
     isOpen: boolean;
@@ -79,11 +81,23 @@ export default function CategoryManagement() {
     try {
       await axiosInstance.delete(`/categories/${deleteId}`);
       setPopup({ isOpen: true, message: "حذف شد", type: "success" });
-      fetchData();
+      await fetchData();
     } catch {
       setPopup({ isOpen: true, message: "خطا در حذف", type: "error" });
     } finally {
       setIsDeleteModalOpen(false);
+    }
+  };
+
+  const handleSaveWrapper = async () => {
+    setIsSubmitting(true);
+    try {
+      setIsModalOpen(false);
+      await fetchData();
+    } catch (error) {
+      console.error(error);
+    } finally {
+      setIsSubmitting(false);
     }
   };
 
@@ -93,7 +107,6 @@ export default function CategoryManagement() {
         title="مدیریت دسته‌بندی‌ها"
         buttonText={"+ افزودن دسته"}
         canClick={categoryPermissions.canAddSub}
-        isLoading={isInitialLoading}
         onButtonClick={() => {
           setEditingCategory(null);
           setDefaultParentId(null);
@@ -105,15 +118,13 @@ export default function CategoryManagement() {
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         title={editingCategory ? "ویرایش" : "افزودن"}
+        isLoading={isSubmitting} 
       >
         <CategoryForm
           allCategories={categories}
           category={editingCategory}
           defaultParentId={defaultParentId}
-          onSave={() => {
-            setIsModalOpen(false);
-            fetchData();
-          }}
+          onSave={handleSaveWrapper}
         />
       </CategoryModal>
 
