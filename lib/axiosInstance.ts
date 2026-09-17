@@ -1,8 +1,8 @@
 import axios from "axios";
 
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://my-market-backend.liara.run/api";
 
-const cleanBaseUrl = rawBaseUrl.replace(/\/$/, "");
+const cleanBaseUrl = rawBaseUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
 
 const axiosInstance = axios.create({
   baseURL: `${cleanBaseUrl}/api`,
