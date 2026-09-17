@@ -2,6 +2,7 @@
 
 import React, { useRef } from "react";
 import BaseInput from "@/components/ui/Form/BaseInput";
+import { getImagePath } from "@/lib/utils";
 
 interface LogoUploadProps {
   preview: string | null;
@@ -39,11 +40,9 @@ export default function LogoUpload({
 
   const getImageUrl = () => {
     if (!preview) return null;
-    if (preview.startsWith("blob:") || preview.startsWith("http"))
-      return preview;
-
-    const backendUrl = process.env.NEXT_PUBLIC_API_URL || "https://my-market-backend.liara.run";
-    return `${backendUrl.replace('/api', '')}/storage/${preview}`;
+    if (preview.startsWith("blob:")) return preview;
+    
+    return getImagePath(preview);
   };
 
   return (
