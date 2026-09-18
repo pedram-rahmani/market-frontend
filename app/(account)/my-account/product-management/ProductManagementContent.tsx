@@ -100,10 +100,6 @@ export default function ProductManagement() {
     setLoadingAction("save");
     try {
       const url = editingProduct ? `/products/${editingProduct.id}` : "/products";
-      
-      if (editingProduct) {
-        data.append("_method", "PUT");
-      }
 
       await axiosInstance.post(url, data);
 

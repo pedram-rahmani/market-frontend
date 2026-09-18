@@ -168,7 +168,7 @@ export default function ProductForm({ product, categories, onSave }: any) {
         duration_months: 0,
       });
       const newWarranty = data.warranty || data;
-      await fetchWarranties();
+      setAllWarranties((current) => [...current, newWarranty]);
 
       const nw = [...selectedWarranties];
       nw[index].warranty_id = newWarranty.id.toString();
