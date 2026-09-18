@@ -34,6 +34,7 @@ export const PERMISSIONS = {
 
   // System Settings
   SETTINGS_EDIT: "settings.edit",
+  NOTIFICATIONS_MANAGE: "notifications.manage",
 } as const;
 
 export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
@@ -65,6 +66,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.ORDERS_EDIT]: "تغییر وضعیت سفارشات",
   [PERMISSIONS.FINANCIAL_REPORTS]: "گزارشات مالی",
   [PERMISSIONS.SETTINGS_EDIT]: "تغییر تنظیمات سایت",
+  [PERMISSIONS.NOTIFICATIONS_MANAGE]: "ارسال و مدیریت پیام‌ها",
 };
 
 // Grouped permissions for better UX in forms
@@ -120,6 +122,10 @@ export const PERMISSION_GROUPS = {
   settings: {
     label: "Settings",
     permissions: [PERMISSIONS.SETTINGS_EDIT],
+  },
+  notifications: {
+    label: "Notifications",
+    permissions: [PERMISSIONS.NOTIFICATIONS_MANAGE],
   },
 } as const;
 

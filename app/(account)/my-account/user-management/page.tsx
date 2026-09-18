@@ -1,5 +1,6 @@
 import AuthGuard from "@/components/guards/AuthGuard";
 import UserManagementContent from "./UserManagementContent";
+import { PERMISSIONS } from "@/types/permissions";
 
 export const metadata = {
   title: "مدیریت کاربران | پنل کاربری",
@@ -7,7 +8,7 @@ export const metadata = {
 
 export default function Page() {
   return (
-    <AuthGuard allowedRoles={["admin"]}>
+    <AuthGuard requiredPermission={PERMISSIONS.USERS_VIEW}>
       <UserManagementContent />
     </AuthGuard>
   );

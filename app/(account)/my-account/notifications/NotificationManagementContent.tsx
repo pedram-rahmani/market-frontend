@@ -70,8 +70,8 @@ export default function NotificationManagementContent() {
   return (
     <div className="space-y-6">
       <PageHeader
-        title="مدیریت پیام‌ها و اعلان‌ها"
-        description="مشاهده و بررسی آخرین اطلاعیه‌ها و پیام‌های سیستم"
+        title="پیام‌ها"
+        description="مشاهده آخرین اطلاعیه‌ها و پیام‌های شما"
         buttonText="علامت‌گذاری همه به عنوان خوانده‌شده"
         canClick={!loading && notifications.some((notification) => !notification.isRead)}
         onButtonClick={handleMarkAllAsRead}

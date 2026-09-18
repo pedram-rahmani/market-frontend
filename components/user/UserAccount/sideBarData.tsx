@@ -23,7 +23,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/product-management",
     label: "مدیریت محصولات",
-    permission: "users.view",
+    permission: "products.view",
     typeKey: "product-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -34,7 +34,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/category-management",
     label: "مدیریت دسته بندی ها",
-    permission: "users.view",
+    permission: "categories.view",
     typeKey: "category-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -45,7 +45,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/coupon-management",
     label: "مدیریت کدهای تخفیف",
-    permission: "users.view",
+    permission: "orders.edit",
     typeKey: "coupon-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -56,7 +56,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/site-management",
     label: "تنظیمات عمومی سایت",
-    permission: "users.view",
+    permission: "settings.edit",
     typeKey: "site-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -67,7 +67,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/user-interactions",
     label: "تعاملات کاربران",
-    permission: "users.view",
+    permission: "comments.manage",
     typeKey: "user-interactions",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -76,8 +76,19 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
     ),
   },
   {
-    link: "/my-account/notifications",
+    link: "/my-account/notification-management",
     label: "مدیریت پیام‌ها",
+    permission: "notifications.manage",
+    typeKey: "notification-management",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
+      </svg>
+    ),
+  },
+  {
+    link: "/my-account/notifications",
+    label: "پیام‌ها",
     typeKey: "notifications",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">

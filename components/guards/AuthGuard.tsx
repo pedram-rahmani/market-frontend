@@ -31,7 +31,14 @@ export default function AuthGuard({
     }
 
     const role = userObj?.role;
-    const permissions = userObj?.permissions || [];
+    const rawPermissions = userObj?.permissions || [];
+    const permissions = Array.isArray(rawPermissions)
+      ? rawPermissions
+      : rawPermissions && typeof rawPermissions === "object"
+        ? Object.entries(rawPermissions)
+            .filter(([, enabled]) => Boolean(enabled))
+            .map(([permission]) => permission)
+        : [];
 
     if (userObj?.status && userObj?.status !== "active") {
       router.push("/login");

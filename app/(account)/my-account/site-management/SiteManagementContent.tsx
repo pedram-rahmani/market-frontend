@@ -30,6 +30,8 @@ export default function SiteManagementContent() {
 
   const [logoFile, setLogoFile] = useState<File | null>(null);
   const [logoPreview, setLogoPreview] = useState<string | null>(null);
+  const [faviconFile, setFaviconFile] = useState<File | null>(null);
+  const [faviconPreview, setFaviconPreview] = useState<string | null>(null);
   const { can } = usePermissions();
   const canEdit = can(PERMISSIONS.SETTINGS_EDIT);
 
@@ -46,8 +48,15 @@ export default function SiteManagementContent() {
           trust_badges: d.trust_badges || "",
         });
         if (d.site_logo) setLogoPreview(d.site_logo);
+        if (d.site_favicon) setFaviconPreview(d.site_favicon);
       }
     } catch (error) { console.error("خطای API:", error); }
+  };
+
+  const handleFaviconChange = (file: File) => {
+    if (faviconPreview?.startsWith("blob:")) URL.revokeObjectURL(faviconPreview);
+    setFaviconFile(file);
+    setFaviconPreview(URL.createObjectURL(file));
   };
 
   useEffect(() => { loadSettings(); }, []);
@@ -79,6 +88,7 @@ export default function SiteManagementContent() {
     setSubmitting(true);
     const data = new FormData();
     if (logoFile) data.append("site_logo", logoFile);
+    if (faviconFile) data.append("site_favicon", faviconFile);
     data.append("site_name", formData.site_name);
     data.append("footer_text", formData.footer_text);
     data.append("trust_badges", formData.trust_badges);
@@ -87,6 +97,7 @@ export default function SiteManagementContent() {
     try {
       await axiosInstance.post("/settings", data, { headers: { Authorization: `Bearer ${token}` } });
       setLogoFile(null);
+      setFaviconFile(null);
       setCacheKey(Date.now());
       // @ts-ignore
       dispatch(fetchSettings());
@@ -114,6 +125,8 @@ export default function SiteManagementContent() {
           disabled={!canEdit}
           preview={displayPreview} 
           onChange={handleLogoChange}
+          faviconPreview={faviconPreview}
+          onFaviconChange={handleFaviconChange}
           siteName={formData.site_name}
           onSiteNameChange={(val) => setFormData({...formData, site_name: val})}
         />

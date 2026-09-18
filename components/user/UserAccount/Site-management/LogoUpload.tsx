@@ -7,7 +7,9 @@ import { getImagePath } from "@/lib/utils";
 
 interface LogoUploadProps {
   preview: string | null;
+  faviconPreview?: string | null;
   onChange: (file: File) => void;
+  onFaviconChange?: (file: File) => void;
   siteName: string;
   onSiteNameChange: (val: string) => void;
   disabled?: boolean;
@@ -15,12 +17,15 @@ interface LogoUploadProps {
 
 export default function LogoUpload({
   preview,
+  faviconPreview = null,
   onChange,
+  onFaviconChange,
   siteName,
   onSiteNameChange,
   disabled,
 }: LogoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
+  const faviconInputRef = useRef<HTMLInputElement>(null);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -44,6 +49,22 @@ export default function LogoUpload({
     if (preview.startsWith("blob:")) return preview;
     
     return getImagePath(preview);
+  };
+
+  const getFaviconUrl = () => {
+    if (!faviconPreview) return null;
+    return faviconPreview.startsWith("blob:") ? faviconPreview : getImagePath(faviconPreview);
+  };
+
+  const handleFaviconChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (disabled || !onFaviconChange) return;
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!["image/png", "image/x-icon", "image/vnd.microsoft.icon", "image/jpeg", "image/webp"].includes(file.type)) {
+      alert("فرمت favicon باید PNG، ICO، JPG یا WEBP باشد.");
+      return;
+    }
+    onFaviconChange(file);
   };
 
   return (
@@ -95,6 +116,24 @@ export default function LogoUpload({
           onChange={(e) => onSiteNameChange(e.target.value)}
           className={disabled ? " bg-gray-50/50" : ""}
         />
+        <div className="flex items-center gap-3">
+          <div className="size-10 rounded-lg border border-custom-gray-400/40 bg-white flex items-center justify-center overflow-hidden">
+            {getFaviconUrl() ? (
+              <img src={getFaviconUrl() || ""} alt="Favicon" className="size-7 object-contain" />
+            ) : (
+              <span className="text-[9px] text-gray-400">favicon</span>
+            )}
+          </div>
+          {!disabled && (
+            <>
+              <input ref={faviconInputRef} type="file" accept=".ico,.png,.jpg,.jpeg,.webp,image/*" onChange={handleFaviconChange} className="hidden" />
+              <button type="button" onClick={() => faviconInputRef.current?.click()} className="py-2 px-3 rounded-xl text-xs font-semibold bg-cyan-100 text-cyan-700 hover:bg-cyan-200 transition-colors">
+                تغییر آیکون تب
+              </button>
+            </>
+          )}
+          <span className="text-[10px] text-gray-400">تصویر کوچک کنار عنوان تب مرورگر</span>
+        </div>
       </div>
     </div>
   );

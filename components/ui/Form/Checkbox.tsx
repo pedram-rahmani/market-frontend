@@ -51,12 +51,15 @@ export default function Checkbox({
 
   // هماهنگ‌سازی با تغییرات از بیرون (مثل لود شدن اطلاعات ویرایش)
   useEffect(() => {
+    if (checkboxState.checked === Boolean(externalChecked)) {
+      return;
+    }
     dispatch({ 
       type: "TOGGLE", 
       checked: Boolean(externalChecked), 
       required: !!required 
     });
-  }, [externalChecked, required]);
+  }, [externalChecked, required, checkboxState.checked]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;

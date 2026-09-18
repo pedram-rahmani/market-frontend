@@ -1,11 +1,14 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect, useCallback } from "react";
 import Select from "@/components/ui/Form/Select";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import { PERMISSION_GROUPS, PERMISSION_LABELS } from "@/types/permissions";
 import { usePermissions } from "@/store/hooks/usePermissions";
 import { User } from "@/types/user";
+import Checkbox from "@/components/ui/Form/Checkbox";
+import SecureInput from "@/components/ui/SecureInput/SecureInput";
+import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 
 interface EditUserModalProps {
   isOpen: boolean;
@@ -32,12 +35,35 @@ export function EditUserModal({
     postal_address: existingAddress,
     status: user?.status || "active",
     admin_notes: user?.admin_notes || "",
+    password: "",
     permissions: user?.permissions || [],
   });
 
   const [loading, setLoading] = useState(false);
   const modalRef = useRef<HTMLDivElement>(null!);
-  useClickOutside(() => onClose(), [modalRef]);
+  useLockBodyScroll(isOpen);
+  useClickOutside(onClose, modalRef);
+
+  const handlePasswordInput = useCallback((_id: string, value: string) => {
+    setFormData((current) =>
+      current.password === value ? current : { ...current, password: value },
+    );
+  }, []);
+
+  useEffect(() => {
+    if (!user) return;
+    setFormData({
+      name: user.name || "",
+      username: user.username || "",
+      phone: user.phone || "",
+      postal_address: user.postal_address || (user as any)?.addresses?.[0]?.postal_address || "",
+      status: user.status || "active",
+      admin_notes: user.admin_notes || "",
+      password: "",
+      permissions: Array.isArray(user.permissions) ? user.permissions : [],
+    });
+    setActiveTab("info");
+  }, [user]);
 
   const togglePermission = (perm: string) => {
     setFormData((prev) => ({
@@ -90,7 +116,7 @@ export function EditUserModal({
             اطلاعات
           </button>
 
-          {canManagePermissions && user?.role !== "user" && (
+          {canManagePermissions && user?.role === "co-admin" && (
             <button
               onClick={() => setActiveTab("permissions")}
               className={`pb-2 text-xs font-bold ${activeTab === "permissions" ? "text-violet-600 border-b-2 border-violet-600" : "text-gray-400"}`}
@@ -136,6 +162,14 @@ export function EditUserModal({
               placeholder="آدرس پستی"
             />
 
+            <SecureInput
+              id="password"
+              placeholder="رمز عبور جدید (اختیاری)"
+              validations={[]}
+              autoComplete="new-password"
+              onInputHandler={handlePasswordInput}
+            />
+
             <Select
               variant="simple"
               value={formData.status}
@@ -148,32 +182,32 @@ export function EditUserModal({
           </div>
         ) : (
           <div className="h-60 overflow-y-auto scrollbar mb-6 px-1">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {Object.entries(PERMISSION_GROUPS).map(([key, group]) => (
-              <div key={key} className="mb-4">
-                <h4 className="text-xs font-bold text-violet-600 mb-2 border-b border-violet-100 dark:border-violet-900 pb-1">
+              <div key={key} className="rounded-xl border border-gray-200 dark:border-white/10 bg-gray-50/70 dark:bg-dark-900/40 p-3">
+                <h4 className="text-xs font-bold text-violet-600 dark:text-violet-300 mb-3">
                   {group.label}
                 </h4>
 
-                <div className="grid grid-cols-1 gap-1">
+                <div className="grid grid-cols-1 gap-2">
                   {group.permissions.map((perm) => (
-                    <label
+                    <div
                       key={perm}
-                      className="flex items-center gap-2 text-[11px] cursor-pointer p-1.5 rounded hover:bg-gray-50 dark:hover:bg-dark-900/50 transition-colors"
+                      className="text-[11px] p-1.5 rounded-lg hover:bg-white dark:hover:bg-dark-800 transition-colors"
                     >
-                      <input
-                        type="checkbox"
+                      <Checkbox
+                        id={`permission-${perm}`}
+                        label={PERMISSION_LABELS[perm]}
                         checked={formData.permissions.includes(perm)}
-                        onChange={() => togglePermission(perm)}
-                        className="w-3.5 h-3.5 accent-violet-600 rounded"
+                        activeColor="bg-violet-600 border-violet-600"
+                        onInputHandler={() => togglePermission(perm)}
                       />
-                      <span className="text-gray-700 dark:text-gray-300">
-                        {PERMISSION_LABELS[perm]}
-                      </span>
-                    </label>
+                    </div>
                   ))}
                 </div>
               </div>
             ))}
+            </div>
           </div>
         )}
 

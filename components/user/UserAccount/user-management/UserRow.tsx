@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { usePermissions } from "@/store/hooks/usePermissions";
+import { useAuth } from "@/store/hooks/useAuth";
 
 interface UserRowProps {
   user: any;
@@ -30,6 +31,7 @@ export default function UserRow({
   className = "",
 }: UserRowProps) {
   const { canEditUser, canDeleteUser, isAuthorized } = usePermissions();
+  const { user: currentUser } = useAuth();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -38,8 +40,17 @@ export default function UserRow({
 
   if (!isClient) return null;
 
-  const canEdit = isAuthorized && permissions.canEditUser && canEditUser(user);
+  const canEdit =
+    isAuthorized &&
+    permissions.canEditUser &&
+    user.role !== "admin" &&
+    canEditUser(user);
   const canDelete = isAuthorized && permissions.canDelete && canDeleteUser(user);
+  const currentUserId = (currentUser as any)?.user?.id || (currentUser as any)?.id;
+  const canChangeRole =
+    permissions.canPromote || permissions.canDemote
+      ? currentUserId !== user.id
+      : false;
 
   const getStatusClass = (status: string) =>
     status === "active"
@@ -54,12 +65,12 @@ export default function UserRow({
 
   const renderActions = () => (
     <div className="flex gap-2.5 items-center flex-wrap">
-      {permissions.canPromote && user.role === "user" && (
+      {canChangeRole && permissions.canPromote && user.role === "user" && (
         <button onClick={() => onPromote(user.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-emerald-500/10 text-emerald-600 border border-emerald-500/20">
           ارتقا
         </button>
       )}
-      {permissions.canDemote && user.role === "co-admin" && (
+      {canChangeRole && permissions.canDemote && user.role === "co-admin" && (
         <button onClick={() => onDemote(user.id)} className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium bg-amber-500/10 text-amber-600 border border-amber-500/20">
           تنزل
         </button>

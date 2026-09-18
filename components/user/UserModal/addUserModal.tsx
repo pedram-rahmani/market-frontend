@@ -1,10 +1,12 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 import Select from "@/components/ui/Form/Select";
 import useClickOutside from "@/store/hooks/useClickOutside";
+import SecureInput from "@/components/ui/SecureInput/SecureInput";
+import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 
-export function AddUserModal({ isOpen, onClose, onAdd }: any) {
+export function AddUserModal({ isOpen, onClose, onAdd, canAssignStaff = false }: any) {
   const [formData, setFormData] = useState({ 
     name: '', 
     email: '', 
@@ -15,10 +17,14 @@ export function AddUserModal({ isOpen, onClose, onAdd }: any) {
   });
 
   const modalRef = useRef<HTMLDivElement>(null!);
+  useLockBodyScroll(isOpen);
+  const handlePasswordInput = useCallback((_id: string, value: string) => {
+    setFormData((current) =>
+      current.password === value ? current : { ...current, password: value },
+    );
+  }, []);
 
-  useClickOutside(() => {
-    onClose();
-  }, [modalRef]);
+  useClickOutside(onClose, modalRef);
 
   if (!isOpen) return null;
 
@@ -51,11 +57,12 @@ export function AddUserModal({ isOpen, onClose, onAdd }: any) {
             className="input-info w-full" 
             onChange={(e) => setFormData({...formData, phone: e.target.value})} 
           />
-          <input 
-            type="password" 
-            placeholder="رمز عبور" 
-            className="input-info w-full" 
-            onChange={(e) => setFormData({...formData, password: e.target.value})} 
+          <SecureInput
+            id="new-user-password"
+            placeholder="رمز عبور"
+            validations={[]}
+            autoComplete="new-password"
+            onInputHandler={handlePasswordInput}
           />
         </div>
 
@@ -68,8 +75,12 @@ export function AddUserModal({ isOpen, onClose, onAdd }: any) {
             onChange={(val) => setFormData({ ...formData, role: val })}
             options={[
               { value: "user", label: "کاربر عادی" },
-              { value: "co-admin", label: "ادمین ارشد" },
-              { value: "admin", label: "مدیر کل" },
+              ...(canAssignStaff
+                ? [
+                    { value: "co-admin", label: "ادمین ارشد" },
+                    { value: "admin", label: "مدیر کل" },
+                  ]
+                : []),
             ]}
           />
         </div>

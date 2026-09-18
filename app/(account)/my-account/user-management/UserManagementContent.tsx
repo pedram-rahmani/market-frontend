@@ -10,8 +10,10 @@ import DeleteConfirmModal from "@components/feedback/MessageModal/DeleteConfirmM
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import DeletedUsersModal from "@/components/user/UserAccount/user-management/DeletedUsersModal";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import { useAuth } from "@/store/hooks/useAuth";
 
 export default function UserManagementContent() {
+  const { user: currentUser } = useAuth();
   const [users, setUsers] = useState([]);
   const [permissions, setPermissions] = useState<Record<string, boolean>>({
     "users.view": false,
@@ -100,8 +102,22 @@ export default function UserManagementContent() {
       await axiosInstance.put(`/users/${editingUser.id}`, userData);
 
       if (permissions) {
+        let formattedPermissions = permissions;
+
+        if (!Array.isArray(permissions) && typeof permissions === "object") {
+          formattedPermissions = Object.keys(permissions).filter(
+            (key) => permissions[key] === true
+          );
+        }
+
+        if (Array.isArray(formattedPermissions)) {
+          formattedPermissions = formattedPermissions.filter(
+            (p) => typeof p === "string" && p.trim() !== ""
+          );
+        }
+console.log("FORMATTED PERMISSIONS TO SEND:", formattedPermissions);
         await axiosInstance.put(`/users/${editingUser.id}/permissions`, {
-          permissions,
+          permissions: formattedPermissions,
         });
       }
 
@@ -109,7 +125,6 @@ export default function UserManagementContent() {
       fetchUsers();
       showPopup("تغییرات با موفقیت ذخیره شد", "success");
     } catch (error: any) {
-      // این بخش را تغییر دهید تا خطای دقیق سرور را چاپ کند
       console.error("Server Error Details:", error?.response?.data);
       const serverMessage = error?.response?.data?.message || error?.response?.data?.error || "خطا در ذخیره‌سازی اطلاعات";
       showPopup(serverMessage, "error");
@@ -264,6 +279,7 @@ export default function UserManagementContent() {
         isOpen={isAddModalOpen}
         onClose={() => setIsAddModalOpen(false)}
         onAdd={handleAdd}
+        canAssignStaff={currentUser?.role === "admin"}
       />
 
       {editingUser && (

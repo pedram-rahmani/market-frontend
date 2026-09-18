@@ -35,8 +35,15 @@ export default function SideBar({
 
   const { user, token } = useAuth();
   const isAuthenticated = Boolean(user && token);
-  const permissions =
+  const rawPermissions =
     user?.permissions || (user as any)?.user?.permissions || [];
+  const permissions = Array.isArray(rawPermissions)
+    ? rawPermissions
+    : rawPermissions && typeof rawPermissions === "object"
+      ? Object.entries(rawPermissions)
+          .filter(([, enabled]) => Boolean(enabled))
+          .map(([permission]) => permission)
+      : [];
   const userRole = (user as any)?.user?.role || user?.role;
 
   const { notificationCounts, markAsReadByType } = useNotifications();
