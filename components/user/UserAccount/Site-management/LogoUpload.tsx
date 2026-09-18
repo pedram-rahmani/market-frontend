@@ -117,7 +117,7 @@ export default function LogoUpload({
           className={disabled ? " bg-gray-50/50" : ""}
         />
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-lg border border-custom-gray-400/40 bg-white flex items-center justify-center overflow-hidden">
+          <div className="size-10 rounded-lg border border-custom-gray-400/40 bg-white flex items-center justify-center overflow-hidden cursor-default">
             {getFaviconUrl() ? (
               <img src={getFaviconUrl() || ""} alt="Favicon" className="size-7 object-contain" />
             ) : (

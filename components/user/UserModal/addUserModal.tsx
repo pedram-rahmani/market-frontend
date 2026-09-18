@@ -63,6 +63,7 @@ export function AddUserModal({ isOpen, onClose, onAdd, canAssignStaff = false }:
             validations={[]}
             autoComplete="new-password"
             onInputHandler={handlePasswordInput}
+            className="input-info"
           />
         </div>
 

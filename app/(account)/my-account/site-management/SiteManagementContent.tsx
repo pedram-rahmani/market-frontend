@@ -1,10 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useDispatch } from "react-redux";
 import axiosInstance from "@/lib/axiosInstance";
 import { useAuth } from "@/store/hooks/useAuth";
-import { fetchSettings } from "@/store/slices/settingSlice";
 
 import LogoUpload from "@/components/user/UserAccount/Site-management/LogoUpload";
 import ContactSettings from "@/components/user/UserAccount/Site-management/ContactSettings";
@@ -17,7 +15,6 @@ import { SettingsFormData, SocialItem, ContactItem } from "@/types/settings"; //
 
 export default function SiteManagementContent() {
   const { token } = useAuth();
-  const dispatch = useDispatch();
   const [submitting, setSubmitting] = useState(false);
   const [cacheKey, setCacheKey] = useState(Date.now());
   const [popup, setPopup] = useState<{ isOpen: boolean; message: string; type: "success" | "error"; }>({
@@ -38,7 +35,7 @@ export default function SiteManagementContent() {
   const loadSettings = async () => {
     try {
       const response = await axiosInstance.get("/settings");
-      const d = response.data;
+      const d = response.data?.data || response.data;
       if (d) {
         setFormData({
           site_name: d.site_name || "",
@@ -99,8 +96,7 @@ export default function SiteManagementContent() {
       setLogoFile(null);
       setFaviconFile(null);
       setCacheKey(Date.now());
-      // @ts-ignore
-      dispatch(fetchSettings());
+      await loadSettings();
       setPopup({ isOpen: true, message: "تنظیمات با موفقیت ذخیره شدند.", type: "success" });
     } catch (error: any) {
       setPopup({ isOpen: true, message: "خطا در ذخیره.", type: "error" });

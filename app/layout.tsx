@@ -4,12 +4,6 @@ import { ReduxProvider } from "@/components/providers/ReduxProvider";
 import AuthProvider from "@/components/providers/AuthProvider";
 import FaviconManager from "@/components/user/UserAccount/Site-management/FaviconManager";
 
-export const metadata = {
-  icons: {
-    icon: "/images/logos/verena-logo.png",
-  },
-};
-
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="fa" dir="rtl">

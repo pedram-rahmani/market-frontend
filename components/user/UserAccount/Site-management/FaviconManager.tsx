@@ -18,14 +18,23 @@ export default function FaviconManager() {
     const favicon = rawSettings?.site_favicon;
     if (!favicon) return;
 
-    const href = getImagePath(favicon);
-    let link = document.querySelector<HTMLLinkElement>("link[data-site-favicon]");
+    const href = getImagePath(
+      favicon,
+      rawSettings?.site_favicon_updated_at || favicon,
+    );
+
+    // ۱. پیدا کردن اولین تگ icon در صفحه (برای جایگزینی دقیق)
+    let link = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
+
     if (!link) {
+      // اگر اصلاً وجود نداشت، می‌سازیم
       link = document.createElement("link");
       link.rel = "icon";
-      link.dataset.siteFavicon = "true";
       document.head.appendChild(link);
     }
+
+    // ۲. آپدیت کردن آدرسِ تگ موجود
+    link.type = "image/png";
     link.href = href;
   }, [rawSettings]);
 

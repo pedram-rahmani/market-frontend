@@ -168,6 +168,7 @@ export function EditUserModal({
               validations={[]}
               autoComplete="new-password"
               onInputHandler={handlePasswordInput}
+              className="input-info"
             />
 
             <Select

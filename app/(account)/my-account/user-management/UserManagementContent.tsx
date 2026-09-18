@@ -115,7 +115,7 @@ export default function UserManagementContent() {
             (p) => typeof p === "string" && p.trim() !== ""
           );
         }
-console.log("FORMATTED PERMISSIONS TO SEND:", formattedPermissions);
+
         await axiosInstance.put(`/users/${editingUser.id}/permissions`, {
           permissions: formattedPermissions,
         });
