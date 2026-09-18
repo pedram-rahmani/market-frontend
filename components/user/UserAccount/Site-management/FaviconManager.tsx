@@ -23,17 +23,14 @@ export default function FaviconManager() {
       rawSettings?.site_favicon_updated_at || favicon,
     );
 
-    // ۱. پیدا کردن اولین تگ icon در صفحه (برای جایگزینی دقیق)
     let link = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
 
     if (!link) {
-      // اگر اصلاً وجود نداشت، می‌سازیم
       link = document.createElement("link");
       link.rel = "icon";
       document.head.appendChild(link);
     }
 
-    // ۲. آپدیت کردن آدرسِ تگ موجود
     link.type = "image/png";
     link.href = href;
   }, [rawSettings]);
