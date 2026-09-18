@@ -1,8 +1,15 @@
 // API Base URL
-export const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000/api";
-// Backend Domain without /api 
+export const API_BASE_URL =
+  process.env.NEXT_PUBLIC_API_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://my-market-backend.liara.run/api"
+    : "http://127.0.0.1:8000/api");
+// Backend Domain without /api
 export const BACKEND_DOMAIN = (
-  process.env.NEXT_PUBLIC_ASSET_URL || API_BASE_URL.replace(/\/api\/?$/, "")
+  process.env.NEXT_PUBLIC_ASSET_URL ||
+  (process.env.NODE_ENV === "production"
+    ? "https://my-market-backend.liara.run"
+    : API_BASE_URL.replace(/\/api\/?$/, ""))
 ).replace(/\/$/, "");
 export const FALLBACK_IMAGE_PATH = "/images/avatar-placeholder.png";
 
