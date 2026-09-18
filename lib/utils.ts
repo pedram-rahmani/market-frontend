@@ -24,7 +24,9 @@ export const getImagePath = (path: string | null, cacheKey?: string | number | n
         const query = cacheKey
           ? `${urlObj.search ? `${urlObj.search}&` : "?"}v=${encodeURIComponent(String(cacheKey))}`
           : urlObj.search;
-        return `${urlObj.origin}${pathname}${query}${urlObj.hash}`;
+        // Storage URLs can be persisted with the local development host.
+        // Always serve backend storage from the configured deployment domain.
+        return `${BACKEND_DOMAIN}${pathname}${query}${urlObj.hash}`;
       }
 
       cleanPath = pathname;

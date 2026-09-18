@@ -81,7 +81,7 @@ export default function Footer({ categories = [] }: FooterProps) {
           )}
 
           {/* navbar */}
-          <nav className="relative flex w-full items-center justify-between rounded-[1.35rem] border border-gray-200/90 bg-white/[0.97] px-3 py-2.5 shadow-2xl shadow-slate-900/20 backdrop-blur-3xl backdrop-saturate-150 dark:border-white/10 dark:bg-dark-900/[0.97] sm:px-5 [&_svg]:size-5! sm:[&_svg]:size-6">
+          <nav className="relative flex w-full items-center justify-between rounded-[1.35rem] border border-gray-200/90 bg-white/97 px-3 py-2.5 shadow-2xl shadow-slate-900/20 backdrop-blur-3xl backdrop-saturate-150 dark:border-white/10 dark:bg-dark-900/97 sm:px-5 [&_svg]:size-5! sm:[&_svg]:size-6">
             <div className="flex items-center justify-around flex-1">
               {leftItems.map(renderItem)}
             </div>
