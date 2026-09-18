@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Select from "@/components/ui/Form/Select";
 
 interface BasicInfoTabProps {
@@ -45,8 +46,11 @@ export default function BasicInfoTab({
       {/* Image Upload */}
       <div className="flex items-center gap-4">
         {previewUrl && (
-          <img
+          <Image
             src={previewUrl}
+            width={64}
+            height={64}
+            unoptimized
             className="w-16 h-16 bg-custom-gray-100/40 dark:bg-dark-800/30 rounded-xl overflow-hidden flex items-center justify-center border border-custom-gray-400 dark:border-custom-gray-400/40 shadow-sm shadow-ui-blue-300 relative shrink-0 object-cover"
             alt="Preview"
           />

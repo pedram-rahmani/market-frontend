@@ -13,7 +13,7 @@ interface DashboardStatsGridProps {
 export default function DashboardStatsGrid({ loading, stats }: DashboardStatsGridProps) {
   if (loading) {
     return (
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4">
         <SkeletonCard />
         <SkeletonCard />
         <SkeletonCard />
@@ -22,7 +22,7 @@ export default function DashboardStatsGrid({ loading, stats }: DashboardStatsGri
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+    <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-3 md:gap-4">
       <DashboardCard
         title="سفارشات من"
         value={`${stats.order_count} مورد`}
@@ -68,15 +68,15 @@ function DashboardCard({ title, value, link, icon }: DashboardCardProps) {
   return (
     <Link
       href={link}
-      className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-800 p-5 rounded-2xl shadow-sm hover:border-violet-500/50 dark:hover:border-violet-500/50 transition-all group flex items-center justify-between"
+      className="group flex items-center justify-between rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:border-violet-500/50 dark:border-white/5 dark:bg-ui-blue-900 dark:hover:border-violet-500/50 sm:p-5"
     >
       <div className="space-y-1">
-        <p className="text-gray-500 dark:text-gray-400 text-xs">{title}</p>
-        <p className="text-lg font-bold text-gray-900 dark:text-white group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">
+        <p className="text-xs text-gray-500 dark:text-gray-400">{title}</p>
+        <p className="text-base font-bold text-gray-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400 sm:text-lg">
           {value}
         </p>
       </div>
-      <div className="p-3 rounded-xl bg-gray-50 dark:bg-gray-800 group-hover:bg-violet-50 dark:group-hover:bg-violet-500/10 transition-colors">
+      <div className="rounded-xl bg-gray-50 p-2.5 transition-colors group-hover:bg-violet-50 dark:bg-dark-800 dark:group-hover:bg-violet-500/10 sm:p-3">
         {icon}
       </div>
     </Link>

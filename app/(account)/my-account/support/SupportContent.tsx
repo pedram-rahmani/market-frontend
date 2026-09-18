@@ -6,6 +6,7 @@ import CreateTicketModal from "@/components/user/UserAccount/support/CreateTicke
 import TicketDetailModal from "@/components/user/UserAccount/support/TicketDetailModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import axiosInstance from "@/lib/axiosInstance";
+import PageHeader from "@/components/user/UserAccount/PageHeader";
 
 export default function SupportContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -73,23 +74,18 @@ export default function SupportContent() {
 
   return (
     <div className="space-y-6">
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white dark:bg-gray-900 border border-gray-100 dark:border-gray-800 p-6 rounded-2xl shadow-sm">
-        <div>
-          <h3 className="font-bold text-gray-900 dark:text-white text-base">
-            پشتیبانی و تیکت‌ها
-          </h3>
-          <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
-            سوالات و مشکلات خود را از طریق تیکت با کارشناسان ما در میان بگذارید.
-          </p>
-        </div>
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="px-4 py-2.5 bg-violet-600 hover:bg-violet-700 text-white text-xs font-medium rounded-xl transition shadow-lg shadow-violet-600/20 cursor-pointer flex items-center justify-center gap-2"
-        >
-          <span>➕</span>
-          <span>ثبت تیکت جدید</span>
-        </button>
-      </div>
+      <PageHeader
+        title="پشتیبانی و تیکت‌ها"
+        description="سوالات و مشکلات خود را از طریق تیکت با کارشناسان ما در میان بگذارید."
+        onButtonClick={() => setIsModalOpen(true)}
+        buttonText="ثبت تیکت جدید"
+        icon={
+          <svg viewBox="0 0 24 24" className="size-7" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M3 11.5a8.5 8.5 0 0 1 17 0v3.25a2.25 2.25 0 0 1-2.25 2.25H16l-3.2 3.2a1.125 1.125 0 0 1-1.925-.796V17H6.25A3.25 3.25 0 0 1 3 13.75V11.5Z" />
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 11h.01M12 11h.01M16 11h.01" />
+          </svg>
+        }
+      />
 
       {/* tickets list */}
       {loading ? (

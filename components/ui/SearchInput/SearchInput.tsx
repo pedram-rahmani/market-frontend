@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useRef } from "react";
 import Link from "next/link";
 import useSearch from "@/store/hooks/useSearch";
@@ -111,9 +112,12 @@ export default function SearchInput<T extends Record<string, any>>({
                   >
                     {showImage && imageUrl && (
                       <div className="relative size-10 shrink-0 rounded-lg overflow-hidden bg-gray-100 dark:bg-dark-800 flex items-center justify-center">
-                        <img
+                        <Image
                           src={imageUrl}
                           alt={title}
+                          fill
+                          sizes="40px"
+                          unoptimized
                           className="w-full h-full object-cover"
                         />
                       </div>

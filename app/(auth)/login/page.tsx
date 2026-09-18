@@ -76,7 +76,7 @@ export default function LoginPage() {
   );
 
   return (
-    <div className="min-h-[80vh] flex items-center justify-center p-4">
+    <div className="min-h-[80vh] flex items-center justify-center p-4 sm:p-6">
       <MessageModal
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
@@ -88,13 +88,15 @@ export default function LoginPage() {
         response={result}
       />
 
-      <div className="w-full max-w-md bg-white/5 dark:bg-dark-600/50 backdrop-blur-xl border border-white/10 dark:border-white/5 p-8 rounded-3xl shadow-2xl transition-all">
-        <div className="text-center mb-10">
-          <h2 className="text-3xl font-black text-white mb-3">ورود به حساب</h2>
-          <p className="text-sm text-gray-400">خوشحالم دوباره می‌بینمت</p>
+      <div className="relative w-full max-w-lg overflow-hidden rounded-3xl border border-white/10 bg-[#08122d]/80 p-5 shadow-2xl shadow-violet-950/30 backdrop-blur-xl transition-all sm:p-8">
+        <div className="pointer-events-none absolute -left-24 -top-24 size-56 rounded-full bg-cyan-500/15 blur-3xl" />
+        <div className="pointer-events-none absolute -bottom-24 -right-20 size-56 rounded-full bg-violet-500/20 blur-3xl" />
+        <div className="relative z-10 mb-8 sm:mb-10">
+          <p className="text-xs font-medium text-cyan-300">دوباره خوش آمدید</p>
+          <h2 className="mt-1 text-2xl font-black text-white sm:text-3xl">ورود به حساب</h2>
         </div>
 
-        <form onSubmit={userLogin} className="space-y-6">
+        <form onSubmit={userLogin} className="relative z-10 space-y-4">
           <ValidationInput
             id="identifier"
             type="text"
@@ -111,6 +113,7 @@ export default function LoginPage() {
           <SecurInput
             id="password"
             placeholder="رمز عبور"
+            autoComplete="current-password"
             className="input-validation"
             validations={[
               requiredValidator(),
@@ -121,7 +124,7 @@ export default function LoginPage() {
             onInputHandler={onInputHandler}
           />
 
-          <div className="flex items-center justify-between text-xs sm:text-sm">
+          <div className="flex items-center justify-between gap-3 text-xs sm:text-sm">
             <Checkbox
               id="rememberMe"
               label="مرا به خاطر بسپار"
@@ -130,7 +133,7 @@ export default function LoginPage() {
             />
             <Link
               href="/forgot-password"
-              className="text-gray-400 hover:text-green-500 transition-colors"
+              className="text-cyan-300 transition-colors hover:text-cyan-200"
             >
               فراموشی رمز عبور؟
             </Link>
@@ -145,11 +148,11 @@ export default function LoginPage() {
           </Button>
         </form>
 
-        <div className="mt-8 text-center text-sm text-gray-400">
+        <div className="relative z-10 mt-7 border-t border-white/10 pt-5 text-center text-xs text-gray-400 sm:text-sm">
           هنوز عضو نشده‌اید؟{" "}
           <Link
             href="/register"
-            className="text-green-500 font-bold hover:underline underline-offset-4"
+            className="font-bold text-cyan-300 underline-offset-4 hover:text-cyan-200 hover:underline"
           >
             ساخت حساب جدید
           </Link>

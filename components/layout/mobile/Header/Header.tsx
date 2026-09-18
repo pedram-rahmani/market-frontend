@@ -1,28 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import SearchInput from "@/components/ui/SearchInput/SearchInput";
 import { getProducts } from "@/services/product";
 import { getImagePath } from "@/lib/utils";
 import MobileMenu from "./MobileMenu";
+import { useAppDispatch } from "@/store/hooks/storeHooks";
+import { fetchSettings } from "@/store/slices/settingSlice";
+import { useSettings } from "@/store/hooks/useSettings";
 
 export default function Header() {
   const [showSearch, setShowSearch] = useState(false);
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const dispatch = useAppDispatch();
+  const { siteName, loading, rawSettings } = useSettings();
+
+  useEffect(() => {
+    if (!loading && Object.keys(rawSettings).length === 0) {
+      dispatch(fetchSettings());
+    }
+  }, [dispatch, loading, rawSettings]);
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 w-full lg:hidden bg-white/80 dark:bg-dark-700/80 backdrop-blur-xl border-b border-custom-gray-100 dark:border-dark-600 z-50 transition-all">
-        <div className="flex items-center justify-between h-16 px-4 w-full text-gray-800 dark:text-white">
+      <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-gray-200/70 bg-white/85 shadow-sm shadow-slate-900/5 backdrop-blur-2xl transition-all dark:border-white/5 dark:bg-dark-900/85 lg:hidden">
+        <div className="flex h-[4.5rem] w-full items-center justify-between px-4 text-gray-800 dark:text-white">
           
           {/* Menu Button (Right) */}
           <button
             onClick={() => setIsMenuOpen(true)}
-            className="w-10 h-10 rounded-xl flex items-center justify-center text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-600 transition-all"
+            className="group flex size-10 items-center justify-center rounded-2xl border border-gray-200/80 bg-gray-50 text-gray-600 transition-all hover:border-violet-300 hover:bg-violet-50 hover:text-violet-600 dark:border-white/5 dark:bg-white/5 dark:text-gray-300 dark:hover:border-violet-500/40 dark:hover:bg-violet-500/10 dark:hover:text-violet-300"
             aria-label="Open Menu"
           >
             <svg
-              className="size-5"
+              className="size-5 transition-transform duration-200 group-hover:scale-110"
               fill="none"
               stroke="currentColor"
               strokeWidth="2"
@@ -37,21 +48,26 @@ export default function Header() {
           </button>
 
           {/* Logo (Center) */}
-          <span className="font-black text-xs sm:text-sm tracking-widest bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-transparent">
-            SHIKSHOP
-          </span>
+          <div className="flex max-w-[12rem] flex-col items-center leading-none">
+            <span className="truncate bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-sm font-black tracking-[0.12em] text-transparent sm:text-base">
+              {loading ? "..." : siteName}
+            </span>
+            <span className="mt-1 text-[9px] font-medium tracking-[0.18em] text-gray-400 dark:text-gray-500">
+              SHOP SMART
+            </span>
+          </div>
 
           {/* Search Toggle (Left) */}
           <button
             onClick={() => setShowSearch((prev) => !prev)}
-            className={`w-10 h-10 rounded-xl flex items-center justify-center transition-all ${
+            className={`group flex size-10 items-center justify-center rounded-2xl border transition-all ${
               showSearch
-                ? "bg-violet-500/10 text-violet-600 dark:text-cyan-400"
-                : "text-gray-600 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-dark-600"
+                ? "border-violet-300 bg-violet-50 text-violet-600 dark:border-violet-500/40 dark:bg-violet-500/10 dark:text-cyan-400"
+                : "border-gray-200/80 bg-gray-50 text-gray-600 hover:border-violet-300 hover:bg-violet-50 hover:text-violet-600 dark:border-white/5 dark:bg-white/5 dark:text-gray-300 dark:hover:border-violet-500/40 dark:hover:bg-violet-500/10 dark:hover:text-violet-300"
             }`}
             aria-label="Toggle Search"
           >
-            <svg className="size-5!" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg className="size-5! transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
@@ -59,7 +75,7 @@ export default function Header() {
 
         {/* Mobile Search Bar Dropdown */}
         {showSearch && (
-          <div className="p-3.5 border-t border-gray-100 dark:border-white/10 bg-white/95 dark:bg-dark-700/95 backdrop-blur-2xl shadow-xl animate-in fade-in slide-in-from-top-2 duration-200">
+          <div className="border-t border-gray-100/80 bg-white/95 p-3.5 shadow-xl shadow-slate-900/10 backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200 dark:border-white/5 dark:bg-dark-900/95">
             <SearchInput
               placeholder="به دنبال چه میگردی؟"
               showImage={true}

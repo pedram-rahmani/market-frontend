@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
@@ -88,9 +89,12 @@ export default function CartSection() {
               <div className="flex items-center gap-4 border-b border-gray-100 dark:border-gray-800 pb-4">
                 {product.img || product.image ? (
                   <div className="relative w-16 h-16 rounded-xl overflow-hidden border border-gray-200 dark:border-gray-800 shrink-0">
-                    <img
+                    <Image
                       src={productImage}
                       alt={product.name}
+                      fill
+                      sizes="64px"
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
                   </div>

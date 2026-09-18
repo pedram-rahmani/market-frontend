@@ -4,6 +4,7 @@ import { useState } from "react";
 import OrderCard from "../OrderCard";
 import CancelledOrderDetails from "./CancelledOrderDetails";
 import { Order } from "@/types/order";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface CancelledOrdersProps {
   orders: Order[];
@@ -14,17 +15,13 @@ export default function CancelledOrders({ orders }: CancelledOrdersProps) {
 
   if (!orders || orders.length === 0) {
     return (
-      <div>
-        <div className="w-16 h-16 rounded-full bg-red-100 dark:bg-rose-500/10 flex items-center justify-center text-red-600 dark:text-rose-400 shadow-inner">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">سفارش لغو شده‌ای ندارید</h3>
-          <p className="text-xs text-gray-400">سفارش‌هایی که لغو می‌کنید در این بخش نمایش داده می‌شوند.</p>
-        </div>
-      </div>
+      <EmptyState
+        tone="red"
+        eyebrow="سفارش‌های لغوشده"
+        title="سفارش لغو شده‌ای ندارید"
+        description="سفارش‌هایی که لغو می‌کنید در این بخش نمایش داده می‌شوند."
+        icon={<CancelledIcon />}
+      />
     );
   }
 
@@ -50,5 +47,13 @@ export default function CancelledOrders({ orders }: CancelledOrdersProps) {
         order={selectedOrder}
       />
     </div>
+  );
+}
+
+function CancelledIcon() {
+  return (
+    <svg className="size-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+    </svg>
   );
 }

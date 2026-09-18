@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { RefObject, useState, useRef } from "react";
 import { usePathname, useRouter } from "next/navigation";
 import useTheme from "@/store/hooks/useTheme";
 import useClickOutside from "@/store/hooks/useClickOutside";
@@ -9,9 +9,10 @@ import Link from "next/link";
 
 interface HeaderProps {
   onOpenSidebar: () => void;
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
 }
 
-export default function Header({ onOpenSidebar }: HeaderProps) {
+export default function Header({ onOpenSidebar, menuButtonRef }: HeaderProps) {
   const [theme, toggleTheme] = useTheme();
   const [showBasket, setShowBasket] = useState(false);
   const pathname = usePathname();
@@ -23,6 +24,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
   const getPageTitle = () => {
     if (pathname.includes("purchases")) return "خریدهای من";
+    if (pathname.includes("wishlist")) return "علاقه‌مندی‌ها";
     if (pathname.includes("settings")) return "تنظیمات حساب";
     if (pathname.includes("support")) return "پشتیبانی";
     return "پنل کاربری";
@@ -33,6 +35,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
       <div className="flex items-center gap-x-3">
         <button
           type="button"
+          ref={menuButtonRef}
           onClick={onOpenSidebar}
           className="md:hidden p-2 rounded-xl bg-violet-500/10 text-violet-500 hover:bg-violet-500/20 cursor-pointer"
           aria-label="باز کردن منو"
@@ -50,7 +53,10 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
         {/* backward btn */}
         <button
           type="button"
-          onClick={() => router.back()}
+          onClick={() => {
+            sessionStorage.setItem("account-page-refresh", "1");
+            router.back();
+          }}
           className="group flex items-center justify-center p-2 rounded-xl bg-dark-900/5 dark:bg-white/5 hover:bg-cyan-500/10 text-gray-500 dark:text-gray-400 hover:text-cyan-500 transition-all cursor-pointer border border-gray-200/50 dark:border-white/5"
           title="بازگشت به صفحه قبل"
         >
@@ -73,7 +79,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
       <div className="flex gap-x-2 sm:gap-x-4">
         <div
-          className="hidden! sm:flex! h-btn cursor-pointer items-center justify-center"
+          className="hidden! md:flex! h-btn cursor-pointer items-center justify-center"
           onClick={toggleTheme}
         >
           <svg className={` ${theme === "dark" ? "hidden" : "inline"}`}>
@@ -86,7 +92,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
 
         {/* Basket Container */}
         <div
-          className="hidden! sm:flex! relative h-btn items-center justify-center"
+          className="hidden! md:flex! relative h-btn items-center justify-center"
           ref={basketRef}
         >
           <button
@@ -105,7 +111,7 @@ export default function Header({ onOpenSidebar }: HeaderProps) {
         {/* Home Link */}
         <Link
           href="/"
-          className="hidden! sm:flex! h-btn items-center justify-center"
+          className="hidden! md:flex! h-btn items-center justify-center"
         >
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />

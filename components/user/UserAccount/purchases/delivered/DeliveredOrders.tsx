@@ -2,6 +2,7 @@
 
 import OrderCard from "../OrderCard";
 import { Order } from "@/types/order";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface DeliveredOrdersProps {
   orders: Order[];
@@ -10,17 +11,15 @@ interface DeliveredOrdersProps {
 export default function DeliveredOrders({ orders }: DeliveredOrdersProps) {
   if (!orders || orders.length === 0) {
     return (
-      <div>
-        <div className="w-16 h-16 rounded-full bg-green-100 dark:bg-green-500/10 flex items-center justify-center text-green-600 dark:text-green-400 shadow-inner">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">سفارش تحویل‌شده‌ای ثبت نشده است</h3>
-          <p className="text-xs text-gray-400">سفارش‌هایی که با موفقیت تحویل گرفته‌اید در این بخش بایگانی می‌شوند.</p>
-        </div>
-      </div>
+      <EmptyState
+        tone="blue"
+        eyebrow="سفارش‌های تحویل‌شده"
+        title="سفارش تحویل‌شده‌ای ثبت نشده است"
+        description="سفارش‌هایی که با موفقیت تحویل گرفته‌اید در این بخش بایگانی می‌شوند."
+        actionLabel="مشاهده محصولات"
+        actionHref="/products"
+        icon={<DeliveredIcon />}
+      />
     );
   }
 
@@ -39,5 +38,13 @@ export default function DeliveredOrders({ orders }: DeliveredOrdersProps) {
         />
       ))}
     </div>
+  );
+}
+
+function DeliveredIcon() {
+  return (
+    <svg className="size-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
   );
 }

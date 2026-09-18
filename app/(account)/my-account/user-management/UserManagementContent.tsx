@@ -9,6 +9,7 @@ import { AddUserModal } from "@/components/user/UserModal/addUserModal";
 import DeleteConfirmModal from "@components/feedback/MessageModal/DeleteConfirmModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import DeletedUsersModal from "@/components/user/UserAccount/user-management/DeletedUsersModal";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 export default function UserManagementContent() {
   const [users, setUsers] = useState([]);
@@ -195,6 +196,18 @@ export default function UserManagementContent() {
             ))}
           </div>
         </div>
+      ) : users.length === 0 ? (
+        <EmptyState
+          tone="violet"
+          eyebrow="کاربران"
+          title="کاربری یافت نشد"
+          description="کاربران ثبت‌نام‌شده‌ی فروشگاه در این بخش نمایش داده می‌شوند."
+          icon={
+            <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2m8-10a4 4 0 1 0 0-8 4 4 0 0 0 8 0Zm6 3v-2a4 4 0 0 0-3-3.87m-1-4a4 4 0 0 1 0 7.75" />
+            </svg>
+          }
+        />
       ) : (
         <>
           {/* desktop */}
@@ -212,48 +225,36 @@ export default function UserManagementContent() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-100 dark:divide-white/5">
-                {users.length > 0 ? (
-                  users.map((user: any) => (
-                    <UserRow
-                      key={user.id}
-                      user={user}
-                      permissions={getPermissionsForUser(user)}
-                      type="desktop"
-                      onEdit={() => setEditingUser(user)}
-                      onDelete={() => setDeletingUser(user)}
-                      onPromote={() => handlePromote(user.id)}
-                      onDemote={() => handleDemote(user.id)}
-                    />
-                  ))
-                ) : (
-                  <tr>
-                    <td colSpan={7} className="py-10 text-center text-gray-500">
-                      کاربری یافت نشد.
-                    </td>
-                  </tr>
-                )}
+                {users.map((user: any) => (
+                  <UserRow
+                    key={user.id}
+                    user={user}
+                    permissions={getPermissionsForUser(user)}
+                    type="desktop"
+                    onEdit={() => setEditingUser(user)}
+                    onDelete={() => setDeletingUser(user)}
+                    onPromote={() => handlePromote(user.id)}
+                    onDemote={() => handleDemote(user.id)}
+                  />
+                ))}
               </tbody>
             </table>
           </div>
 
           {/* mobile */}
           <div className="md:hidden space-y-4">
-            {users.length > 0 ? (
-              users.map((user: any) => (
-                <UserRow
-                  key={user.id}
-                  user={user}
-                  permissions={getPermissionsForUser(user)}
-                  type="mobile"
-                  onDelete={() => setDeletingUser(user)}
-                  onEdit={() => setEditingUser(user)}
-                  onPromote={() => handlePromote(user.id)}
-                  onDemote={() => handleDemote(user.id)}
-                />
-              ))
-            ) : (
-              <p className="text-center py-6 text-gray-500">کاربری یافت نشد.</p>
-            )}
+            {users.map((user: any) => (
+              <UserRow
+                key={user.id}
+                user={user}
+                permissions={getPermissionsForUser(user)}
+                type="mobile"
+                onDelete={() => setDeletingUser(user)}
+                onEdit={() => setEditingUser(user)}
+                onPromote={() => handlePromote(user.id)}
+                onDemote={() => handleDemote(user.id)}
+              />
+            ))}
           </div>
         </>
       )}

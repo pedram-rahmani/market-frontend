@@ -7,6 +7,7 @@ import CouponRow from "@/components/user/UserAccount/coupon-management/CouponRow
 import CouponForm from "@/components/user/UserAccount/coupon-management/CouponForm";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 export default function CouponManagement() {
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -106,9 +107,18 @@ export default function CouponManagement() {
             ))}
           </div>
         ) : coupons.length === 0 ? (
-          <div className="text-center py-16 text-xs text-gray-400 dark:text-gray-500">
-            هیچ کد تخفیفی ثبت نشده است.
-          </div>
+          <EmptyState
+            tone="amber"
+            eyebrow="کدهای تخفیف"
+            title="هیچ کد تخفیفی ثبت نشده است"
+            description="کدهای تخفیف فروشگاه را از این بخش ایجاد و مدیریت کنید."
+            icon={
+              <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V5.257c0-1.105.895-2 2-2h15c1.105 0 2 .895 2 2Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9.75h.008v.008H9V9.75Zm6 4.5h.008v.008H15v-.008Z" />
+              </svg>
+            }
+          />
         ) : (
           <div className="bg-light dark:bg-dark-900/20 overflow-x-auto border border-gray-100 dark:border-gray-800 rounded-3xl overflow-hidden backdrop-blur-md shadow-sm">
             <table className="w-full text-right text-xs">

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { useEffect, useState } from "react";
 import { useForm, SubmitHandler, Controller } from "react-hook-form";
@@ -162,9 +163,12 @@ export default function ReviewSection({ productId }: { productId: number }) {
                   className="relative w-16 h-16 rounded-lg overflow-hidden border border-cyan-500/30 shrink-0"
                 >
                   {file.type === "image" ? (
-                    <img
+                    <Image
                       src={file.url}
                       alt="preview"
+                      fill
+                      sizes="64px"
+                      unoptimized
                       className="w-full h-full object-cover"
                     />
                   ) : (

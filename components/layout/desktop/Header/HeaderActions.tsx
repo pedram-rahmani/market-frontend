@@ -102,11 +102,19 @@ export default function HeaderActions() {
           />
         </div>
       ) : (
-        <Link className="btn btn--link text-white! text-xs md:text-sm whitespace-nowrap" href="/login">
-          <svg viewBox="0 0 24 24" className="size-5!">
-            <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
-          </svg>
+        <Link
+          className="group flex h-11 items-center gap-2 rounded-2xl border border-violet-400/30 bg-linear-to-r from-violet-600 to-cyan-500 px-4 text-xs font-bold text-white shadow-lg shadow-violet-500/20 transition-all duration-300 hover:-translate-y-0.5 hover:from-violet-500 hover:to-cyan-400 hover:shadow-violet-500/35 active:translate-y-0 md:text-sm"
+          href="/login"
+        >
+          <span className="flex size-7 items-center justify-center rounded-xl bg-white/15 transition-transform duration-300 group-hover:scale-110">
+            <svg viewBox="0 0 24 24" className="size-4.5!">
+              <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+            </svg>
+          </span>
           <span>ورود | عضویت</span>
+          <svg viewBox="0 0 24 24" className="size-4! opacity-70 transition-transform duration-300 group-hover:-translate-x-0.5">
+            <path d="M9 5.25 15.75 12 9 18.75" />
+          </svg>
         </Link>
       )}
     </div>

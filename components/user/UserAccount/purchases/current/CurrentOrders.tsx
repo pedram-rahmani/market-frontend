@@ -2,6 +2,7 @@
 
 import OrderCard from "../OrderCard";
 import { Order } from "@/types/order";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface CurrentOrdersProps {
   orders: Order[];
@@ -10,17 +11,15 @@ interface CurrentOrdersProps {
 export default function CurrentOrders({ orders }: CurrentOrdersProps) {
   if (!orders || orders.length === 0) {
     return (
-      <div>
-        <div className="w-16 h-16 rounded-full bg-amber-100 dark:bg-amber-500/10 flex items-center justify-center text-amber-600 dark:text-amber-400 shadow-inner">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">سفارش جاری فعالی ندارید</h3>
-          <p className="text-xs text-gray-400">سفارش‌های در حال پردازش یا ارسال شما اینجا قرار می‌گیرند.</p>
-        </div>
-      </div>
+      <EmptyState
+        tone="amber"
+        eyebrow="سفارش‌های جاری"
+        title="سفارش جاری فعالی ندارید"
+        description="سفارش‌های در حال پردازش یا ارسال شما اینجا قرار می‌گیرند."
+        actionLabel="مشاهده محصولات"
+        actionHref="/products"
+        icon={<ClockIcon />}
+      />
     );
   }
 
@@ -39,5 +38,13 @@ export default function CurrentOrders({ orders }: CurrentOrdersProps) {
         />
       ))}
     </div>
+  );
+}
+
+function ClockIcon() {
+  return (
+    <svg className="size-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+    </svg>
   );
 }

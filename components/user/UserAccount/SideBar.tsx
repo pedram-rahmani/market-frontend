@@ -1,5 +1,6 @@
 "use client";
 
+import { RefObject, useRef } from "react";
 import Link from "next/link";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -10,18 +11,30 @@ import axiosInstance from "@/lib/axiosInstance";
 import useDate from "@/store/hooks/useDate";
 import { useNotifications } from "@/store/hooks/useNotifications";
 import { getSideBarItems } from "./sideBarData";
+import useClickOutside from "@/store/hooks/useClickOutside";
 
 interface SideBarProps {
   isOpen: boolean;
   onClose: () => void;
+  menuButtonRef: RefObject<HTMLButtonElement | null>;
 }
 
-export default function SideBar({ isOpen, onClose }: SideBarProps) {
+export default function SideBar({
+  isOpen,
+  onClose,
+  menuButtonRef,
+}: SideBarProps) {
   const router = useRouter();
   const pathname = usePathname();
   const dispatch = useAppDispatch();
+  const sidebarRef = useRef<HTMLElement>(null);
+
+  useClickOutside(() => {
+    if (isOpen) onClose();
+  }, [sidebarRef, menuButtonRef]);
 
   const { user, token } = useAuth();
+  const isAuthenticated = Boolean(user && token);
   const permissions =
     user?.permissions || (user as any)?.user?.permissions || [];
   const userRole = (user as any)?.user?.role || user?.role;
@@ -72,6 +85,7 @@ export default function SideBar({ isOpen, onClose }: SideBarProps) {
       )}
 
       <aside
+        ref={sidebarRef}
         className={`fixed right-0 bottom-0 top-0 w-67 flex flex-col shrink-0 bg-white dark:bg-ui-blue-900 py-4 z-50 shadow-lg border-l border-gray-100 dark:border-white/5 transition-transform duration-300 ease-in-out md:translate-x-0 ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
@@ -138,17 +152,19 @@ export default function SideBar({ isOpen, onClose }: SideBarProps) {
           })}
         </nav>
 
-        <div className="px-4 mt-auto pt-4 border-t border-gray-200 dark:border-white/5">
-          <button
-            className="w-full flex items-center gap-x-3 px-4 py-4 rounded-xl text-red-500 hover:bg-ui-red-600/6 dark:hover:bg-ui-red-600/12 transition-all font-bold text-sm cursor-pointer"
-            onClick={handleLogout}
-          >
-            <svg viewBox="0 0 24 24" className="size-5!">
-              <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
-            </svg>
-            خروج از حساب
-          </button>
-        </div>
+        {isAuthenticated && (
+          <div className="px-4 mt-auto pt-4 border-t border-gray-200 dark:border-white/5">
+            <button
+              className="w-full flex items-center gap-x-3 px-4 py-4 rounded-xl text-red-500 hover:bg-ui-red-600/6 dark:hover:bg-ui-red-600/12 transition-all font-bold text-sm cursor-pointer"
+              onClick={handleLogout}
+            >
+              <svg viewBox="0 0 24 24" className="size-5!">
+                <path d="M8.25 9V5.25A2.25 2.25 0 0 1 10.5 3h6a2.25 2.25 0 0 1 2.25 2.25v13.5A2.25 2.25 0 0 1 16.5 21h-6a2.25 2.25 0 0 1-2.25-2.25V15m-3 0-3-3m0 0 3-3m-3 3H15" />
+              </svg>
+              خروج از حساب
+            </button>
+          </div>
+        )}
       </aside>
     </>
   );

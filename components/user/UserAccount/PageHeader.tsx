@@ -2,6 +2,8 @@
 
 interface PageHeaderProps {
   title: string;
+  description?: string;
+  icon?: React.ReactNode;
   buttonText?: string;
   onButtonClick?: () => void;
   isLoading?: boolean;
@@ -12,6 +14,8 @@ interface PageHeaderProps {
 
 export default function PageHeader({ 
   title, 
+  description,
+  icon,
   buttonText, 
   onButtonClick, 
   isLoading, 
@@ -23,13 +27,24 @@ export default function PageHeader({
   const isButtonDisabled = isLoading || !canClick;
 
   return (
-    <div className="sticky top-20 sm:top-24 md:top-20 z-20 bg-white/70 dark:bg-dark-900/70 backdrop-blur-xl py-3 px-4 sm:px-6 mb-4 border border-gray-200 dark:border-white/10 rounded-2xl shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 transition-all">
-      <h1 className="text-base sm:text-lg font-extrabold text-gray-800 dark:text-white flex items-center gap-2">
-        <span className="w-1.5 h-6 bg-violet-600 rounded-full shrink-0"></span> 
-        <span className="wrap-break-word">{title}</span>
-      </h1>
+    <div className="mb-6 flex flex-col gap-4 rounded-2xl border border-gray-100 bg-white p-6 shadow-sm dark:border-white/5 dark:bg-ui-blue-900 sm:flex-row sm:items-center sm:justify-between">
+      <div className="flex items-center gap-4">
+        {icon && (
+          <div className="flex size-14 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-500">
+            {icon}
+          </div>
+        )}
+        <div>
+          <h1 className="text-xl font-black text-gray-800 dark:text-white">
+            {title}
+          </h1>
+          {description && (
+            <p className="mt-1 text-xs text-gray-400">{description}</p>
+          )}
+        </div>
+      </div>
       
-      <div className="flex items-center gap-2 sm:gap-4 w-full sm:w-auto justify-end overflow-x-auto pb-1 sm:pb-0">
+      <div className="flex w-full items-center justify-end gap-2 overflow-x-auto pb-1 sm:w-auto sm:gap-4 sm:pb-0">
         {children}
         
         {buttonText && (
@@ -38,7 +53,7 @@ export default function PageHeader({
             form={formId} 
             onClick={onButtonClick} 
             disabled={isButtonDisabled}
-            className={`whitespace-nowrap px-5 py-2.5 rounded-xl font-bold text-sm transition-all bg-violet-600 text-white hover:bg-violet-700 ${
+            className={`flex items-center justify-center gap-2 whitespace-nowrap rounded-xl bg-violet-600 px-4 py-2.5 text-xs font-bold text-white shadow-lg shadow-violet-600/20 transition-all hover:bg-violet-700 ${
               isButtonDisabled ? "opacity-50 cursor-not-allowed!" : ""
             }`}
           >

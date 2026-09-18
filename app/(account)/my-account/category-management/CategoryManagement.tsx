@@ -11,6 +11,7 @@ import CategoryForm from "@/components/user/UserAccount/category-management/Cate
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import { usePermissions } from "@/store/hooks/usePermissions";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 export default function CategoryManagement() {
   const { token } = useAuth();
@@ -152,6 +153,19 @@ export default function CategoryManagement() {
               />
             ))}
           </div>
+        ) : categories.length === 0 ? (
+          <EmptyState
+            tone="blue"
+            eyebrow="دسته‌بندی‌ها"
+            title="هنوز دسته‌بندی‌ای ثبت نشده است"
+            description="برای مرتب‌سازی محصولات، اولین دسته‌بندی فروشگاه را ایجاد کنید."
+            icon={
+              <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M3 7.5 12 3l9 4.5-9 4.5-9-4.5Z" />
+                <path strokeLinecap="round" strokeLinejoin="round" d="m3 12 9 4.5 9-4.5M3 16.5l9 4.5 9-4.5" />
+              </svg>
+            }
+          />
         ) : (
           categories.map((c) => (
             <CategoryRow

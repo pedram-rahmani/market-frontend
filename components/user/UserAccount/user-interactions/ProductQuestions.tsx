@@ -1,6 +1,7 @@
 "use client";
 
 import { ProductQuestionItem } from "@/types/interactions";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface ProductQuestionsProps {
   items: ProductQuestionItem[];
@@ -26,9 +27,17 @@ export default function ProductQuestions({
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12 bg-white dark:bg-dark-800 rounded-2xl border border-gray-200 dark:border-white/5">
-        <p className="text-xs text-gray-400">هیچ پرسش و پاسخی ثبت نشده است.</p>
-      </div>
+      <EmptyState
+        tone="blue"
+        eyebrow="پرسش و پاسخ‌ها"
+        title="هیچ پرسش و پاسخی ثبت نشده است"
+        description="پرسش‌ها و پاسخ‌های ثبت‌شده کاربران در این بخش نمایش داده می‌شوند."
+        icon={
+          <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h8M8 14h4m8-2a8 8 0 1 1-16 0c0 1.85.63 3.55 1.69 4.9L5 21l3.1-1.55A8 8 0 0 0 20 12Z" />
+          </svg>
+        }
+      />
     );
   }
 

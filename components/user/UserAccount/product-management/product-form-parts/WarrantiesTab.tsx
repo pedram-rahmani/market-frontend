@@ -153,7 +153,7 @@ export default function WarrantiesTab({
         onClick={() =>
           setSelectedWarranties([
             ...selectedWarranties,
-            { warranty_id: "", price: "", is_default: false },
+            { warranty_id: "", price: "0", is_default: false },
           ])
         }
       >

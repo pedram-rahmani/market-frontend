@@ -42,7 +42,11 @@ export default function ProductBox({ productInfos }: ProductBoxProps) {
           onLoad={() => setIsLoading(false)}
           onError={(e) => {
             const target = e.target as HTMLImageElement;
-            target.src = "/fallback.jpg";
+            if (target.src.endsWith("/images/avatar-placeholder.png")) {
+              setIsLoading(false);
+              return;
+            }
+            target.src = "/images/avatar-placeholder.png";
           }}
           sizes="(max-width: 768px) 100vw, 300px"
         />

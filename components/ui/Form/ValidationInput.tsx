@@ -13,6 +13,7 @@ interface InputProps {
   onInputHandler: (id: string, value: any, isValid: boolean) => void;
   elem?: "input" | "textarea";
   allInputs?: any;
+  autoComplete?: string;
   children?: ReactNode;
 }
 
@@ -41,6 +42,7 @@ export default function ValidationInput({
   onInputHandler,
   elem,
   allInputs,
+  autoComplete,
   children,
 }: InputProps) {
   const [inputState, dispatch] = useReducer(inputReducer, {
@@ -83,6 +85,7 @@ export default function ValidationInput({
     value,
     onChange: onChangeHandler,
     placeholder,
+    autoComplete,
     className: `w-full bg-transparent outline-none border-none! ring-0! py-3 px-4 transition-all duration-200 ${className}`,
     ref: inputRef,
   };

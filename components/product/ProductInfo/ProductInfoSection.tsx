@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import { ProductColor, ProductSize, Product } from "@/types/product";
 
@@ -21,8 +22,8 @@ export default function ProductInfoSection() {
       {/* Product Header */}
       <div>
         <div className="flex items-center gap-x-3">
-          <div className="flex items-center justify-center size-12 rounded-full p-1 bg-my-dark2 shadow-inner-dark shrink-0">
-            <img src="/images/logos/verena-logo.png" alt="" className="size-full object-contain" />
+          <div className="relative flex items-center justify-center size-12 rounded-full p-1 bg-my-dark2 shadow-inner-dark shrink-0">
+            <Image src="/images/logos/verena-logo.png" alt="" fill sizes="48px" className="size-full object-contain" />
           </div>
           <div className="text-sm font-medium">verena</div>
         </div>

@@ -28,7 +28,7 @@
 }
 
 /* -------------------------------------------------------
-   Theme Section (Tailwind v4 Configuration)
+   Theme Section
 ------------------------------------------------------- */
 @theme {
   --color-background: var(--background);

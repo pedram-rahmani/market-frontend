@@ -1,9 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import ProductGallery from "../ProductDetails/ProductGallery/ProductGallery";
 import { Product } from "@/types/product";
+import { getImagePath } from "@/lib/utils";
 
 export default function ProductShowcase() {
   const product = useSelector((state: any) => state.product?.currentProduct) as Product | null;
@@ -96,9 +98,12 @@ export default function ProductShowcase() {
         {/* image and details */}
         <div className="flex flex-col gap-y-3 items-center w-full max-w-md mx-auto">
           <div className="flex flex-col w-full px-4 lg:px-0">
-            <img
-              src={product?.img || ""}
+            <Image
+              src={getImagePath(product?.img || null)}
               alt={product?.name || ""}
+              width={800}
+              height={600}
+              unoptimized
               className="rounded-xl w-full h-auto max-h-87.5 object-contain mx-auto"
             />
             <div className="text-sm">{/* other infos */}</div>
@@ -107,16 +112,16 @@ export default function ProductShowcase() {
           {/* Gallery */}
           <div className="flex gap-x-2 items-center overflow-x-auto max-w-full p-1 *:bg-white *:cursor-pointer *:border *:border-gray-300 *:rounded-md *:overflow-hidden *:shrink-0 [*_img]:p-2 [*_img]:size-16 [*_img]:object-contain">
             <div>
-              <img src="/images/products/8.webp" alt="" />
+              <Image src="/images/products/8.webp" width={64} height={64} alt="" />
             </div>
             <div className="flex">
-              <img src="/images/products/8.webp" alt="" />
+              <Image src="/images/products/8.webp" width={64} height={64} alt="" />
             </div>
             <div className="flex">
-              <img src="/images/products/8.webp" alt="" />
+              <Image src="/images/products/8.webp" width={64} height={64} alt="" />
             </div>
             <div className="flex">
-              <img src="/images/products/8.webp" alt="" />
+              <Image src="/images/products/8.webp" width={64} height={64} alt="" />
             </div>
 
             {/* gallery more... */}
@@ -125,7 +130,7 @@ export default function ProductShowcase() {
               onClick={() => setShowGallery(true)}
             >
               <div className="blur-sm opacity-50 p-1 size-full flex items-center justify-center">
-                <img src="/images/products/8.webp" alt="" className="size-full object-contain" />
+                <Image src="/images/products/8.webp" width={64} height={64} alt="" className="size-full object-contain" />
               </div>
               <div className="absolute size-7 flex items-center justify-center text-gray-800 dark:text-white">
                 <svg viewBox="0 0 24 24" fill="currentColor">

@@ -1,11 +1,13 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import MessageModal from "@/components/feedback/MessageModal/MessageModal";
 import { SkeletonAvatar } from "@/components/ui/Skeletons/Skeletons";
 import { useProfileForm, EditProfileFormValues } from "@/store/hooks/useProfileForm";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import useClickOutside from "@/store/hooks/useClickOutside";
+import { FALLBACK_IMAGE_PATH } from "@/lib/utils";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -68,7 +70,7 @@ export default function EditProfileModal({
                 {avatarLoading ? (
                   <SkeletonAvatar size="size-16 rounded-2xl" />
                 ) : getAvatarUrl() ? (
-                  <img src={getAvatarUrl() || ""} alt="Avatar" className="w-full h-full object-cover" />
+                  <Image src={getAvatarUrl() || FALLBACK_IMAGE_PATH} alt="Avatar" fill sizes="64px" unoptimized className="w-full h-full object-cover" />
                 ) : (
                   <span className="text-xl">{formData.name ? formData.name.charAt(0).toUpperCase() : "U"}</span>
                 )}

@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 
 import { createPortal } from "react-dom";
 import { GalleryMedia } from "./ProductGallery";
@@ -158,7 +159,7 @@ export default function GalleryLightbox({
                   isSelected ? "border-cyan-400 scale-105 opacity-100 shadow-md shadow-cyan-500/20" : "border-transparent opacity-50 hover:opacity-80"
                 }`}
               >
-                <img src={getFullUrl(thumbUrl)} className="w-full h-full object-cover rounded-lg pointer-events-none" alt="" />
+                <Image src={getFullUrl(thumbUrl)} width={64} height={64} className="w-full h-full object-cover rounded-lg pointer-events-none" alt="" />
               </button>
             );
           })}

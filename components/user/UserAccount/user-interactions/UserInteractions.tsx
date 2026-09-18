@@ -52,13 +52,30 @@ export default function UserInteractions() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState<number | null>(null);
 
-  // Mark notifications as read & Fetch Data
+  // Mark notifications as read & fetch data.
   useEffect(() => {
     axiosInstance
       .post("/notifications/mark-as-read", { type: "user-interactions" })
       .catch((err) => console.error("Failed to mark notifications as read", err));
 
     fetchInteractions();
+
+    const handlePageShow = (event: PageTransitionEvent) => {
+      const shouldRefresh =
+        event.persisted ||
+        sessionStorage.getItem("account-page-refresh") === "1";
+
+      if (!shouldRefresh) return;
+
+      sessionStorage.removeItem("account-page-refresh");
+      fetchInteractions();
+    };
+
+    window.addEventListener("pageshow", handlePageShow);
+
+    return () => {
+      window.removeEventListener("pageshow", handlePageShow);
+    };
   }, []);
 
   const fetchInteractions = async () => {

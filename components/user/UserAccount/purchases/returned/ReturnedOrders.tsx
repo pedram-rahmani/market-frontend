@@ -2,6 +2,7 @@
 
 import OrderCard from "../OrderCard";
 import { Order } from "@/types/order";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface ReturnedOrdersProps {
   orders: Order[];
@@ -10,17 +11,13 @@ interface ReturnedOrdersProps {
 export default function ReturnedOrders({ orders }: ReturnedOrdersProps) {
   if (!orders || orders.length === 0) {
     return (
-      <div>
-        <div className="w-16 h-16 rounded-full bg-violet-100 dark:bg-violet-500/10 flex items-center justify-center text-violet-600 dark:text-violet-400 shadow-inner">
-          <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-            <path strokeLinecap="round" strokeLinejoin="round" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
-          </svg>
-        </div>
-        <div className="space-y-1">
-          <h3 className="text-base font-semibold text-gray-800 dark:text-gray-200">سفارش مرجوع‌شده‌ای ندارید</h3>
-          <p className="text-xs text-gray-400">تاریخچه مرجوع کردن کالاها در این قسمت نمایش داده می‌شود.</p>
-        </div>
-      </div>
+      <EmptyState
+        tone="violet"
+        eyebrow="سفارش‌های مرجوع‌شده"
+        title="سفارش مرجوع‌شده‌ای ندارید"
+        description="تاریخچه مرجوع کردن کالاها در این قسمت نمایش داده می‌شود."
+        icon={<ReturnedIcon />}
+      />
     );
   }
 
@@ -40,5 +37,13 @@ export default function ReturnedOrders({ orders }: ReturnedOrdersProps) {
         />
       ))}
     </div>
+  );
+}
+
+function ReturnedIcon() {
+  return (
+    <svg className="size-12" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+      <path strokeLinecap="round" strokeLinejoin="round" d="M16 15v-1a4 4 0 00-4-4H8m0 0l3 3m-3-3l3-3m9 14V5a2 2 0 00-2-2H6a2 2 0 00-2 2v16l4-2 4 2 4-2 4 2z" />
+    </svg>
   );
 }

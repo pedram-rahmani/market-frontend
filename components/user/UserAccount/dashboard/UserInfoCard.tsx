@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { SkeletonAvatar, BaseSkeleton } from "@/components/ui/Skeletons/Skeletons";
 import { getImagePath } from "@/lib/utils";
 
@@ -50,32 +51,30 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
         </button>
       </div>
 
-      {/* avatar */}
-      <div className="flex flex-col items-start py-2">
-        <div className="flex flex-col items-center">
-          <div className="w-16 h-16 rounded-2xl bg-linear-to-tr from-primary to-info flex items-center justify-center text-white font-bold shadow-sm overflow-hidden shrink-0 ring-4 ring-gray-50 dark:ring-white/5 mb-2">
+      {/* profile summary */}
+      <div className="flex items-center gap-4 rounded-2xl border border-gray-100 bg-gray-50/70 p-3 dark:border-white/5 dark:bg-white/3 sm:p-4">
+        <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-linear-to-tr from-violet-600 to-cyan-500 font-bold text-white shadow-sm ring-4 ring-white dark:ring-white/5">
             {isLoading ? (
               <SkeletonAvatar size="w-16 h-16 rounded-2xl" />
             ) : currentAvatar ? (
-              <img src={currentAvatar} alt={fullName} className="w-full h-full object-cover" />
+              <Image src={currentAvatar} alt={fullName} fill sizes="64px" unoptimized className="w-full h-full object-cover" />
             ) : (
               <span className="text-xl">{fullName.charAt(0).toUpperCase()}</span>
             )}
-          </div>
-          
-          {isLoading ? (
-            <BaseSkeleton className="w-24 h-4 mt-1" />
-          ) : (
-            <span className="text-xs text-gray-400 dark:text-text-on-dark/50 font-medium text-center">
-              {fullName}
-            </span>
-          )}
+        </div>
+        <div className="min-w-0 space-y-1">
+          <p className="text-sm font-bold text-gray-900 dark:text-white sm:text-base">{fullName}</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400">اطلاعات حساب کاربری شما</p>
+          <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-500/10 px-2 py-1 text-[10px] font-medium text-emerald-600 dark:text-emerald-400">
+            <span className="size-1.5 rounded-full bg-emerald-500" />
+            حساب کاربری فعال
+          </span>
         </div>
       </div>
 
       {/* information */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 text-sm">
-        <div className="bg-gray-50/50 dark:bg-white/2 sm:bg-transparent p-3! sm:p-0 rounded-xl border border-gray-100 dark:border-white/5 sm:border-0">
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3! dark:border-white/5 dark:bg-white/2 sm:border-0 sm:bg-transparent sm:p-3!">
           <span className="block dark:text-text-on-dark/50 text-xs mb-1">نام و نام خانوادگی</span>
           {isLoading ? (
             <BaseSkeleton className="w-28 h-5 mt-1" />
@@ -84,7 +83,7 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
           )}
         </div>
 
-        <div className="bg-gray-50/50 dark:bg-white/2 sm:bg-transparent p-3! sm:p-0 rounded-xl border border-gray-100 dark:border-white/5 sm:border-0">
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3! dark:border-white/5 dark:bg-white/2 sm:border-0 sm:bg-transparent sm:p-3!">
           <span className="block dark:text-text-on-dark/50 text-xs mb-1">شماره تماس</span>
           {isLoading ? (
             <BaseSkeleton className="w-32 h-5 mt-1" />
@@ -93,7 +92,7 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
           )}
         </div>
 
-        <div className="bg-gray-50/50 dark:bg-white/2 sm:bg-transparent p-3! sm:p-0 rounded-xl border border-gray-100 dark:border-white/5 sm:border-0">
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3! dark:border-white/5 dark:bg-white/2 sm:border-0 sm:bg-transparent sm:p-3!">
           <span className="block dark:text-text-on-dark/50 text-xs mb-1">ایمیل</span>
           {isLoading ? (
             <BaseSkeleton className="w-40 h-5 mt-1" />
@@ -102,7 +101,7 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
           )}
         </div>
 
-        <div className="sm:col-span-2 lg:col-span-3 bg-gray-50/50 dark:bg-white/2 sm:bg-transparent p-3! sm:p-0 rounded-xl border border-gray-100 dark:border-white/5 sm:border-0">
+        <div className="rounded-xl border border-gray-100 bg-gray-50/50 p-3! dark:border-white/5 dark:bg-white/2 sm:col-span-2 sm:border-0 sm:bg-transparent sm:p-3! lg:col-span-3">
           <span className="block dark:text-text-on-dark/50 text-xs mb-1">آدرس پستی</span>
           {isLoading ? (
             <BaseSkeleton className="w-full h-10 mt-1" />

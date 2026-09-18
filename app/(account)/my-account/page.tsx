@@ -100,7 +100,7 @@ export default function Page() {
   };
 
   return (
-    <div className="p-6 space-y-8" dir="rtl">
+    <div className="space-y-5 p-4 sm:space-y-8 sm:p-6" dir="rtl">
       <DashboardGreeting userName={userName} />
       <DashboardStatsGrid loading={loading} stats={stats} />
       <UserInfoCard

@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import Image from "next/image";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
-import { getImagePath } from "@/lib/utils";
+import { FALLBACK_IMAGE_PATH, getImagePath } from "@/lib/utils";
 import GalleryLightbox from "./GalleryLightbox";
 
 export type MediaType = "image" | "video";
@@ -64,7 +65,7 @@ export default function ProductGallery({
 
   // استفاده از تابع متمرکز getImagePath برای مدیریت یکپارچه آدرس‌ها
   const getFullUrl = (path?: string) => {
-    if (!path) return "/placeholder.png";
+    if (!path) return FALLBACK_IMAGE_PATH;
     return getImagePath(path);
   };
 
@@ -94,9 +95,11 @@ export default function ProductGallery({
       );
     }
     return (
-      <img
+      <Image
         src={getFullUrl(media.url)}
         alt="Product View"
+        fill
+        unoptimized
         className={`w-full h-full object-contain ${
           isLightbox ? "rounded-xl max-h-[58vh]" : "transition-transform duration-300 group-hover:scale-105"
         }`}
@@ -114,7 +117,7 @@ export default function ProductGallery({
         {activeMainMedia ? (
           renderMediaContent(activeMainMedia, false)
         ) : (
-          <img src="/placeholder.png" alt="No Media" className="h-full w-full object-contain" />
+          <Image src={FALLBACK_IMAGE_PATH} alt="No Media" fill sizes="100vw" className="h-full w-full object-contain" />
         )}
 
         {activeMainMedia?.type === "video" && (
@@ -144,9 +147,12 @@ export default function ProductGallery({
                 }}
                 className="relative aspect-square size-16 sm:size-auto shrink-0 overflow-hidden rounded-xl border border-white/10 opacity-60 hover:opacity-100 transition-all bg-gray-900/50 p-0.5 cursor-pointer hover:border-cyan-400"
               >
-                <img
+                <Image
                   src={getFullUrl(thumbUrl)}
                   alt=""
+                  fill
+                  sizes="64px"
+                  unoptimized
                   className="h-full w-full object-cover rounded-lg pointer-events-none"
                 />
                 {item.type === "video" && (

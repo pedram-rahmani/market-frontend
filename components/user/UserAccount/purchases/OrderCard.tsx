@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { OrderItem } from "@/types/order";
 
 interface OrderCardProps {
@@ -47,10 +48,13 @@ export default function OrderCard({
         {items.map((item, index) => (
           <div key={index} className="flex items-center justify-between gap-4 py-2">
             <div className="flex items-center gap-3">
-              <div className="w-14 h-14 bg-gray-50 dark:bg-white/5 rounded-xl flex items-center justify-center p-2 shrink-0 border border-gray-100 dark:border-white/5">
-                <img
-                  src={item.image || "/images/placeholder.png"}
+              <div className="relative w-14 h-14 bg-gray-50 dark:bg-white/5 rounded-xl flex items-center justify-center p-2 shrink-0 border border-gray-100 dark:border-white/5">
+                <Image
+                  src={item.image || "/images/avatar-placeholder.png"}
                   alt={item.title || "محصول"}
+                  fill
+                  sizes="56px"
+                  unoptimized
                   className="w-full h-full object-contain"
                 />
               </div>

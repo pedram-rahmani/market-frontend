@@ -1,7 +1,9 @@
 "use client";
 
+import Image from "next/image";
 import { InteractionItem } from "./UserInteractions";
 import { getImagePath } from "@/lib/utils";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 interface ProductReviewsProps {
   items: InteractionItem[];
@@ -30,9 +32,17 @@ export default function ProductReviews({
 
   if (items.length === 0) {
     return (
-      <div className="text-center py-12 bg-white dark:bg-dark-800 rounded-2xl border border-gray-200 dark:border-white/5">
-        <p className="text-xs text-gray-400">هیچ دیدگاهی ثبت نشده است.</p>
-      </div>
+      <EmptyState
+        tone="amber"
+        eyebrow="دیدگاه‌های محصولات"
+        title="هیچ دیدگاهی ثبت نشده است"
+        description="دیدگاه‌های ثبت‌شده و وضعیت بررسی آن‌ها در این بخش نمایش داده می‌شوند."
+        icon={
+          <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+            <path strokeLinecap="round" strokeLinejoin="round" d="M8 10h8M8 14h5m8-2a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
+          </svg>
+        }
+      />
     );
   }
 
@@ -114,7 +124,7 @@ export default function ProductReviews({
                           {mediaItem.file_type === 'video' ? (
                             <video src={mediaUrl} className="w-full h-full object-cover" />
                           ) : (
-                            <img src={mediaUrl} alt="Review Media" className="w-full h-full object-cover" />
+                            <Image src={mediaUrl} alt="Review Media" fill sizes="128px" unoptimized className="w-full h-full object-cover" />
                           )}
                           <span className={`absolute top-1.5 right-1.5 text-[8px] px-1.5 py-0.5 rounded font-bold shadow ${isMediaApproved ? 'bg-emerald-500 text-white' : 'bg-amber-500 text-white'}`}>
                             {isMediaApproved ? 'تایید' : 'انتظار'}

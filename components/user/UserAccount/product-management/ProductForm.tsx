@@ -1,6 +1,7 @@
 "use client";
 import { useState, useEffect } from "react";
 import axiosInstance from "@/lib/axiosInstance";
+import { getImagePath } from "@/lib/utils";
 import useForm from "@/store/hooks/useForm";
 
 import BasicInfoTab from "./product-form-parts/BasicInfoTab";
@@ -128,7 +129,10 @@ export default function ProductForm({ product, categories, onSave }: any) {
         setSelectedWarranties(
           product.warranties.map((w: any) => ({
             warranty_id: w.id ? w.id.toString() : "",
-            price: w.pivot?.price ? w.pivot.price.toString() : "",
+            price:
+              w.pivot?.price !== null && w.pivot?.price !== undefined
+                ? w.pivot.price.toString()
+                : "0",
             is_default: Boolean(w.pivot?.is_default),
           }))
         );
@@ -137,11 +141,7 @@ export default function ProductForm({ product, categories, onSave }: any) {
       }
 
       if (product.img) {
-        if (product.img.startsWith("http") || product.img.startsWith("/images")) {
-          setPreviewUrl(product.img);
-        } else {
-          setPreviewUrl(`${process.env.NEXT_PUBLIC_ASSET_URL}/storage/${product.img}`);
-        }
+        setPreviewUrl(getImagePath(product.img, product.updated_at));
       } else {
         setPreviewUrl(null);
       }
@@ -203,7 +203,16 @@ export default function ProductForm({ product, categories, onSave }: any) {
     data.append("introduction_blocks", JSON.stringify(introBlocks));
     data.append("colors", JSON.stringify(colors));
     data.append("options", JSON.stringify(options));
-    data.append("warranties", JSON.stringify(selectedWarranties));
+    data.append(
+      "warranties",
+      JSON.stringify(
+        selectedWarranties.map((warranty) => ({
+          ...warranty,
+          price:
+            warranty.price.trim() === "" ? 0 : Number(warranty.price),
+        })),
+      ),
+    );
 
     const processedSpecs = specs
       .filter((s) => s.feature_id || s.name)

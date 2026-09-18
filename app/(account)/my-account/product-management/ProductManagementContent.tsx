@@ -12,6 +12,7 @@ import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import { usePermissions } from "@/store/hooks/usePermissions";
 import { PERMISSIONS } from "@/types/permissions";
+import EmptyState from "@/components/ui/emptyState/EmptyState";
 
 type ProductItem = {
   id: number;
@@ -34,7 +35,7 @@ export default function ProductManagement() {
   const [deleteId, setDeleteId] = useState<number | null>(null);
   const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [loadingAction, setLoadingAction] = useState<string | null>(null);
-  
+
   const [popup, setPopup] = useState<{
     isOpen: boolean;
     message: string;
@@ -70,7 +71,9 @@ export default function ProductManagement() {
 
   const fetchProducts = async () => {
     try {
-      const { data } = await axiosInstance.get("/products");
+      const { data } = await axiosInstance.get("/products", {
+        params: { _t: Date.now() },
+      });
       setProducts(data.products || []);
     } catch (error) {
       console.error("خطا در دریافت محصولات:", error);
@@ -111,7 +114,8 @@ export default function ProductManagement() {
       });
       setIsModalOpen(false);
       setEditingProduct(null);
-      await fetchProducts();
+      setLoadingAction(null);
+      void fetchProducts();
     } catch (error: any) {
       console.error("Server Error:", error.response?.data);
       const message = error.response?.status === 403 
@@ -185,9 +189,17 @@ export default function ProductManagement() {
             ))}
           </div>
         ) : (
-          <div className="py-20 text-center bg-white dark:bg-dark-800 rounded-2xl border border-gray-100 dark:border-gray-800 text-gray-500 shadow-sm">
-            محصولی یافت نشد.
-          </div>
+          <EmptyState
+            tone="blue"
+            eyebrow="محصولات فروشگاه"
+            title="هنوز محصولی ثبت نشده است"
+            description="اولین محصول فروشگاه را ایجاد کنید تا در این بخش نمایش داده شود."
+            icon={
+              <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m3 7.5 9-5.25 9 5.25m-18 0 9 5.25m-9-5.25v9l9 5.25m9-14.25-9 5.25m9-5.25v9l-9 5.25m0-9v9" />
+              </svg>
+            }
+          />
         )}
       </div>
     </div>

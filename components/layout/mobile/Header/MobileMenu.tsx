@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useRef } from "react";
+import { useRef } from "react";
+import Link from "next/link";
+import { useSelector } from "react-redux";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
-import Link from "next/link";
+import { RootState } from "@/store";
+import MobileMenuItems from "./MobileMenuItems";
+import { useSettings } from "@/store/hooks/useSettings";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -12,6 +16,8 @@ interface MobileMenuProps {
 
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
+  const isLoggedIn = useSelector((state: RootState) => !!state.auth.user);
+  const { siteName, footerText, loading } = useSettings();
 
   useClickOutside(() => {
     if (isOpen) onClose();
@@ -22,7 +28,7 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   return (
     <>
       <div
-        className={`fixed inset-0 z-[60] bg-black/60 backdrop-blur-sm transition-all duration-300 lg:hidden ${
+        className={`fixed inset-0 z-60 bg-black/60 backdrop-blur-sm transition-all duration-300 lg:hidden ${
           isOpen ? "opacity-100 visible" : "opacity-0 invisible"
         }`}
         onClick={onClose}
@@ -30,14 +36,14 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
 
       <div
         ref={menuRef}
-        className={`fixed top-0 right-0 z-[70] w-[85%] max-w-sm h-full bg-white dark:bg-dark-800 shadow-2xl flex flex-col justify-between p-6 overflow-y-auto transition-transform duration-300 ease-in-out lg:hidden ${
+        className={`fixed right-0 top-0 z-70 flex h-full w-[85%] max-w-sm flex-col overflow-hidden bg-white shadow-2xl transition-transform duration-300 ease-in-out dark:bg-dark-800 lg:hidden ${
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
-        <div>
-          <div className="flex items-center justify-between pb-5 border-b border-gray-100 dark:border-white/10">
-            <span className="font-black text-sm tracking-widest bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-transparent">
-              SHIKSHOP
+        <div className="sticky top-0 z-10 shrink-0 border-b border-gray-100 bg-white/95 px-6 pb-5 pt-6 backdrop-blur-xl dark:border-white/10 dark:bg-dark-800/95">
+          <div className="flex items-center justify-between">
+            <span className="max-w-[12rem] truncate bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-sm font-black tracking-[0.12em] text-transparent">
+              {loading ? "..." : siteName}
             </span>
             <button
               onClick={onClose}
@@ -49,118 +55,53 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
               </svg>
             </button>
           </div>
-
-          <nav className="py-6 space-y-2 text-xs sm:text-sm font-medium text-gray-700 dark:text-gray-200">
-            
-            {/* سفارش‌های من (بر اساس پوشه purchases) */}
-            <Link
-              href="/my-account/purchases"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-violet-50 dark:bg-dark-700 flex items-center justify-center text-violet-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012-2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
-                </svg>
-              </div>
-              سفارش‌های من
-            </Link>
-
-            {/* علاقه‌مندی‌ها */}
-            <Link
-              href="/wishlist"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-pink-50 dark:bg-dark-700 flex items-center justify-center text-pink-500 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-              </div>
-              لیست علاقه‌مندی‌ها
-            </Link>
-
-            {/* پیشنهادهای شگفت‌انگیز */}
-            <Link
-              href="/offers"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-amber-50 dark:bg-dark-700 flex items-center justify-center text-amber-500 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v13m0-13V6a2 2 0 112 2h-2zm0 0V5.5A2.5 2.5 0 109.5 8H12zm-7 4h14M5 12a2 2 0 110-4h14a2 2 0 110 4M5 12v7a2 2 0 002 2h10a2 2 0 002-2v-7" />
-                </svg>
-              </div>
-              پیشنهادهای شگفت‌انگیز
-            </Link>
-
-            {/* مجله و مقالات */}
-            <Link
-              href="/blog"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-blue-50 dark:bg-dark-700 flex items-center justify-center text-blue-500 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z" />
-                </svg>
-              </div>
-              مجله و مقالات
-            </Link>
-
-            <div className="my-3 border-t border-gray-100 dark:border-white/5" />
-
-            {/* درباره ما */}
-            <Link
-              href="/about-us"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-dark-700 flex items-center justify-center text-gray-500 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-              </div>
-              درباره شیک‌شاپ
-            </Link>
-
-            {/* قوانین و مقررات */}
-            <Link
-              href="/terms"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-gray-100 dark:bg-dark-700 flex items-center justify-center text-gray-500 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                </svg>
-              </div>
-              قوانین و مقررات
-            </Link>
-
-            {/* تنظیمات (بر اساس پوشه settings داخل my-account) */}
-            <Link
-              href="/my-account/settings"
-              onClick={onClose}
-              className="flex items-center gap-3.5 p-3 rounded-xl hover:bg-violet-500/10 hover:text-violet-600 dark:hover:text-cyan-400 transition-all group"
-            >
-              <div className="w-8 h-8 rounded-lg bg-violet-50 dark:bg-dark-700 flex items-center justify-center text-violet-600 dark:text-cyan-400 group-hover:scale-110 transition-transform">
-                <svg className="size-4" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              </div>
-              تنظیمات
-            </Link>
-          </nav>
         </div>
 
-        <div className="pt-4 border-t border-gray-100 dark:border-white/10 text-center">
-          <p className="text-[11px] text-gray-400">
-            تمامی حقوق محفوظ است &copy; {new Date().getFullYear()}
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-5 scrollbar">
+          {isLoggedIn ? (
+            <Link
+              href="/my-account"
+              onClick={onClose}
+              className="mt-5 flex items-center gap-3 rounded-2xl bg-violet-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-violet-600/20"
+            >
+              <span className="flex size-9 items-center justify-center rounded-xl bg-white/15">
+                <UserIcon />
+              </span>
+              ورود به حساب کاربری
+            </Link>
+          ) : (
+            <Link
+              href="/login"
+              onClick={onClose}
+              className="mt-5 flex items-center justify-between rounded-2xl bg-green-600 px-4 py-3.5 text-sm font-bold text-white shadow-lg shadow-green-600/20"
+            >
+              <span className="flex items-center gap-3">
+                <span className="flex size-9 items-center justify-center rounded-xl bg-white/15">
+                  <UserIcon />
+                </span>
+                ورود و عضویت
+              </span>
+              <span className="text-xs text-white/75">ورود به حساب</span>
+            </Link>
+          )}
+
+          <MobileMenuItems onClose={onClose} />
+        </div>
+
+        <div className="shrink-0 border-t border-gray-100 px-6 pb-6 pt-4 text-center dark:border-white/10">
+          <p className="text-[11px] leading-6 text-gray-400" dir="rtl">
+            {footerText} &copy; {new Date().getFullYear()}
           </p>
         </div>
       </div>
     </>
+  );
+}
+
+function UserIcon() {
+  return (
+    <svg viewBox="0 0 24 24" className="size-5" fill="none" stroke="currentColor" strokeWidth="1.8">
+      <path d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z" />
+    </svg>
   );
 }

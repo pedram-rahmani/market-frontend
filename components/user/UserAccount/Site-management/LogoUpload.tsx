@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import React, { useRef } from "react";
 import BaseInput from "@/components/ui/Form/BaseInput";
 import { getImagePath } from "@/lib/utils";
@@ -50,11 +51,14 @@ export default function LogoUpload({
       className={`flex flex-col md:flex-row items-center gap-10 p-4 rounded-2xl border border-custom-gray-200 dark:border-custom-gray-400/20 bg-light/50 dark:bg-dark-700/30 ${disabled ? "opacity-70" : ""}`}
     >
       <div className="flex flex-row gap-4 items-center">
-        <div className="size-24 bg-custom-gray-100/40 dark:bg-dark-800/30 rounded-xl overflow-hidden flex items-center justify-center border border-custom-gray-400/40 shadow-sm shadow-ui-blue-400/40 dark:shadow-ui-purple shrink-0">
+        <div className="relative size-24 bg-custom-gray-100/40 dark:bg-dark-800/30 rounded-xl overflow-hidden flex items-center justify-center border border-custom-gray-400/40 shadow-sm shadow-ui-blue-400/40 dark:shadow-ui-purple shrink-0">
           {preview ? (
-            <img
+            <Image
               src={getImageUrl() || ""}
               alt="Logo"
+              fill
+              sizes="96px"
+              unoptimized
               className="w-full h-full object-cover"
             />
           ) : (

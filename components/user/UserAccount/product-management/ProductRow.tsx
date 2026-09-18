@@ -1,4 +1,6 @@
 "use client";
+import Image from "next/image";
+import { getImagePath } from "@/lib/utils";
 
 export default function ProductRow({ product, onDelete, onEdit, permissions, className }: any) {
   
@@ -30,8 +32,12 @@ export default function ProductRow({ product, onDelete, onEdit, permissions, cla
       
       {/* img/name */}
       <div className="flex items-center gap-4 flex-1">
-        <img 
-          src={`${process.env.NEXT_PUBLIC_ASSET_URL}/storage/${product.img}`} 
+        <Image
+          key={`${product.id}-${product.img}-${product.updated_at ?? ""}`}
+          src={getImagePath(product.img, product.updated_at)}
+          width={56}
+          height={56}
+          unoptimized
           className="w-14 h-14 rounded-xl object-cover" 
           alt={product.name} 
         />
