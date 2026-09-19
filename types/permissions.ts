@@ -21,13 +21,17 @@ export const PERMISSIONS = {
   CATEGORIES_EDIT: "categories.edit",
   CATEGORIES_DELETE: "categories.delete",
 
-  // Content & Communication
+  // User Interactions (Comments & Questions)
+  INTERACTIONS_VIEW: "interactions.view",
+  INTERACTIONS_MANAGE: "interactions.manage",
   COMMENTS_MANAGE: "comments.manage",
   COMMENTS_APPROVE: "comments.approve",
   COMMENTS_MEDIA_APPROVE: "comments.media.approve",
   QUESTIONS_MANAGE: "questions.manage",
   QUESTIONS_APPROVE: "questions.approve",
   ANSWERS_APPROVE: "answers.approve",
+
+  // Support & Tickets
   TICKETS_VIEW: "tickets.view",
   TICKETS_REPLY: "tickets.reply",
 
@@ -52,6 +56,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.USERS_PROMOTE]: "ارتقا نقش کاربران",
   [PERMISSIONS.USERS_DEMOTE]: "تنزل نقش کاربران",
   [PERMISSIONS.USERS_FORCE_DELETE]: "حذف دائمی کاربران",
+  
   [PERMISSIONS.PRODUCTS_VIEW]: "مشاهده لیست محصولات",
   [PERMISSIONS.PRODUCTS_CREATE]: "افزودن محصول جدید",
   [PERMISSIONS.PRODUCTS_EDIT]: "ویرایش محصولات",
@@ -62,14 +67,20 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.CATEGORIES_EDIT]: "ویرایش دسته‌بندی",
   [PERMISSIONS.CATEGORIES_DELETE]: "حذف دسته‌بندی",
 
+  // Interactions Labels
+  [PERMISSIONS.INTERACTIONS_VIEW]: "مشاهده صفحه تعاملات کاربران",
+  [PERMISSIONS.INTERACTIONS_MANAGE]: "مدیریت تعاملات کاربران",
   [PERMISSIONS.COMMENTS_MANAGE]: "مدیریت نظرات",
   [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن نظرات",
   [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های نظرات",
   [PERMISSIONS.QUESTIONS_MANAGE]: "پاسخ به سوالات",
   [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌ها",
   [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
+
+  // Support Labels
   [PERMISSIONS.TICKETS_VIEW]: "مشاهده تیکت‌ها",
   [PERMISSIONS.TICKETS_REPLY]: "پاسخ به تیکت‌ها",
+
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
   [PERMISSIONS.ORDERS_EDIT]: "تغییر وضعیت سفارشات",
   [PERMISSIONS.FINANCIAL_REPORTS]: "گزارشات مالی",
@@ -80,7 +91,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
 // Grouped permissions for better UX in forms
 export const PERMISSION_GROUPS = {
   users: {
-    label: "User Management",
+    label: "مدیریت کاربران",
     permissions: [
       PERMISSIONS.USERS_VIEW,
       PERMISSIONS.USERS_CREATE,
@@ -93,7 +104,7 @@ export const PERMISSION_GROUPS = {
     ],
   },
   products: {
-    label: "Product Management",
+    label: "مدیریت محصولات",
     permissions: [
       PERMISSIONS.PRODUCTS_VIEW,
       PERMISSIONS.PRODUCTS_CREATE,
@@ -102,7 +113,7 @@ export const PERMISSION_GROUPS = {
     ],
   },
   categories: {
-    label: "Category Management",
+    label: "مدیریت دسته‌بندی‌ها",
     permissions: [
       PERMISSIONS.CATEGORIES_VIEW,
       PERMISSIONS.CATEGORIES_CREATE,
@@ -110,21 +121,28 @@ export const PERMISSION_GROUPS = {
       PERMISSIONS.CATEGORIES_DELETE,
     ],
   },
-  content: {
-    label: "Content & Support",
+  interactions: {
+    label: "تعاملات کاربران (دیدگاه‌ها و پرسش‌ها)",
     permissions: [
+      PERMISSIONS.INTERACTIONS_VIEW,
+      PERMISSIONS.INTERACTIONS_MANAGE,
       PERMISSIONS.COMMENTS_MANAGE,
       PERMISSIONS.COMMENTS_APPROVE,
       PERMISSIONS.COMMENTS_MEDIA_APPROVE,
       PERMISSIONS.QUESTIONS_MANAGE,
       PERMISSIONS.QUESTIONS_APPROVE,
       PERMISSIONS.ANSWERS_APPROVE,
+    ],
+  },
+  support: {
+    label: "پشتیبانی و تیکت‌ها",
+    permissions: [
       PERMISSIONS.TICKETS_VIEW,
       PERMISSIONS.TICKETS_REPLY,
     ],
   },
   finance: {
-    label: "Finance & Reports",
+    label: "مالی و گزارش‌ها",
     permissions: [
       PERMISSIONS.ORDERS_VIEW,
       PERMISSIONS.ORDERS_EDIT,
@@ -132,11 +150,11 @@ export const PERMISSION_GROUPS = {
     ],
   },
   settings: {
-    label: "Settings",
+    label: "تنظیمات سایت",
     permissions: [PERMISSIONS.SETTINGS_EDIT],
   },
   notifications: {
-    label: "Notifications",
+    label: "مدیریت پیام‌ها",
     permissions: [PERMISSIONS.NOTIFICATIONS_MANAGE],
   },
 } as const;

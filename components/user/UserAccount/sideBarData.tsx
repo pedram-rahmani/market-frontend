@@ -67,7 +67,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/user-interactions",
     label: "تعاملات کاربران",
-    permission: "comments.manage",
+    permission: "interactions.view",
     typeKey: "user-interactions",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
