@@ -61,7 +61,7 @@ export default function Navbar({ menuItems }: NavbarProps) {
   const logoSrc = cleanLogoUrl ? getImagePath(cleanLogoUrl) : null;
 
   return (
-    <nav className="flex items-center w-full relative md:px-2 lg:px-4 grow gap-x-3 lg:gap-x-5 min-w-0 h-full">
+    <nav className="flex items-center w-full relative md:px-1 lg:px-4 grow gap-x-1 lg:gap-x-5 min-w-0 h-full">
       {/* Logo Section */}
       <Link
         href="/"
@@ -101,6 +101,8 @@ export default function Navbar({ menuItems }: NavbarProps) {
             className="group flex items-center gap-x-1.5 md:gap-x-2 font-bold cursor-pointer px-2 md:px-3"
             onMouseEnter={handleMouseEnter}
             onClick={handleToggleMenu}
+            aria-label="دسته‌بندی کالاها"
+            title="دسته‌بندی کالاها"
           >
             <svg
               className={`size-5 transition-colors ${showMenu ? "text-green-500" : "group-hover:text-green-500"}`}
@@ -110,7 +112,7 @@ export default function Navbar({ menuItems }: NavbarProps) {
             >
               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h16M4 18h16" />
             </svg>
-            <span className={`text-xs md:text-sm whitespace-nowrap transition-colors ${showMenu ? "text-green-500" : "group-hover:text-green-500"}`}>
+            <span className={`hidden lg:inline text-xs md:text-sm whitespace-nowrap transition-colors ${showMenu ? "text-green-500" : "group-hover:text-green-500"}`}>
               دسته‌بندی کالاها
             </span>
           </div>
@@ -120,10 +122,10 @@ export default function Navbar({ menuItems }: NavbarProps) {
           </div>
         </div>
 
-        <div className="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1 md:mx-2 shrink-0"></div>
+        <div className="w-px h-4 bg-gray-300 dark:bg-white/10 mx-1 shrink-0"></div>
 
-        {/* Strategic Links */}
-        <div className="flex items-center [&>a]:px-2 md:[&>a]:px-3 [&>a]:text-xs md:[&>a]:text-sm [&>a]:transition-all [&>a]:py-2">
+        {/* Desktop links */}
+        <div className="hidden lg:flex items-center min-w-0 [&>a]:px-3 [&>a]:text-sm [&>a]:transition-all [&>a]:py-2">
           <Link href="/products" className="hover:text-green-500 flex items-center gap-1 whitespace-nowrap">
             همه محصولات
           </Link>
@@ -134,10 +136,20 @@ export default function Navbar({ menuItems }: NavbarProps) {
             </span>
             شگفت‌انگیزها
           </Link>
-          <Link href="/seller-panel" className="hidden lg:inline-block hover:text-green-500 whitespace-nowrap">
+          <Link href="/seller-panel" className="hover:text-green-500 whitespace-nowrap">
             فروشنده شوید
           </Link>
-          <Link href="/faq" className="hidden lg:inline-block text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white whitespace-nowrap">
+          <Link href="/faq" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white whitespace-nowrap">
+            سوالی دارید؟
+          </Link>
+        </div>
+
+        {/* Compact links for medium desktop widths */}
+        <div className="flex lg:hidden items-center min-w-0 [&>a]:px-2 [&>a]:text-xs [&>a]:transition-all [&>a]:py-2">
+          <Link href="/seller-panel" className="hover:text-green-500 whitespace-nowrap">
+            فروشنده شوید
+          </Link>
+          <Link href="/faq" className="text-gray-500 dark:text-gray-400 hover:text-black dark:hover:text-white whitespace-nowrap">
             سوالی دارید؟
           </Link>
         </div>

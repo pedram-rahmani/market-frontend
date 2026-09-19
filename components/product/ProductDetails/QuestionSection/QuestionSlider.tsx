@@ -206,10 +206,8 @@ export default function QuestionSlider({
             : "opacity-0 group-hover:opacity-100 hover:bg-gray-50 dark:hover:bg-dark-600"
         }`}
       >
-        <svg viewBox="0 0 24 24" strokeWidth={1.5} className="size-4!">
+        <svg viewBox="0 0 24 24" className="size-4!">
           <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
             d="m8.25 4.5 7.5 7.5-7.5 7.5"
           />
         </svg>

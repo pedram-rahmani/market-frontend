@@ -7,7 +7,9 @@ interface ProductQuestionsProps {
   items: ProductQuestionItem[];
   onEdit: (id: number) => void;
   onDelete: (id: number) => void;
-  onToggleApproval: (id: number, currentStatus: number) => void;
+  onToggleApproval: (id: number, currentStatus: number, isReply?: boolean) => void;
+  canApproveQuestions: boolean;
+  canApproveAnswers: boolean;
 }
 
 export default function ProductQuestions({
@@ -15,6 +17,8 @@ export default function ProductQuestions({
   onEdit,
   onDelete,
   onToggleApproval,
+  canApproveQuestions,
+  canApproveAnswers,
 }: ProductQuestionsProps) {
   const pendingQuestionsCount = items.filter(
     (item) => item.is_approved === 0,
@@ -98,17 +102,19 @@ export default function ProductQuestions({
             </div>
 
             <div className="flex items-center gap-2 pt-2 border-t border-gray-100 dark:border-white/5">
-              <button
-                type="button"
-                onClick={() => onToggleApproval(item.id, item.is_approved)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-                  isApproved
-                    ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
-                    : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                }`}
-              >
-                {isApproved ? "لغو تایید" : "تایید کردن"}
-              </button>
+              {canApproveQuestions && (
+                <button
+                  type="button"
+                  onClick={() => onToggleApproval(item.id, item.is_approved)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                    isApproved
+                      ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
+                      : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+                  }`}
+                >
+                  {isApproved ? "لغو تایید" : "تایید کردن"}
+                </button>
+              )}
 
               <button
                 type="button"
@@ -167,19 +173,21 @@ export default function ProductQuestions({
                       </div>
 
                       <div className="flex items-center gap-2 pt-2 border-t border-gray-200/40 dark:border-white/5">
-                        <button
-                          type="button"
-                          onClick={() =>
-                            onToggleApproval(reply.id, reply.is_approved)
-                          }
-                          className={`px-3 py-1 rounded-lg text-[11px] font-medium cursor-pointer ${
-                            isReplyApproved
-                              ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
-                              : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                          }`}
-                        >
-                          {isReplyApproved ? "لغو تایید" : "تایید کردن"}
-                        </button>
+                        {canApproveAnswers && (
+                          <button
+                            type="button"
+                            onClick={() =>
+                              onToggleApproval(reply.id, reply.is_approved, true)
+                            }
+                            className={`px-3 py-1 rounded-lg text-[11px] font-medium cursor-pointer ${
+                              isReplyApproved
+                                ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
+                                : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+                            }`}
+                          >
+                            {isReplyApproved ? "لغو تایید" : "تایید کردن"}
+                          </button>
+                        )}
 
                         <button
                           type="button"

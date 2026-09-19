@@ -11,6 +11,8 @@ interface ProductReviewsProps {
   onDelete: (id: number) => void;
   onToggleApproval: (id: number, currentStatus: number) => void;
   onToggleMediaApproval: (mediaId: number) => void;
+  canApproveComments: boolean;
+  canApproveCommentMedia: boolean;
 }
 
 export default function ProductReviews({
@@ -19,6 +21,8 @@ export default function ProductReviews({
   onDelete,
   onToggleApproval,
   onToggleMediaApproval,
+  canApproveComments,
+  canApproveCommentMedia,
 }: ProductReviewsProps) {
   const pendingCommentsCount = items.filter((item) => item.is_approved === 0).length;
   
@@ -131,17 +135,19 @@ export default function ProductReviews({
                           </span>
                         </div>
 
-                        <button
-                          type="button"
-                          onClick={() => onToggleMediaApproval(mediaItem.id)}
-                          className={`w-full py-1 rounded text-[10px] font-medium transition-colors cursor-pointer ${
-                            isMediaApproved 
-                              ? 'bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400' 
-                              : 'bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 dark:text-emerald-400'
-                          }`}
-                        >
-                          {isMediaApproved ? 'لغو تایید' : 'تایید فایل'}
-                        </button>
+                        {canApproveCommentMedia && (
+                          <button
+                            type="button"
+                            onClick={() => onToggleMediaApproval(mediaItem.id)}
+                            className={`w-full py-1 rounded text-[10px] font-medium transition-colors cursor-pointer ${
+                              isMediaApproved
+                                ? 'bg-amber-500/10 text-amber-600 hover:bg-amber-500/20 dark:text-amber-400'
+                                : 'bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20 dark:text-emerald-400'
+                            }`}
+                          >
+                            {isMediaApproved ? 'لغو تایید' : 'تایید فایل'}
+                          </button>
+                        )}
                       </div>
                     );
                   })}
@@ -151,17 +157,19 @@ export default function ProductReviews({
 
             {/* action btns */}
             <div className="flex items-center gap-2 pt-3 border-t border-gray-100 dark:border-white/5">
-              <button
-                type="button"
-                onClick={() => onToggleApproval(item.id, item.is_approved)}
-                className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
-                  isApproved
-                    ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
-                    : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
-                }`}
-              >
-                {isApproved ? "لغو تایید متن" : "تایید کردن متن"}
-              </button>
+              {canApproveComments && (
+                <button
+                  type="button"
+                  onClick={() => onToggleApproval(item.id, item.is_approved)}
+                  className={`px-3.5 py-1.5 rounded-xl text-xs font-medium transition-colors cursor-pointer ${
+                    isApproved
+                      ? "bg-amber-500/10 text-amber-600 hover:bg-amber-500/20"
+                      : "bg-emerald-500/10 text-emerald-600 hover:bg-emerald-500/20"
+                  }`}
+                >
+                  {isApproved ? "لغو تایید متن" : "تایید کردن متن"}
+                </button>
+              )}
 
               <button
                 type="button"

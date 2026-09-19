@@ -23,7 +23,11 @@ export const PERMISSIONS = {
 
   // Content & Communication
   COMMENTS_MANAGE: "comments.manage",
+  COMMENTS_APPROVE: "comments.approve",
+  COMMENTS_MEDIA_APPROVE: "comments.media.approve",
   QUESTIONS_MANAGE: "questions.manage",
+  QUESTIONS_APPROVE: "questions.approve",
+  ANSWERS_APPROVE: "answers.approve",
   TICKETS_VIEW: "tickets.view",
   TICKETS_REPLY: "tickets.reply",
 
@@ -59,7 +63,11 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.CATEGORIES_DELETE]: "حذف دسته‌بندی",
 
   [PERMISSIONS.COMMENTS_MANAGE]: "مدیریت نظرات",
+  [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن نظرات",
+  [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های نظرات",
   [PERMISSIONS.QUESTIONS_MANAGE]: "پاسخ به سوالات",
+  [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌ها",
+  [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
   [PERMISSIONS.TICKETS_VIEW]: "مشاهده تیکت‌ها",
   [PERMISSIONS.TICKETS_REPLY]: "پاسخ به تیکت‌ها",
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
@@ -106,7 +114,11 @@ export const PERMISSION_GROUPS = {
     label: "Content & Support",
     permissions: [
       PERMISSIONS.COMMENTS_MANAGE,
+      PERMISSIONS.COMMENTS_APPROVE,
+      PERMISSIONS.COMMENTS_MEDIA_APPROVE,
       PERMISSIONS.QUESTIONS_MANAGE,
+      PERMISSIONS.QUESTIONS_APPROVE,
+      PERMISSIONS.ANSWERS_APPROVE,
       PERMISSIONS.TICKETS_VIEW,
       PERMISSIONS.TICKETS_REPLY,
     ],

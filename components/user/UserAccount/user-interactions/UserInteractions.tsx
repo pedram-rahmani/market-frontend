@@ -7,6 +7,8 @@ import ProductQuestions from "./ProductQuestions";
 import EditInteractionModal from "./EditInteractionModal";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import axiosInstance from "@/lib/axiosInstance";
+import { PERMISSIONS } from "@/types/permissions";
+import { usePermissions } from "@/store/hooks/usePermissions";
 
 export interface ReplyItem {
   id: number;
@@ -40,6 +42,7 @@ export interface InteractionItem {
 }
 
 export default function UserInteractions() {
+  const { can } = usePermissions();
   const [activeTab, setActiveTab] = useState<"reviews" | "questions">("reviews");
   const [reviewsList, setReviewsList] = useState<InteractionItem[]>([]);
   const [questionsList, setQuestionsList] = useState<InteractionItem[]>([]);
@@ -296,6 +299,8 @@ export default function UserInteractions() {
             onDelete={(id) => { setItemToDeleteId(id); setIsDeleteModalOpen(true); }}
             onToggleApproval={handleToggleApproval}
             onToggleMediaApproval={handleToggleMediaApproval}
+            canApproveComments={can(PERMISSIONS.COMMENTS_APPROVE)}
+            canApproveCommentMedia={can(PERMISSIONS.COMMENTS_MEDIA_APPROVE)}
           />
         ) : (
           <ProductQuestions
@@ -303,6 +308,8 @@ export default function UserInteractions() {
             onEdit={handleOpenEdit}
             onDelete={(id) => { setItemToDeleteId(id); setIsDeleteModalOpen(true); }}
             onToggleApproval={handleToggleApproval}
+            canApproveQuestions={can(PERMISSIONS.QUESTIONS_APPROVE)}
+            canApproveAnswers={can(PERMISSIONS.ANSWERS_APPROVE)}
           />
         )
       )}
