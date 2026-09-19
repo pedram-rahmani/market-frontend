@@ -49,6 +49,7 @@ export default function EditInteractionModal({
       onClose();
     } catch (error) {
       console.error("Error saving interaction:", error);
+      throw error;
     } finally {
       setLoading(false);
     }

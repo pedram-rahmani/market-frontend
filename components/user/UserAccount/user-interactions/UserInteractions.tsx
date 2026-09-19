@@ -6,6 +6,7 @@ import ProductReviews from "./ProductReviews";
 import ProductQuestions from "./ProductQuestions";
 import EditInteractionModal from "./EditInteractionModal";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
+import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import axiosInstance from "@/lib/axiosInstance";
 import { PERMISSIONS } from "@/types/permissions";
 import { usePermissions } from "@/store/hooks/usePermissions";
@@ -53,7 +54,13 @@ export default function UserInteractions() {
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
   const [selectedItem, setSelectedItem] = useState<InteractionItem | null>(null);
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState<number | null>(null);
+  const [popup, setPopup] = useState<{ isOpen: boolean; message: string; type: "success" | "error" }>({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
 
   // Mark notifications as read & fetch data.
   useEffect(() => {
@@ -145,26 +152,60 @@ export default function UserInteractions() {
 
   // Handlers
   const handleOpenEdit = (id: number) => {
-    const item = (activeTab === "reviews" ? reviewsList : questionsList).find((i) => i.id === id);
+    const items = activeTab === "reviews" ? reviewsList : questionsList;
+    const item = items.find((i) => i.id === id);
+    const parent = activeTab === "questions"
+      ? items.find((question) => question.replies?.some((reply) => reply.id === id))
+      : undefined;
+    const reply = parent?.replies?.find((item) => item.id === id);
     if (item) {
       setSelectedItem(item);
+      setIsEditModalOpen(true);
+    } else if (parent && reply) {
+      setSelectedItem({
+        id: reply.id,
+        type: "question",
+        productName: reply.productName || parent.productName,
+        content: reply.content,
+        date: reply.date,
+        status: reply.status,
+        is_approved: reply.is_approved,
+      });
       setIsEditModalOpen(true);
     }
   };
 
   const handleDeleteConfirm = async () => {
     if (!itemToDeleteId) return;
+    setIsDeleting(true);
     try {
       const endpoint = activeTab === "reviews" ? `/reviews/${itemToDeleteId}` : `/questions/${itemToDeleteId}`;
       await axiosInstance.delete(endpoint);
 
-      const setter = activeTab === "reviews" ? setReviewsList : setQuestionsList;
-      setter((prev) => prev.filter((item) => item.id !== itemToDeleteId));
+      if (activeTab === "reviews") {
+        setReviewsList((prev) => prev.filter((item) => item.id !== itemToDeleteId));
+      } else {
+        setQuestionsList((prev) =>
+          prev
+            .filter((item) => item.id !== itemToDeleteId)
+            .map((item) => ({
+              ...item,
+              replies: item.replies?.filter((reply) => reply.id !== itemToDeleteId),
+            }))
+        );
+      }
 
       setIsDeleteModalOpen(false);
       setItemToDeleteId(null);
+      setPopup({ isOpen: true, message: "مورد با موفقیت حذف شد.", type: "success" });
     } catch (err: any) {
-      alert(err.response?.data?.message || "خطا در حذف اطلاعات");
+      setPopup({
+        isOpen: true,
+        message: err.response?.data?.message || "خطا در حذف اطلاعات",
+        type: "error",
+      });
+    } finally {
+      setIsDeleting(false);
     }
   };
 
@@ -232,7 +273,16 @@ export default function UserInteractions() {
       ? { comment: updatedData.content, rating: updatedData.rating }
       : { body: updatedData.content };
 
-    await axiosInstance.put(endpoint, payload);
+    try {
+      await axiosInstance.put(endpoint, payload);
+    } catch (error: any) {
+      setPopup({
+        isOpen: true,
+        message: error.response?.data?.message || "خطا در ویرایش اطلاعات",
+        type: "error",
+      });
+      throw error;
+    }
 
     const setter = isReview ? setReviewsList : setQuestionsList;
     setter((prev) =>
@@ -248,10 +298,19 @@ export default function UserInteractions() {
           : item
       )
     );
+    setPopup({ isOpen: true, message: "مورد با موفقیت ویرایش شد و برای تایید مجدد ارسال شد.", type: "success" });
   };
 
-  const itemToDeleteTitle =
-    (activeTab === "reviews" ? reviewsList : questionsList).find((i) => i.id === itemToDeleteId)?.productName || "این مورد";
+  const itemToDelete = (activeTab === "reviews" ? reviewsList : questionsList)
+    .find((item) =>
+      item.id === itemToDeleteId ||
+      item.replies?.some((reply) => reply.id === itemToDeleteId)
+    );
+  const itemToDeleteReply = itemToDelete?.replies?.find((reply) => reply.id === itemToDeleteId);
+  const itemToDeleteText = itemToDeleteReply?.content || itemToDelete?.content || "این مورد";
+  const itemToDeleteTitle = itemToDeleteText.length > 100
+    ? `${itemToDeleteText.slice(0, 100)}…`
+    : itemToDeleteText;
 
   // tab btns
   const renderTabButton = (tab: "reviews" | "questions", label: string, badgeCount: number) => (
@@ -323,9 +382,17 @@ export default function UserInteractions() {
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
-        onClose={() => { setIsDeleteModalOpen(false); setItemToDeleteId(null); }}
+        onClose={() => { if (!isDeleting) { setIsDeleteModalOpen(false); setItemToDeleteId(null); } }}
         onConfirm={handleDeleteConfirm}
         title={itemToDeleteTitle}
+        isDeleting={isDeleting}
+      />
+
+      <SimplePopup
+        isOpen={popup.isOpen}
+        onClose={() => setPopup((current) => ({ ...current, isOpen: false }))}
+        message={popup.message}
+        type={popup.type}
       />
     </div>
   );

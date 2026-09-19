@@ -30,13 +30,14 @@ export default function HeaderActions() {
   return (
     <div className="flex items-center gap-x-1.5 lg:gap-x-4 shrink-0">
       {/* Search Box */}
-      <div className="hidden xl:block w-64 3xl:w-80">
+      <div className="hidden md:block w-10 xl:w-64 3xl:w-80">
         <SearchInput
-          placeholder="به دنبال چه میگردی؟"
+          placeholder="جست‌وجوی محصول..."
           showImage={true}
           filterKey="name"
           redirectUrl="/search"
           searchParamName="search"
+          compactAtMedium
           getItemLink={(item: any) => `/products/${item.slug || item.id}`}
           fetcher={async (query) => {
             const products = await getProducts({ search: query });

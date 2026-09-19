@@ -77,7 +77,7 @@ export default function Header() {
         {showSearch && (
           <div className="border-t border-gray-100/80 bg-white/95 p-3.5 shadow-xl shadow-slate-900/10 backdrop-blur-2xl animate-in fade-in slide-in-from-top-2 duration-200 dark:border-white/5 dark:bg-dark-900/95">
             <SearchInput
-              placeholder="به دنبال چه میگردی؟"
+              placeholder="جست‌وجوی محصول..."
               showImage={true}
               filterKey="name"
               redirectUrl="/search"

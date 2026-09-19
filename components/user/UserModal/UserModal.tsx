@@ -74,7 +74,7 @@ const UserModal = forwardRef<HTMLDivElement, UserModalProps>(
         }`}
       >
         {/* triangle */}
-        <div className="absolute top-2.5 left-5 w-3 h-3 bg-white/95 dark:bg-[#16161a] border-t border-l border-gray-200 dark:border-white/5 rotate-45 z-10"></div>
+        <div className="absolute top-2.5 left-5 w-3 h-3 bg-white dark:bg-[#16161aec] border-t border-l border-gray-200 dark:border-white/5 rotate-45 backdrop-blur-2xl z-10"></div>
         <div
           className="relative w-72 bg-white/95 dark:bg-[#16161a]/95 border border-gray-200 dark:border-white/10 p-5 rounded-2xl shadow-2xl backdrop-blur-2xl overflow-hidden text-right"
           dir="rtl"
