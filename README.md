@@ -1,36 +1,86 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Marketplace Frontend
 
-## Getting Started
+The customer-facing web application for the Marketplace project. It is built with Next.js and TypeScript and communicates with the Laravel REST API in the [market-backend repository](https://github.com/pedram-rahmani/market-backend).
 
-First, run the development server:
+## Features
+
+- Responsive storefront with home, product listing, product details, search, category navigation, filtering, and sorting
+- Authentication flows: registration, login, logout, forgot password, and password reset
+- Product detail pages with galleries, specifications, warranties, reviews, questions, reactions, and reports
+- Shopping cart and checkout flows with address and shipping/payment selections
+- User account area with orders, wallet and transactions, coupons, notifications, support tickets, wishlist, profile, and security settings
+- Role-aware management screens for products, categories, users, coupons, reviews, questions, notifications, and site settings
+- Client-side image compression before upload
+- Persian/Jalali date support and a Persian-first responsive interface
+
+## Technology
+
+- Next.js `16`
+- React `19`
+- TypeScript
+- Tailwind CSS `4`
+- Redux Toolkit and React Redux
+- Axios
+- React Hook Form
+- `jalaali-js`
+- `browser-image-compression`
+
+## Project structure
+
+```text
+app/          Next.js App Router pages and layouts
+components/   Reusable UI, product, cart, checkout, auth, and account components
+lib/          API client and shared utilities
+store/        Redux store and slices
+public/       Fonts and static assets
+```
+
+## Requirements
+
+- Node.js 20 or newer
+- A running instance of the Laravel backend
+
+## Local setup
+
+From this directory:
+
+```bash
+npm install
+```
+
+Create `frontend/.env.local`:
+
+```env
+NEXT_PUBLIC_API_URL=http://127.0.0.1:8000/api
+NEXT_PUBLIC_ASSET_URL=http://127.0.0.1:8000/storage
+```
+
+Start the development server:
 
 ```bash
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+The application will be available at `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Production build
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+```bash
+npm run build
+npm run start
+```
 
-## Learn More
+`npm run start` uses the `PORT` environment variable when it is set.
 
-To learn more about Next.js, take a look at the following resources:
+## Backend
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+The frontend expects the Laravel API to be available at `NEXT_PUBLIC_API_URL`. See the setup guide in the [market-backend repository](https://github.com/pedram-rahmani/market-backend).
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Live Demo
 
-## Deploy on Vercel
+- [Open the Marketplace website](https://my-market-frontend.liara.run/)
+- [Backend API](https://my-market-backend.liara.run/api)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Related documentation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+- [Backend repository](https://github.com/pedram-rahmani/market-backend)
