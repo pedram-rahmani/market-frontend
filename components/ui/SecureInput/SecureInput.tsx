@@ -12,6 +12,7 @@ interface SecureInputProps {
   className?: string;
   allInputs?: any;
   autoComplete?: string;
+  showRequiredMarker?: boolean;
 }
 
 export default function SecureInput({
@@ -22,6 +23,7 @@ export default function SecureInput({
   className = "",
   allInputs,
   autoComplete,
+  showRequiredMarker = true,
 }: SecureInputProps) {
   const [showPassword, setShowPassword] = useState(false);
 
@@ -34,6 +36,7 @@ export default function SecureInput({
       onInputHandler={onInputHandler}
       allInputs={allInputs}
       autoComplete={autoComplete}
+      showRequiredMarker={showRequiredMarker}
       className={`${className} [&::-ms-reveal]:hidden [&::-webkit-credentials-auto-fill-button]:hidden`}
     >
       <button

@@ -7,6 +7,7 @@ import TicketDetailModal from "@/components/user/UserAccount/support/TicketDetai
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import axiosInstance from "@/lib/axiosInstance";
 import PageHeader from "@/components/user/UserAccount/PageHeader";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function SupportContent() {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -33,7 +34,7 @@ export default function SupportContent() {
       console.error("خطا در دریافت تیکت‌ها:", error);
       setPopup({
         isOpen: true,
-        message: "خطا در دریافت لیست تیکت‌ها",
+        message: getPersianErrorMessage(error, "خطا در دریافت لیست تیکت‌ها"),
         type: "error",
       });
     } finally {
@@ -59,14 +60,14 @@ export default function SupportContent() {
       
       setPopup({
         isOpen: true,
-        message: response.data.message || "پیام شما با موفقیت ثبت شد.",
+        message: response.data.message || SUCCESS_MESSAGES.ticketCreated,
         type: "success",
       });
     } catch (error: any) {
       console.error("خطا در ثبت تیکت:", error);
       setPopup({
         isOpen: true,
-        message: error.response?.data?.message || "خطایی در ثبت پیام رخ داد.",
+        message: getPersianErrorMessage(error, "خطایی در ثبت پیام رخ داد."),
         type: "error",
       });
     }

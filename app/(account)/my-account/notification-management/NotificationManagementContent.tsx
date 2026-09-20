@@ -6,6 +6,7 @@ import PageHeader from "@/components/user/UserAccount/PageHeader";
 import Select from "@/components/ui/Form/Select";
 import Checkbox from "@/components/ui/Form/Checkbox";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface Recipient {
   id: number;
@@ -39,7 +40,7 @@ export default function NotificationManagementContent() {
       setHistory(response.data.history || []);
     } catch (error) {
       console.error("Failed to load notification management data", error);
-      setFeedback("دریافت اطلاعات مدیریت پیام‌ها ناموفق بود.");
+      setFeedback(getPersianErrorMessage(error, "دریافت اطلاعات مدیریت پیام‌ها ناموفق بود."));
     } finally {
       setLoading(false);
     }
@@ -64,11 +65,11 @@ export default function NotificationManagementContent() {
       setMessage("");
       setRecipientId("");
       setSendToAll(false);
-      setFeedback("پیام با موفقیت ارسال شد.");
+      setFeedback(SUCCESS_MESSAGES.notificationSent);
       await loadData();
     } catch (error: any) {
       console.error("Failed to send notification", error);
-      setFeedback(error?.response?.data?.message || "ارسال پیام ناموفق بود.");
+      setFeedback(getPersianErrorMessage(error, "ارسال پیام ناموفق بود."));
     } finally {
       setSending(false);
     }

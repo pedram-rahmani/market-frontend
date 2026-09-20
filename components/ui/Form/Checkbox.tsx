@@ -1,31 +1,6 @@
 "use client";
 
-import { useReducer, useEffect } from "react";
-
-interface CheckboxState {
-  checked: boolean;
-  isValid: boolean;
-  touched?: boolean;
-}
-
-type CheckboxAction = { type: "TOGGLE"; checked: boolean; required: boolean };
-
-const checkboxReducer = (
-  state: CheckboxState,
-  action: CheckboxAction,
-): CheckboxState => {
-  switch (action.type) {
-    case "TOGGLE":
-      return {
-        ...state,
-        checked: action.checked,
-        isValid: action.required ? action.checked : true,
-        touched: true,
-      };
-    default:
-      return state;
-  }
-};
+import { useState, useEffect } from "react";
 
 interface CheckboxProps {
   id: string;
@@ -44,32 +19,18 @@ export default function Checkbox({
   onInputHandler,
   activeColor = "bg-green-500 border-green-500",
 }: CheckboxProps) {
-  const [checkboxState, dispatch] = useReducer(checkboxReducer, {
-    checked: Boolean(externalChecked),
-    isValid: !required,
-  });
+  const [checked, setChecked] = useState(Boolean(externalChecked));
 
   // هماهنگ‌سازی با تغییرات از بیرون (مثل لود شدن اطلاعات ویرایش)
   useEffect(() => {
-    if (checkboxState.checked === Boolean(externalChecked)) {
-      return;
-    }
-    dispatch({ 
-      type: "TOGGLE", 
-      checked: Boolean(externalChecked), 
-      required: !!required 
-    });
-  }, [externalChecked, required, checkboxState.checked]);
+    setChecked(Boolean(externalChecked));
+  }, [externalChecked]);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newChecked = e.target.checked;
     const newIsValid = required ? newChecked : true;
 
-    dispatch({
-      type: "TOGGLE",
-      checked: newChecked,
-      required: !!required,
-    });
+    setChecked(newChecked);
 
     // گزارش به والد فقط هنگام تغییر توسط کاربر
     onInputHandler(id, newChecked, newIsValid);
@@ -80,15 +41,15 @@ export default function Checkbox({
       <input
         type="checkbox"
         className="sr-only"
-        checked={checkboxState.checked}
+        checked={checked}
         onChange={handleChange}
       />
       <div
         className={`w-5 h-5 border-2 border-custom-gray-300 dark:border-white/20 rounded-full flex items-center justify-center transition-all shadow-sm ${
-          checkboxState.checked ? activeColor : "bg-transparent"
+          checked ? activeColor : "bg-transparent"
         }`}
       >
-        {checkboxState.checked && (
+        {checked && (
           <svg
             className="w-3.5 h-3.5 text-white"
             fill="none"

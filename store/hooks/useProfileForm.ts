@@ -22,7 +22,9 @@ export function useProfileForm(
 ) {
   const [formData, setFormData] = useState<EditProfileFormValues>(initialData);
   const [loading, setLoading] = useState(false);
+  const [profileLoading, setProfileLoading] = useState(true);
   const [avatarLoading, setAvatarLoading] = useState(true);
+  const [avatarImageLoading, setAvatarImageLoading] = useState(true);
 
   const { processAvatar, isProcessing } = useImageCompressor();
   const [selectedAvatarFile, setSelectedAvatarFile] = useState<File | null>(
@@ -43,7 +45,9 @@ export function useProfileForm(
     setFormData(initialData);
     setAvatarPreview(initialData.avatar || null);
     setSelectedAvatarFile(null);
+    setProfileLoading(true);
     setAvatarLoading(true);
+    setAvatarImageLoading(Boolean(initialData.avatar));
 
     const fetchUserData = async () => {
       try {
@@ -60,25 +64,26 @@ export function useProfileForm(
           };
           setFormData(fetchedData);
           setAvatarPreview(userData.avatar || null);
+          setAvatarImageLoading(Boolean(userData.avatar));
         }
       } catch (err) {
         console.error("Error fetching current user profile:", err);
       } finally {
+        setProfileLoading(false);
         setAvatarLoading(false);
       }
     };
 
     fetchUserData();
-  }, [isOpen, initialData]);
+  }, [isOpen]);
 
   const handleInputChange = (
     field: keyof EditProfileFormValues,
     value: string,
   ) => {
-    setFormData((prev) => ({
-      ...prev,
-      [field]: value,
-    }));
+    setFormData((prev) =>
+      prev[field] === value ? prev : { ...prev, [field]: value },
+    );
   };
 
   const handleAvatarChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -88,7 +93,8 @@ export function useProfileForm(
     try {
       const optimizedFile = await processAvatar(file, 300, 0.85);
       setSelectedAvatarFile(optimizedFile);
-      setAvatarPreview(URL.createObjectURL(optimizedFile));
+        setAvatarImageLoading(true);
+        setAvatarPreview(URL.createObjectURL(optimizedFile));
     } catch (err) {
       console.error("Error processing image:", err);
     }
@@ -154,7 +160,10 @@ export function useProfileForm(
   return {
     formData,
     loading,
+    profileLoading,
     avatarLoading,
+    avatarImageLoading,
+    setAvatarImageLoading,
     isProcessing,
     messageModalOpen,
     setMessageModalOpen,

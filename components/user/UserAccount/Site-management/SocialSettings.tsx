@@ -63,11 +63,11 @@ export default function SocialSettings({
             ];
 
             return (
-              <div key={index} className="flex gap-3 items-center group animate-fadeIn">
+              <div key={index} className="flex flex-wrap gap-3 items-center group animate-fadeIn">
                 {editingIndex === index ? (
                   <input
                     disabled={disabled}
-                    className="input-info w-44! border-violet-500 ring-2 ring-violet-500/20"
+                    className="input-info w-full sm:w-44! border-violet-500 ring-2 ring-violet-500/20"
                     autoFocus
                     placeholder="نام شبکه..."
                     value={social.name}
@@ -84,7 +84,7 @@ export default function SocialSettings({
                       else onUpdate(index, "name", val);
                     }}
                     placeholder="انتخاب شبکه"
-                    className="w-44!"
+                    className="w-full sm:w-44!"
                   />
                 )}
 
@@ -94,14 +94,14 @@ export default function SocialSettings({
                   value={social.url}
                   onChange={(e) => onUpdate(index, "url", e.target.value)}
                   placeholder="https://..."
-                  className="input-info flex-1 text-left"
+                  className="input-info min-w-0 w-full sm:flex-1 text-left"
                 />
 
                 {!disabled && (
                   <button
                     type="button"
                     onClick={() => onRemove(index)}
-                    className="px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-sm"
+                    className="shrink-0 px-4 py-3 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-sm"
                   >
                     حذف
                   </button>

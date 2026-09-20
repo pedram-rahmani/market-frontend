@@ -4,6 +4,7 @@ import { useState } from "react";
 import { CartSummaryProps } from "@/types/cart";
 import axiosInstance from "@/lib/axiosInstance";
 import useDiscount from "@/store/hooks/useDiscount";
+import { getPersianErrorMessage } from "@/lib/errorMapper";
 
 interface ExtendedCartSummaryProps extends CartSummaryProps {
   totalQuantity?: number;
@@ -55,7 +56,7 @@ export default function CartSummary({
       }
     } catch (error: any) {
       setErrorMessage(
-        error.response?.data?.message || "خطایی در اعمال کد تخفیف رخ داد."
+        getPersianErrorMessage(error, "خطایی در اعمال کد تخفیف رخ داد.")
       );
     } finally {
       setLoadingCoupon(false);

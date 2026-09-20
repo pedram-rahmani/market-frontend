@@ -6,6 +6,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import MessageModal from "@/components/feedback/MessageModal/MessageModal";
 import SecureInput from "../ui/SecureInput/SecureInput";
 import { requiredValidator } from "@/Validator/Rules";
+import { SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 function ResetPasswordContent() {
   const router = useRouter();
@@ -36,7 +37,7 @@ function ResetPasswordContent() {
 
       setModalResponse({
         status: 200,
-        message: response.data.message || "رمز عبور با موفقیت تغییر کرد.",
+        message: response.data.message || SUCCESS_MESSAGES.passwordChanged,
       });
     } catch (err: any) {
       setModalResponse(

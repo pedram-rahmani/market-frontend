@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
+import { getPersianErrorMessage } from "@/lib/errorMapper";
 
 // تعریفِ ساختارِ اولیه
 interface WalletState {
@@ -22,7 +23,7 @@ export const fetchWallet = createAsyncThunk("wallet/fetchWallet", async (_, { re
     const response = await axiosInstance.get("/wallet");
     return response.data; // انتظار داریم دیتای {balance: 12000, status: 'active'} برگردد
   } catch (err: any) {
-    return rejectWithValue(err.response?.data?.message || "خطا در دریافت موجودی");
+    return rejectWithValue(getPersianErrorMessage(err, "خطا در دریافت موجودی"));
   }
 });
 

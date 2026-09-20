@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
+import { getPersianErrorMessage } from "@/lib/errorMapper";
 
 interface SettingItem {
   id: number;
@@ -30,7 +31,7 @@ export const fetchSettings = createAsyncThunk(
       return response.data.data || response.data;
     } catch (error: any) {
       return rejectWithValue(
-        error.response?.data?.message || "خطا در دریافت تنظیمات سیستم"
+        getPersianErrorMessage(error, "خطا در دریافت تنظیمات سیستم")
       );
     }
   }

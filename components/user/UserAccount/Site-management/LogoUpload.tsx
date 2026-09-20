@@ -1,9 +1,10 @@
 "use client";
 
 import Image from "next/image";
-import React, { useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import BaseInput from "@/components/ui/Form/BaseInput";
 import { getImagePath } from "@/lib/utils";
+import { BaseSkeleton } from "@/components/ui/Skeletons/Skeletons";
 
 interface LogoUploadProps {
   preview: string | null;
@@ -26,6 +27,16 @@ export default function LogoUpload({
 }: LogoUploadProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const faviconInputRef = useRef<HTMLInputElement>(null);
+  const [logoImageLoading, setLogoImageLoading] = useState(Boolean(preview));
+  const [faviconImageLoading, setFaviconImageLoading] = useState(Boolean(faviconPreview));
+
+  useEffect(() => {
+    setLogoImageLoading(Boolean(preview));
+  }, [preview]);
+
+  useEffect(() => {
+    setFaviconImageLoading(Boolean(faviconPreview));
+  }, [faviconPreview]);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (disabled) return;
@@ -73,15 +84,22 @@ export default function LogoUpload({
     >
       <div className="flex flex-row gap-4 items-center">
         <div className="relative size-24 bg-custom-gray-100/40 dark:bg-dark-800/30 rounded-xl overflow-hidden flex items-center justify-center border border-custom-gray-400/40 shadow-sm shadow-ui-blue-400/40 dark:shadow-ui-purple shrink-0">
-          {preview ? (
-            <Image
-              src={getImageUrl() || ""}
-              alt="Logo"
-              fill
-              sizes="96px"
-              unoptimized
-              className="w-full h-full object-cover"
-            />
+          {preview && getImageUrl() ? (
+            <>
+              <Image
+                src={getImageUrl() || ""}
+                alt="Logo"
+                fill
+                sizes="96px"
+                unoptimized
+                onLoad={() => setLogoImageLoading(false)}
+                onError={() => setLogoImageLoading(false)}
+                className={`w-full h-full object-cover ${logoImageLoading ? "opacity-0" : "opacity-100"}`}
+              />
+              {logoImageLoading && (
+                <BaseSkeleton className="absolute inset-0 h-full w-full rounded-none" />
+              )}
+            </>
           ) : (
             <span className="text-xs text-gray-400">بدون لوگو</span>
           )}
@@ -117,9 +135,18 @@ export default function LogoUpload({
           className={disabled ? " bg-gray-50/50" : ""}
         />
         <div className="flex items-center gap-3">
-          <div className="size-10 rounded-lg border border-custom-gray-400/40 bg-white flex items-center justify-center overflow-hidden cursor-default">
-            {getFaviconUrl() ? (
-              <img src={getFaviconUrl() || ""} alt="Favicon" className="size-7 object-contain" />
+          <div className="relative size-10 rounded-lg border border-custom-gray-400/40 bg-white flex items-center justify-center overflow-hidden cursor-default">
+            {faviconPreview && getFaviconUrl() ? (
+              <>
+                <img
+                  src={getFaviconUrl() || ""}
+                  alt="Favicon"
+                  onLoad={() => setFaviconImageLoading(false)}
+                  onError={() => setFaviconImageLoading(false)}
+                  className={`size-7 object-contain ${faviconImageLoading ? "opacity-0" : "opacity-100"}`}
+                />
+                {faviconImageLoading && <BaseSkeleton className="absolute size-7 rounded-md" />}
+              </>
             ) : (
               <span className="text-[9px] text-gray-400">favicon</span>
             )}

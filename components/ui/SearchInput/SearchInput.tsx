@@ -75,7 +75,7 @@ export default function SearchInput<T extends Record<string, any>>({
       {compactAtMedium && (
         <button
           type="button"
-          className="h-btn flex lg:hidden! items-center justify-center"
+          className="h-btn flex xl:hidden! items-center justify-center"
           onClick={() => {
             setIsCompactExpanded((prev) => {
               const nextState = !prev;
@@ -92,7 +92,7 @@ export default function SearchInput<T extends Record<string, any>>({
           title="جستجوی محصول"
         >
           <svg viewBox="0 0 24 24" className="size-5!">
-            <path stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
           </svg>
         </button>
       )}
@@ -103,35 +103,38 @@ export default function SearchInput<T extends Record<string, any>>({
           compactAtMedium
             ? `${
                 isCompactExpanded ? "" : "hidden!"
-              } lg:flex! absolute left-0 top-full z-50 mt-2 w-72 lg:w-full rounded-2xl! p-2 lg:static lg:mt-0 lg:rounded-none lg:bg-transparent lg:p-0 lg:shadow-none shadow-xl border lg:border-none border-gray-100 dark:border-white/10 bg-white dark:bg-dark-700 `
+              } xl:flex! absolute left-0 top-full z-50 mt-2 w-72 xl:w-full rounded-2xl! p-2 xl:static xl:mt-0 xl:rounded-none xl:bg-transparent xl:p-0 xl:shadow-none shadow-xl border xl:border-none border-gray-100 dark:border-white/10 bg-white dark:bg-dark-700 `
             : "relative block w-full "
         }`}
       >
         {/* triangle */}
-        <div className="lg:hidden absolute -top-1.5 left-4 w-3 h-3 bg-white dark:bg-dark-700 border-t border-l border-gray-200 dark:border-white/5 rotate-45 z-11"></div>
-        
-        <input
-          ref={inputRef}
-          value={query}
-          onChange={(e) => {
-            setQuery(e.target.value);
-            if (!isOpen) setIsOpen(true);
-          }}
-          onFocus={() => setIsOpen(true)}
-          className={`w-full text-text-on-light dark:text-text-on-dark text-sm rounded-full pr-4! pl-10! py-2! tracking-tight bg-custom-gray-100/60! dark:bg-dark-600/50! border! border-custom-gray-300! dark:border-dark-800! focus:border-violet-500! dark:focus:border-cyan-400! ${inputClassName}`}
-          type="text"
-          placeholder={placeholder}
-        />
-        <button
-          type="submit"
-          className="flex absolute left-3 top-0 bottom-0 w-5 h-5 my-auto items-center justify-center text-text-on-light dark:text-text-on-dark opacity-70 hover:opacity-100 transition-all"
-          aria-label="جستجوی محصول"
-          title="جستجوی محصول"
-        >
-          <svg viewBox="0 0 24 24" className="scale-125 lg:scale-100 ml-2 lg:ml-0">
-            <path stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
-          </svg>
-        </button>
+        <div className="hidden md:max-[1279px]:flex absolute -top-1.5 left-4 w-3 h-3 bg-white dark:bg-dark-700 border-t border-l border-gray-200 dark:border-white/5 rotate-45 z-11"></div>
+
+        <div className="relative w-full">
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => {
+              setQuery(e.target.value);
+              if (!isOpen) setIsOpen(true);
+            }}
+            onFocus={() => setIsOpen(true)}
+            className={`min-w-full! text-text-on-light dark:text-text-on-dark text-sm rounded-full pl-4! pr-10! py-2! tracking-tight bg-custom-gray-100/60! dark:bg-dark-600/50! border! border-custom-gray-300! dark:border-dark-800! focus:border-violet-500! dark:focus:border-cyan-400! ${inputClassName}`}
+            type="text"
+            placeholder={placeholder}
+          />
+
+          <button
+            type="submit"
+            className="absolute left-3 top-1/2 -translate-y-1/2 flex items-center justify-center text-text-on-light dark:text-text-on-dark opacity-70 hover:opacity-100 transition-all"
+            aria-label="جستجوی محصول"
+            title="جستجوی محصول"
+          >
+            <svg viewBox="0 0 24 24" className="size-5!">
+              <path d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+            </svg>
+          </button>
+        </div>
 
         {/* Dropdown */}
         {isOpen && query.trim().length > 0 && fetcher && (

@@ -1,10 +1,19 @@
 "use client";
 
+import ValidationInput from "@/components/ui/Form/ValidationInput";
+import {
+  maxLengthValidator,
+  minValidator,
+  nameValidator,
+  phoneValidator,
+  requiredValidator,
+} from "@/Validator/Rules";
+
 interface EditAddressModalProps {
   isOpen: boolean;
   onClose: () => void;
   formData: { name: string; phone: string; address: string };
-  onChange: (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => void;
+  onChange: (id: "name" | "phone" | "address", value: string) => void;
   onSave: () => void;
 }
 
@@ -22,32 +31,45 @@ export default function EditAddressModal({ isOpen, onClose, formData, onChange, 
         <div className="space-y-3 text-xs">
           <div>
             <label className="text-gray-400 block mb-1">نام و نام خانوادگی</label>
-            <input 
-              type="text" 
-              name="name" 
-              value={formData.name} 
-              onChange={onChange}
-              className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-800 dark:text-white focus:outline-none focus:border-violet-500"
+            <ValidationInput
+              id="name"
+              type="text"
+              value={formData.name}
+              onInputHandler={(id, value) =>
+                onChange(id as "name" | "phone" | "address", value)
+              }
+              className="bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white"
+              validations={[
+                requiredValidator(),
+                minValidator(3),
+                maxLengthValidator(30),
+                nameValidator(),
+              ]}
             />
           </div>
           <div>
             <label className="text-gray-400 block mb-1">شماره موبایل</label>
-            <input 
-              type="text" 
-              name="phone" 
-              value={formData.phone} 
-              onChange={onChange}
-              className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl px-4 py-3 text-gray-800 dark:text-white focus:outline-none focus:border-violet-500"
+            <ValidationInput
+              id="phone"
+              type="tel"
+              value={formData.phone}
+              onInputHandler={(id, value) =>
+                onChange(id as "name" | "phone" | "address", value)
+              }
+              className="bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white ltr"
+              validations={[requiredValidator(), phoneValidator()]}
             />
           </div>
           <div>
             <label className="text-gray-400 block mb-1">آدرس پستی</label>
-            <textarea 
-              rows={3} 
-              name="address" 
-              value={formData.address} 
-              onChange={onChange}
-              className="w-full bg-gray-50 dark:bg-white/5 border border-gray-200 dark:border-white/10 rounded-xl p-4 text-gray-800 dark:text-white focus:outline-none focus:border-violet-500 resize-none"
+            <ValidationInput
+              id="address"
+              elem="textarea"
+              value={formData.address}
+              onInputHandler={(id, value) =>
+                onChange(id as "name" | "phone" | "address", value)
+              }
+              className="bg-gray-50 dark:bg-white/5 text-gray-800 dark:text-white resize-none"
             />
           </div>
         </div>

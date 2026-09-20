@@ -18,10 +18,7 @@ export default function FaviconManager() {
     const favicon = rawSettings?.site_favicon;
     if (!favicon) return;
 
-    const href = getImagePath(
-      favicon,
-      rawSettings?.site_favicon_updated_at || favicon,
-    );
+    const href = getImagePath(favicon, Date.now());
 
     let link = document.querySelector<HTMLLinkElement>("link[rel*='icon']");
 

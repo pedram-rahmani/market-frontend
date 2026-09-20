@@ -102,6 +102,7 @@ export default function LoginPage() {
             type="text"
             placeholder="ایمیل یا نام کاربری"
             className="input-validation"
+            showRequiredMarker={false}
             validations={[
               requiredValidator(),
               minValidator(3),
@@ -115,6 +116,7 @@ export default function LoginPage() {
             placeholder="رمز عبور"
             autoComplete="current-password"
             className="input-validation"
+            showRequiredMarker={false}
             validations={[
               requiredValidator(),
               minValidator(8),

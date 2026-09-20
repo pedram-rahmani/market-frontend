@@ -63,11 +63,11 @@ export default function ContactSettings({
             ];
 
             return (
-              <div key={index} className="flex gap-3 items-center animate-fadeIn">
+              <div key={index} className="flex flex-wrap gap-3 items-center animate-fadeIn">
                 {editingIndex === index ? (
                   <input
                     disabled={disabled}
-                    className="input-info w-44! border-violet-500 ring-2 ring-violet-500/20"
+                    className="input-info w-full sm:w-44! border-violet-500 ring-2 ring-violet-500/20"
                     autoFocus
                     placeholder="نام را بنویسید..."
                     value={contact.label}
@@ -84,7 +84,7 @@ export default function ContactSettings({
                       else onUpdate(index, "label", val);
                     }}
                     placeholder="انتخاب نوع"
-                    className="w-44!"
+                    className="w-full sm:w-44!"
                   />
                 )}
 
@@ -94,14 +94,14 @@ export default function ContactSettings({
                   value={contact.value}
                   onChange={(e) => onUpdate(index, "value", e.target.value)}
                   placeholder="مقدار (شماره یا آیدی)..."
-                  className="input-info flex-1"
+                  className="input-info min-w-0 w-full sm:flex-1"
                 />
 
                 {!disabled && (
                   <button
                     type="button"
                     onClick={() => onRemove(index)}
-                    className="px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-sm"
+                    className="shrink-0 px-4 py-2.5 rounded-xl bg-red-50 dark:bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white transition-all text-sm"
                   >
                     حذف
                   </button>

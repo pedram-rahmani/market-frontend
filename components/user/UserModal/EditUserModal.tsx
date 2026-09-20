@@ -8,6 +8,16 @@ import { usePermissions } from "@/store/hooks/usePermissions";
 import { User } from "@/types/user";
 import Checkbox from "@/components/ui/Form/Checkbox";
 import SecureInput from "@/components/ui/SecureInput/SecureInput";
+import ValidationInput from "@/components/ui/Form/ValidationInput";
+import {
+  maxLengthValidator,
+  minValidator,
+  nameValidator,
+  passwordValidator,
+  phoneValidator,
+  requiredValidator,
+  usernameValidator,
+} from "@/Validator/Rules";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 
 interface EditUserModalProps {
@@ -50,6 +60,10 @@ export function EditUserModal({
     );
   }, []);
 
+  const handleValidatedInput = (id: string, value: string) => {
+    setFormData((current) => ({ ...current, [id]: value }));
+  };
+
   useEffect(() => {
     if (!user) return;
     setFormData({
@@ -83,10 +97,12 @@ export function EditUserModal({
         : {
             name: formData.name,
             username: formData.username,
-            phone: formData.phone?.trim() ? formData.phone : user?.phone || "00000000000",
             postal_address: formData.postal_address,
             status: formData.status,
             admin_notes: formData.admin_notes,
+            ...(formData.phone?.trim()
+              ? { phone: formData.phone.trim() }
+              : {}),
           };
 
       await onSave(dataToSend);
@@ -128,44 +144,55 @@ export function EditUserModal({
 
         {activeTab === "info" ? (
           <div className="flex flex-col gap-4 mb-6">
-            <input
+            <ValidationInput
+              id="name"
               value={formData.name}
-              onChange={(e) =>
-                setFormData({ ...formData, name: e.target.value })
-              }
               className="input-info w-full"
               placeholder="نام کاربر"
+              validations={[
+                requiredValidator(),
+                minValidator(3),
+                maxLengthValidator(30),
+                nameValidator(),
+              ]}
+              onInputHandler={handleValidatedInput}
             />
-            <input
+            <ValidationInput
+              id="username"
               value={formData.username}
-              onChange={(e) =>
-                setFormData({ ...formData, username: e.target.value })
-              }
               className="input-info w-full"
               placeholder="نام کاربری"
+              validations={[
+                requiredValidator(),
+                minValidator(3),
+                maxLengthValidator(30),
+                usernameValidator(),
+              ]}
+              onInputHandler={handleValidatedInput}
             />
-            <input
+            <ValidationInput
+              id="phone"
+              type="tel"
               value={formData.phone}
-              onChange={(e) =>
-                setFormData({ ...formData, phone: e.target.value })
-              }
-              className="input-info w-full"
+              className="input-info w-full ltr"
               placeholder="شماره تماس"
+              validations={[phoneValidator()]}
+              onInputHandler={handleValidatedInput}
             />
             
-            <textarea
+            <ValidationInput
+              id="postal_address"
+              elem="textarea"
               value={formData.postal_address}
-              onChange={(e) =>
-                setFormData({ ...formData, postal_address: e.target.value })
-              }
-              className="input-info w-full resize-none h-20 text-xs p-2"
+              className="input-info  resize-none  text-xs p-2"
               placeholder="آدرس پستی"
+              onInputHandler={handleValidatedInput}
             />
 
             <SecureInput
               id="password"
-              placeholder="رمز عبور جدید (اختیاری)"
-              validations={[]}
+              placeholder="رمز عبور جدید"
+              validations={[passwordValidator()]}
               autoComplete="new-password"
               onInputHandler={handlePasswordInput}
               className="input-info"

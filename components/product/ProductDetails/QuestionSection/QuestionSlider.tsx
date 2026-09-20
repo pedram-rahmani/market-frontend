@@ -3,6 +3,7 @@
 import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface QuestionSliderProps {
   questions: any[];
@@ -146,13 +147,13 @@ export default function QuestionSlider({
 
       setPopupState({
         isOpen: true,
-        message: "پاسخ شما با موفقیت ثبت شد.",
+        message: SUCCESS_MESSAGES.answerSubmitted,
         type: "success",
       });
     } catch (error: any) {
       setPopupState({
         isOpen: true,
-        message: error.response?.data?.message || "خطایی در ثبت پاسخ رخ داد.",
+        message: getPersianErrorMessage(error, "خطایی در ثبت پاسخ رخ داد."),
         type: "error",
       });
     }

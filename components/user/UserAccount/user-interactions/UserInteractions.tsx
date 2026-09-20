@@ -10,6 +10,7 @@ import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import axiosInstance from "@/lib/axiosInstance";
 import { PERMISSIONS } from "@/types/permissions";
 import { usePermissions } from "@/store/hooks/usePermissions";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export interface ReplyItem {
   id: number;
@@ -131,7 +132,7 @@ export default function UserInteractions() {
         }))
       );
     } catch (err: any) {
-      setError(err.response?.data?.message || "خطا در دریافت اطلاعات از سرور");
+      setError(getPersianErrorMessage(err, "خطا در دریافت اطلاعات از سرور"));
     } finally {
       setIsLoading(false);
     }
@@ -197,11 +198,11 @@ export default function UserInteractions() {
 
       setIsDeleteModalOpen(false);
       setItemToDeleteId(null);
-      setPopup({ isOpen: true, message: "مورد با موفقیت حذف شد.", type: "success" });
+      setPopup({ isOpen: true, message: SUCCESS_MESSAGES.deleted, type: "success" });
     } catch (err: any) {
       setPopup({
         isOpen: true,
-        message: err.response?.data?.message || "خطا در حذف اطلاعات",
+        message: getPersianErrorMessage(err, "خطا در حذف اطلاعات"),
         type: "error",
       });
     } finally {
@@ -240,7 +241,7 @@ export default function UserInteractions() {
         );
       }
     } catch (err: any) {
-      alert(err.response?.data?.message || "خطا در تغییر وضعیت تایید");
+      alert(getPersianErrorMessage(err, "خطا در تغییر وضعیت تایید"));
     }
   };
 
@@ -256,7 +257,7 @@ export default function UserInteractions() {
         }))
       );
     } catch (err: any) {
-      alert(err.response?.data?.message || "خطا در تغییر وضعیت تایید فایل مدیا");
+      alert(getPersianErrorMessage(err, "خطا در تغییر وضعیت تایید فایل مدیا"));
     }
   };
 
@@ -278,7 +279,7 @@ export default function UserInteractions() {
     } catch (error: any) {
       setPopup({
         isOpen: true,
-        message: error.response?.data?.message || "خطا در ویرایش اطلاعات",
+        message: getPersianErrorMessage(error, "خطا در ویرایش اطلاعات"),
         type: "error",
       });
       throw error;
@@ -298,7 +299,7 @@ export default function UserInteractions() {
           : item
       )
     );
-    setPopup({ isOpen: true, message: "مورد با موفقیت ویرایش شد و برای تایید مجدد ارسال شد.", type: "success" });
+    setPopup({ isOpen: true, message: SUCCESS_MESSAGES.interactionEdited, type: "success" });
   };
 
   const itemToDelete = (activeTab === "reviews" ? reviewsList : questionsList)

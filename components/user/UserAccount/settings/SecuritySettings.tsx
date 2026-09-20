@@ -4,6 +4,7 @@ import { useState, useCallback } from "react";
 import SecureInput from "@/components/ui/SecureInput/SecureInput";
 import { Rules } from "@/Validator/Rules";
 import axiosInstance from "@/lib/axiosInstance";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function SecuritySettings() {
   const [formState, setFormState] = useState({
@@ -52,13 +53,9 @@ export default function SecuritySettings() {
           password_confirmation: formState.confirmPassword.value,
         });
 
-        setSuccessMessage(response.data.message || "رمز عبور با موفقیت تغییر کرد.");
+        setSuccessMessage(response.data.message || SUCCESS_MESSAGES.passwordChanged);
       } catch (error: any) {
-        if (error.response?.data?.message) {
-          setErrorMessage(error.response.data.message);
-        } else {
-          setErrorMessage("خطایی در ارتباط با سرور رخ داد.");
-        }
+        setErrorMessage(getPersianErrorMessage(error, "خطایی در ارتباط با سرور رخ داد."));
       } finally {
         setIsLoading(false);
       }

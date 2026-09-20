@@ -13,6 +13,7 @@ import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirm
 import { usePermissions } from "@/store/hooks/usePermissions";
 import { PERMISSIONS } from "@/types/permissions";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 type ProductItem = {
   id: number;
@@ -85,10 +86,10 @@ export default function ProductManagement() {
     setLoadingAction("delete");
     try {
       await axiosInstance.delete(`/products/${deleteId}`);
-      setPopup({ isOpen: true, message: "محصول با موفقیت حذف شد!", type: "success" });
+      setPopup({ isOpen: true, message: SUCCESS_MESSAGES.productDeleted, type: "success" });
       await fetchProducts();
     } catch (error) {
-      setPopup({ isOpen: true, message: "خطا در حذف محصول رخ داد.", type: "error" });
+      setPopup({ isOpen: true, message: getPersianErrorMessage(error, "خطا در حذف محصول رخ داد."), type: "error" });
     } finally {
       setLoadingAction(null);
       setIsDeleteModalOpen(false);
@@ -105,7 +106,7 @@ export default function ProductManagement() {
 
       setPopup({
         isOpen: true,
-        message: editingProduct ? "محصول با موفقیت ویرایش شد!" : "محصول با موفقیت ثبت شد!",
+        message: editingProduct ? SUCCESS_MESSAGES.productUpdated : SUCCESS_MESSAGES.productCreated,
         type: "success",
       });
       setIsModalOpen(false);
@@ -116,7 +117,7 @@ export default function ProductManagement() {
       console.error("Server Error:", error.response?.data);
       const message = error.response?.status === 403 
         ? "شما اجازه انجام این عملیات را ندارید." 
-        : (error.response?.data?.message || "خطایی در عملیات رخ داد!");
+        : getPersianErrorMessage(error, "خطایی در عملیات رخ داد!");
       
       setPopup({ isOpen: true, message, type: "error" });
     } finally {

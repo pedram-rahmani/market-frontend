@@ -17,6 +17,7 @@ import {
   minValidator,
   maxLengthValidator,
   emailValidator,
+  nameValidator,
   passwordValidator,
   usernameValidator,
   passwordConfirmationValidator,
@@ -95,11 +96,11 @@ const Register: React.FC = () => {
 
         <form className="relative z-10 space-y-4" onSubmit={newUserRegister}>
           <div className="flex flex-col gap-y-4">
-            <ValidationInput id="name" type="text" autoComplete="name" placeholder="نام و نام خانوادگی" className="input-validation" validations={[requiredValidator(), minValidator(3), maxLengthValidator(30)]} onInputHandler={onInputHandler} />
-            <ValidationInput id="username" type="text" autoComplete="username" placeholder="نام کاربری" className="input-validation" validations={[requiredValidator(), minValidator(3), maxLengthValidator(30), usernameValidator()]} onInputHandler={onInputHandler} />
-            <ValidationInput id="email" type="email" autoComplete="email" placeholder="آدرس ایمیل" className="input-validation ltr" validations={[requiredValidator(), maxLengthValidator(38), emailValidator()]} onInputHandler={onInputHandler} />
-            <SecureInput id="password" autoComplete="new-password" placeholder="رمز عبور" className="input-validation" validations={[requiredValidator(), passwordValidator()]} onInputHandler={onInputHandler} />
-            <SecureInput id="passwordConfirmation" autoComplete="new-password" placeholder="تکرار رمز عبور" className="input-validation" validations={[requiredValidator(), passwordConfirmationValidator()]} allInputs={formState.inputs} onInputHandler={onInputHandler} />
+            <ValidationInput id="name" type="text" autoComplete="name" placeholder="نام و نام خانوادگی" className="input-validation" showRequiredMarker={false} validations={[requiredValidator(), minValidator(3), maxLengthValidator(30), nameValidator()]} onInputHandler={onInputHandler} />
+            <ValidationInput id="username" type="text" autoComplete="username" placeholder="نام کاربری" className="input-validation" showRequiredMarker={false} validations={[requiredValidator(), minValidator(3), maxLengthValidator(30), usernameValidator()]} onInputHandler={onInputHandler} />
+            <ValidationInput id="email" type="email" autoComplete="email" placeholder="آدرس ایمیل" className="input-validation ltr" showRequiredMarker={false} validations={[requiredValidator(), maxLengthValidator(38), emailValidator()]} onInputHandler={onInputHandler} />
+            <SecureInput id="password" autoComplete="new-password" placeholder="رمز عبور" className="input-validation" showRequiredMarker={false} validations={[requiredValidator(), passwordValidator()]} onInputHandler={onInputHandler} />
+            <SecureInput id="passwordConfirmation" autoComplete="new-password" placeholder="تکرار رمز عبور" className="input-validation" showRequiredMarker={false} validations={[requiredValidator(), passwordConfirmationValidator()]} allInputs={formState.inputs} onInputHandler={onInputHandler} />
           </div>
 
           <Button

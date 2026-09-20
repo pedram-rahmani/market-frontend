@@ -3,11 +3,20 @@
 import { useRef } from "react";
 import Image from "next/image";
 import MessageModal from "@/components/feedback/MessageModal/MessageModal";
-import { SkeletonAvatar } from "@/components/ui/Skeletons/Skeletons";
+import { BaseSkeleton, SkeletonAvatar } from "@/components/ui/Skeletons/Skeletons";
 import { useProfileForm, EditProfileFormValues } from "@/store/hooks/useProfileForm";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import { FALLBACK_IMAGE_PATH } from "@/lib/utils";
+import ValidationInput from "@/components/ui/Form/ValidationInput";
+import {
+  emailValidator,
+  maxLengthValidator,
+  minValidator,
+  nameValidator,
+  phoneValidator,
+  requiredValidator,
+} from "@/Validator/Rules";
 
 interface EditProfileModalProps {
   isOpen: boolean;
@@ -25,7 +34,10 @@ export default function EditProfileModal({
   const {
     formData,
     loading,
+    profileLoading,
     avatarLoading,
+    avatarImageLoading,
+    setAvatarImageLoading,
     isProcessing,
     messageModalOpen,
     setMessageModalOpen,
@@ -41,6 +53,10 @@ export default function EditProfileModal({
 
   useLockBodyScroll(isOpen);
   useClickOutside(onClose, modalRef);
+
+  const handleValidatedInput = (id: string, value: string) => {
+    handleInputChange(id as keyof EditProfileFormValues, value);
+  };
 
   if (!isOpen) return null;
 
@@ -70,7 +86,21 @@ export default function EditProfileModal({
                 {avatarLoading ? (
                   <SkeletonAvatar size="size-16 rounded-2xl" />
                 ) : getAvatarUrl() ? (
-                  <Image src={getAvatarUrl() || FALLBACK_IMAGE_PATH} alt="Avatar" fill sizes="64px" unoptimized className="w-full h-full object-cover" />
+                  <>
+                    <Image
+                      src={getAvatarUrl() || FALLBACK_IMAGE_PATH}
+                      alt="Avatar"
+                      fill
+                      sizes="64px"
+                      unoptimized
+                      onLoad={() => setAvatarImageLoading(false)}
+                      onError={() => setAvatarImageLoading(false)}
+                      className={`w-full h-full object-cover ${avatarImageLoading ? "opacity-0" : "opacity-100"}`}
+                    />
+                    {avatarImageLoading && (
+                      <SkeletonAvatar size="absolute inset-0 size-16 rounded-2xl" />
+                    )}
+                  </>
                 ) : (
                   <span className="text-xl">{formData.name ? formData.name.charAt(0).toUpperCase() : "U"}</span>
                 )}
@@ -100,16 +130,46 @@ export default function EditProfileModal({
               </div>
             </div>
 
+            {profileLoading ? (
+              <div className="space-y-4">
+                <div className="space-y-1.5">
+                  <BaseSkeleton className="h-3 w-32" />
+                  <BaseSkeleton className="h-12 w-full rounded-xl" />
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
+                  <div className="space-y-1.5">
+                    <BaseSkeleton className="h-3 w-24" />
+                    <BaseSkeleton className="h-12 w-full rounded-xl" />
+                  </div>
+                  <div className="space-y-1.5">
+                    <BaseSkeleton className="h-3 w-20" />
+                    <BaseSkeleton className="h-12 w-full rounded-xl" />
+                  </div>
+                </div>
+                <div className="space-y-1.5">
+                  <BaseSkeleton className="h-3 w-20" />
+                  <BaseSkeleton className="h-28 w-full rounded-xl" />
+                </div>
+              </div>
+            ) : (
+            <>
             <div>
               <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                 نام و نام خانوادگی
               </label>
-              <input
+              <ValidationInput
+                id="name"
                 type="text"
                 value={formData.name}
-                onChange={(e) => handleInputChange("name", e.target.value)}
-                className="input-info min-w-full"
                 placeholder="نام خود را وارد کنید"
+                className="input-info min-w-full"
+                validations={[
+                  requiredValidator(),
+                  minValidator(3),
+                  maxLengthValidator(30),
+                  nameValidator(),
+                ]}
+                onInputHandler={handleValidatedInput}
               />
             </div>
 
@@ -118,26 +178,32 @@ export default function EditProfileModal({
                 <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                   شماره تماس
                 </label>
-                <input
-                  type="text"
+                <ValidationInput
+                  id="phone"
+                  type="tel"
                   value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="input-info"
                   placeholder="0912..."
-                  dir="ltr"
+                  className="input-info ltr"
+                  validations={[phoneValidator()]}
+                  onInputHandler={handleValidatedInput}
                 />
               </div>
               <div>
                 <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                   ایمیل
                 </label>
-                <input
+                <ValidationInput
+                  id="email"
                   type="email"
                   value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="input-info"
                   placeholder="example@mail.com"
-                  dir="ltr"
+                  className="input-info ltr"
+                  validations={[
+                    requiredValidator(),
+                    maxLengthValidator(38),
+                    emailValidator(),
+                  ]}
+                  onInputHandler={handleValidatedInput}
                 />
               </div>
             </div>
@@ -146,14 +212,17 @@ export default function EditProfileModal({
               <label className="block text-xs text-gray-500 dark:text-gray-400 mb-1.5">
                 آدرس پستی
               </label>
-              <textarea
-                rows={3}
+              <ValidationInput
+                id="address"
+                elem="textarea"
                 value={formData.address}
-                onChange={(e) => handleInputChange("address", e.target.value)}
                 className="input-info text-sm resize-none"
                 placeholder="آدرس دقیق پستی خود را وارد کنید"
+                onInputHandler={handleValidatedInput}
               />
             </div>
+            </>
+            )}
 
             <div className="flex items-center justify-end gap-3 pt-4 border-t border-gray-100 dark:border-gray-800">
               <button

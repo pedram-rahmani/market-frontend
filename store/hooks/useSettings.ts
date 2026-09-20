@@ -1,6 +1,7 @@
 import { useMemo } from "react";
 import { useAppSelector } from "@/store/hooks/storeHooks";
 import { getImagePath } from "@/lib/utils";
+import type { TrustBadge } from "@/types/settings";
 
 interface SocialLinkItem {
   name: string;
@@ -153,9 +154,12 @@ export function useSettings() {
     ];
   }, [settingsObject]);
 
-  const trustBadges: string =
-    settingsObject?.trust_badges ||
-    '<a href="#" target="_blank"><img src="/images/Enamad.png" alt="اینماد"></a>';
+  const trustBadge: TrustBadge = {
+    image_url:
+      settingsObject?.trust_badges?.image_url || "/images/Enamad.png",
+    link_url: settingsObject?.trust_badges?.link_url || "#",
+    alt: settingsObject?.trust_badges?.alt || "نماد اعتماد",
+  };
 
   const sitePhone = useMemo(() => {
     return (
@@ -177,7 +181,7 @@ export function useSettings() {
     socialLinks,
     contactInfo,
     footerLinks,
-    trustBadges,
+    trustBadge,
     loading,
     rawSettings: settingsObject,
   };

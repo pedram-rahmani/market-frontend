@@ -9,6 +9,7 @@ import Button from "@/components/ui/Form/Button";
 import Link from "next/link";
 import useForm from "@/store/hooks/useForm";
 import { requiredValidator } from "@/Validator/Rules";
+import { SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function ForgotPasswordForm() {
   const router = useRouter();
@@ -42,7 +43,7 @@ export default function ForgotPasswordForm() {
       // اگر توکنی در پاسخ نبود (حالت استاندارد که ایمیل می‌شود)
       setModalResponse({
         status: 200,
-        message: response.data.message || "لینک بازیابی رمز عبور ارسال شد.",
+        message: response.data.message || SUCCESS_MESSAGES.resetLinkSent,
       });
       setIsModalOpen(true);
     } catch (err: any) {

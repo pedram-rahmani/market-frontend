@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useSettings } from "@/store/hooks/useSettings";
 
 export default function FooterLinks() {
-  const { footerLinks, trustBadges } = useSettings();
+  const { footerLinks, trustBadge } = useSettings();
 
   return (
     <div className="flex flex-col lg:flex-row justify-between items-start gap-8 rtl text-right px-4 sm:px-6">
@@ -34,8 +34,20 @@ export default function FooterLinks() {
       <div className="flex justify-center lg:justify-end items-start w-full lg:w-auto shrink-0 pt-2">
         <div 
           className="w-32 h-32 rounded-2xl border border-gray-200 dark:border-white/10 bg-white dark:bg-dark-800/60 backdrop-blur-sm p-4 flex items-center justify-center hover:scale-105 transition-transform duration-300 [&>a]:w-full [&>a]:h-full [&>a]:flex [&>a]:items-center [&>a]:justify-center [&_img]:object-contain [&_img]:max-h-full"
-          dangerouslySetInnerHTML={{ __html: trustBadges || "" }}
-        />
+          >
+          <a
+            href={trustBadge.link_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="w-full h-full flex items-center justify-center"
+          >
+            <img
+              src={trustBadge.image_url}
+              alt={trustBadge.alt}
+              className="object-contain max-h-full"
+            />
+          </a>
+        </div>
       </div>
     </div>
   );

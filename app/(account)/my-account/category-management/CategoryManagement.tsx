@@ -12,6 +12,7 @@ import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import { usePermissions } from "@/store/hooks/usePermissions";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function CategoryManagement() {
   const { token } = useAuth();
@@ -81,10 +82,10 @@ export default function CategoryManagement() {
     if (!deleteId) return;
     try {
       await axiosInstance.delete(`/categories/${deleteId}`);
-      setPopup({ isOpen: true, message: "حذف شد", type: "success" });
+      setPopup({ isOpen: true, message: SUCCESS_MESSAGES.categoryDeleted, type: "success" });
       await fetchData();
-    } catch {
-      setPopup({ isOpen: true, message: "خطا در حذف", type: "error" });
+    } catch (error) {
+      setPopup({ isOpen: true, message: getPersianErrorMessage(error, "خطا در حذف دسته‌بندی"), type: "error" });
     } finally {
       setIsDeleteModalOpen(false);
     }

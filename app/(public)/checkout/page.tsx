@@ -9,6 +9,7 @@ import PaymentMethod from "@/components/checkout/PaymentMethod";
 import CheckoutSummary from "@/components/checkout/CheckoutSummary";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import EditAddressModal from "@/components/checkout/EditAddressModal";
+import { SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function CheckoutPage() {
   const { user } = useSelector((state: RootState) => state.auth);
@@ -59,13 +60,13 @@ export default function CheckoutPage() {
 
   const handleSaveAddress = () => {
     setIsEditModalOpen(false);
-    setPopupMessage("اطلاعات آدرس با موفقیت بروز شد.");
+    setPopupMessage(SUCCESS_MESSAGES.addressUpdated);
     setPopupType("success");
     setIsPopupOpen(true);
   };
 
   const handlePayment = () => {
-    setPopupMessage("سفارش شما با موفقیت ثبت شد. در حال انتقال به درگاه...");
+    setPopupMessage(SUCCESS_MESSAGES.orderPlaced);
     setPopupType("success");
     setIsPopupOpen(true);
   };
@@ -100,7 +101,7 @@ export default function CheckoutPage() {
         isOpen={isEditModalOpen}
         onClose={() => setIsEditModalOpen(false)}
         formData={tempData}
-        onChange={(e) => setTempData({ ...tempData, [e.target.name]: e.target.value })}
+        onChange={(id, value) => setTempData((current) => ({ ...current, [id]: value }))}
         onSave={handleSaveAddress}
       />
 

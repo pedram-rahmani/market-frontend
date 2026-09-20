@@ -8,6 +8,7 @@ import CouponForm from "@/components/user/UserAccount/coupon-management/CouponFo
 import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 export default function CouponManagement() {
   const [coupons, setCoupons] = useState<any[]>([]);
@@ -46,12 +47,12 @@ export default function CouponManagement() {
       await axiosInstance.delete(`/admin/coupons/${deleteId}`);
       setPopup({
         isOpen: true,
-        message: "کد تخفیف با موفقیت حذف شد",
+        message: SUCCESS_MESSAGES.couponDeleted,
         type: "success",
       });
       fetchCoupons();
-    } catch {
-      setPopup({ isOpen: true, message: "خطا در حذف کد تخفیف", type: "error" });
+    } catch (error) {
+      setPopup({ isOpen: true, message: getPersianErrorMessage(error, "خطا در حذف کد تخفیف"), type: "error" });
     } finally {
       setIsDeleteModalOpen(false);
     }

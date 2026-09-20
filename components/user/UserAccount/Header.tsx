@@ -31,7 +31,7 @@ export default function Header({ onOpenSidebar, menuButtonRef }: HeaderProps) {
   };
 
   return (
-    <div className="header sticky top-0 z-30 flex items-center justify-between py-5 px-4 sm:px-8 mb-5 md:mb-8 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md">
+    <div className="header sticky top-0 z-40 flex items-center justify-between py-5 px-4 sm:px-8 mb-5 md:mb-8 border-b border-gray-100 dark:border-white/5 bg-white/80 dark:bg-dark-900/80 backdrop-blur-md">
       <div className="flex items-center gap-x-3">
         <button
           type="button"

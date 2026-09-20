@@ -1,6 +1,6 @@
 const testEmail = (value: string): boolean => {
   const emailPattern =
-    /^[a-zA-Z0-9][a-zA-Z0-9._-]*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,3}$/;
+    /^[a-zA-Z0-9](?:[a-zA-Z0-9._-]*[a-zA-Z0-9])?@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)*\.[a-zA-Z]{2,63}$/;
   return emailPattern.test(value);
 };
 
@@ -12,17 +12,18 @@ const testPassword = (value: string): boolean => {
 
 const testUsername = (value: string): boolean => {
   const usernamePattern =
-    /^(?=.*[\u0600-\u06FFa-zA-Z])[\u0600-\u06FFa-zA-Z](?!.*[-_]{2})[\u0600-\u06FFa-zA-Z0-9 _-]*$/;
+    /^(?=.*\p{L})\p{L}(?!.*[-_]{2})[\p{L}0-9 _-]*$/u;
   return usernamePattern.test(value);
 };
 
 const testName = (value: string): boolean => {
-  const namePattern = /^[a-zA-Z\u0600-\u06FF\s]+$/;
+  const namePattern = /^\p{L}[\p{L}\s]*$/u;
   return namePattern.test(value);
 };
 
 const testCodeMelli = (value: string): boolean => {
   if (!/^\d{10}$/.test(value)) return false;
+  if (/^(\d)\1{9}$/.test(value)) return false;
   const check = parseInt(value[9], 10);
   const sum = value
     .split("")
@@ -41,7 +42,7 @@ const testPhoneNumber = (value: string): boolean => {
 };
 
 const testNumber = (value: string): boolean => {
-  return /^[0-9]+$/.test(value); // فقط اعداد
+  return /^[0-9]+$/.test(value);
 };
 
 const regexes = {

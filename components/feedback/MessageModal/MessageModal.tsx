@@ -8,7 +8,7 @@ import React, {
   useCallback,
 } from "react";
 import ReactDOM from "react-dom";
-import { ERROR_MAPPINGS } from "@/lib/errorMappings";
+import { getPersianErrorMessage } from "@/lib/errorMapper";
 import { ApiResponse } from "@/types/api";
 
 interface MessageModalProps {
@@ -65,55 +65,18 @@ const MessageModal: React.FC<MessageModalProps> = ({
     wasOpenRef.current = isOpen;
   }, [isOpen, onAfterClose, isSuccess]);
 
+  // Using the centralized error mapper function to keep code DRY and clean
   const getErrorMessage = useCallback((): string => {
-    // message
-    if (
-      typeof response === "object" &&
-      response !== null &&
-      "message" in response &&
-      response.message
-    ) {
-      return response.message as string;
-    }
+    // Wrap the response into an Axios-like error structure if it's passed as ApiResponse
+    const errorLikeObject = {
+      response: {
+        status: statusCode,
+        data: typeof response === "object" ? response : { message: response },
+      },
+    };
 
-    // failed (Validation Errors)
-    if (typeof response === "object" && response !== null && response.errors) {
-      const firstField = Object.keys(response.errors)[0];
-      const rawMessage = response.errors[firstField][0];
-
-      const matchedKey = Object.keys(ERROR_MAPPINGS).find((key) =>
-        rawMessage.includes(key),
-      );
-      return matchedKey ? ERROR_MAPPINGS[matchedKey] : rawMessage;
-    }
-
-    // failed (error code)
-    if (
-      typeof response === "object" &&
-      response !== null &&
-      response.error_code
-    ) {
-      return (
-        ERROR_MAPPINGS[response.error_code] ||
-        response.message ||
-        "خطایی رخ داد."
-      );
-    }
-
-    // success
-    if (isSuccess) {
-      return (
-        ERROR_MAPPINGS[statusCode.toString()] || "عملیات با موفقیت انجام شد."
-      );
-    }
-
-    // default (for server errors)
-    return (
-      (statusCode
-        ? ERROR_MAPPINGS[statusCode.toString()]
-        : "خطای ناشناخته در سرور") || "خطایی رخ داد."
-    );
-  }, [response, statusCode, isSuccess]);
+    return getPersianErrorMessage(errorLikeObject);
+  }, [response, statusCode]);
 
   if (!isOpen || !mounted) return null;
   const portalElement = document.getElementById("modal-portal");

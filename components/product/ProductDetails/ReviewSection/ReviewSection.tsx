@@ -10,6 +10,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import RatingStars from "@/components/ui/RatingStars/RatingStars";
 import ReviewList from "./ReviewList";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface IReviewForm {
   rating: number;
@@ -96,7 +97,7 @@ export default function ReviewSection({ productId }: { productId: number }) {
       // success pop up
       setPopupState({
         isOpen: true,
-        message: "نظر شما با موفقیت ثبت شد و پس از بررسی نمایش داده خواهد شد.",
+        message: SUCCESS_MESSAGES.reviewSubmitted,
         type: "success",
       });
 
@@ -107,9 +108,7 @@ export default function ReviewSection({ productId }: { productId: number }) {
     } catch (error: any) {
       console.error(error);
 
-      const errorMessage =
-        error.response?.data?.message ||
-        "خطایی در ثبت نظر رخ داد. لطفاً دوباره تلاش کنید.";
+      const errorMessage = getPersianErrorMessage(error, "خطایی در ثبت نظر رخ داد. لطفاً دوباره تلاش کنید.");
 
       // failed pop up
       setPopupState({

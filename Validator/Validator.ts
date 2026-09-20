@@ -1,17 +1,6 @@
 import { Rules, ValidationRule } from "./Rules";
 import Regexes from "./Regexes";
-
-const messages = {
-  required: "این فیلد نمیتواند خالی باشد.",
-  minLength: (min: number) => `تعداد کاراکترها نمیتواند کمتر از ${min} باشد.`,
-  maxLength: (max: number) => `بیشتر از ${max} کاراکتر نمیتوانید وارد کنید.`,
-  usernameInvalid: "نام کاربری باید شامل حروف انگلیسی یا فارسی و اعداد باشد.",
-  emailInvalid: "ایمیل وارد شده معتبر نمیباشد.",
-  passwordInvalid: "رمز عبور باید شامل حروف انگلیسی، عدد و کاراکترهای خاص (!@#$%^&*) باشد.",
-  passwordNotConfirmed: "رمز عبور با تکرار آن مطابقت ندارد.",
-  numberInvalid: "لطفاً فقط عدد وارد کنید.",
-  maxValueExceeded: (max: number) => `عدد وارد شده نباید بیشتر از ${max} باشد.`
-};
+import { VALIDATION_MESSAGES as messages } from "@/lib/errorMapper";
 
 const validator = (
   value: string,
@@ -62,6 +51,18 @@ const validator = (
       case Rules.emailValue:
         if (!Regexes.testEmail(trimmedValue)) {
           errors.push(messages.emailInvalid);
+        }
+        break;
+
+      case Rules.nameValue:
+        if (!Regexes.testName(trimmedValue)) {
+          errors.push(messages.nameInvalid);
+        }
+        break;
+
+      case Rules.phoneValue:
+        if (!Regexes.testPhoneNumber(trimmedValue)) {
+          errors.push(messages.phoneInvalid);
         }
         break;
 

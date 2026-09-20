@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import axiosInstance from "@/lib/axiosInstance";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface ReviewReportModalProps {
   reviewId: number;
@@ -28,10 +29,10 @@ export default function ReviewReportModal({
         reason: reportReason,
         description: reportDescription,
       });
-      onSuccess(data.message || "گزارش شما با موفقیت ثبت شد.");
+      onSuccess(data.message || SUCCESS_MESSAGES.reportSubmitted);
       onClose();
     } catch (error: any) {
-      onError(error.response?.data?.message || "خطایی در ثبت گزارش رخ داد.");
+      onError(getPersianErrorMessage(error, "خطایی در ثبت گزارش رخ داد."));
     } finally {
       setIsSubmittingReport(false);
     }

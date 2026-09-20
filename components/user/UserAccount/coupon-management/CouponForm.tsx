@@ -7,6 +7,7 @@ import Checkbox from "@/components/ui/Form/Checkbox";
 import axiosInstance from "@/lib/axiosInstance";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import { toGregorian, toJalaali } from "jalaali-js";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface CouponFormProps {
   isOpen: boolean;
@@ -108,10 +109,10 @@ export default function CouponForm({ isOpen, onClose, onSuccess, editingCoupon, 
 
     request.then(() => {
       onSuccess();
-      setPopup({ isOpen: true, message: editingCoupon ? "با موفقیت ویرایش شد" : "با موفقیت ایجاد شد", type: "success" });
+      setPopup({ isOpen: true, message: editingCoupon ? SUCCESS_MESSAGES.updated : SUCCESS_MESSAGES.created, type: "success" });
       onClose();
     }).catch((err) => {
-      setPopup({ isOpen: true, message: err.response?.data?.message || "خطا در انجام عملیات", type: "error" });
+      setPopup({ isOpen: true, message: getPersianErrorMessage(err, "خطا در انجام عملیات"), type: "error" });
     });
   };
 

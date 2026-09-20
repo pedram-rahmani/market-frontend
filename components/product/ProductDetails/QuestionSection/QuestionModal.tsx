@@ -5,6 +5,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface QuestionModalProps {
   isOpen: boolean;
@@ -86,7 +87,7 @@ export default function QuestionModal({
 
       setPopup({
         isOpen: true,
-        message: "سوال شما با موفقیت ثبت شد و پس از تایید نمایش داده می‌شود.",
+        message: SUCCESS_MESSAGES.questionSubmitted,
         type: "success",
       });
 
@@ -97,9 +98,7 @@ export default function QuestionModal({
       console.error("Failed to submit question", error);
       setPopup({
         isOpen: true,
-        message:
-          error.response?.data?.message ||
-          "خطایی در ثبت سوال رخ داد. لطفاً دوباره تلاش کنید.",
+        message: getPersianErrorMessage(error, "خطایی در ثبت سوال رخ داد. لطفاً دوباره تلاش کنید."),
         type: "error",
       });
     } finally {
@@ -128,7 +127,7 @@ export default function QuestionModal({
 
       setPopup({
         isOpen: true,
-        message: "پاسخ شما با موفقیت ثبت شد.",
+        message: SUCCESS_MESSAGES.answerSubmitted,
         type: "success",
       });
 
@@ -139,9 +138,7 @@ export default function QuestionModal({
       console.error("Failed to submit reply", error.response?.data);
       setPopup({
         isOpen: true,
-        message:
-          error.response?.data?.message ||
-          "خطایی در ثبت پاسخ رخ داد. لطفاً دوباره تلاش کنید.",
+        message: getPersianErrorMessage(error, "خطایی در ثبت پاسخ رخ داد. لطفاً دوباره تلاش کنید."),
         type: "error",
       });
     } finally {

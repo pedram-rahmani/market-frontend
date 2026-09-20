@@ -5,6 +5,7 @@ export const Rules = {
   maxNumber: "MAX_NUMBER",
   emailValue: "EMAIL_VALUE",
   nameValue: "NAME_VALUE",
+  phoneValue: "PHONE_VALUE",
   usernameValue: "USERNAME_VALUE",
   passwordValue: "PASSWORD_VALUE",
   passwordConfirmationValue: "PASSWORDCONFIRMATION_VALUE",
@@ -18,6 +19,7 @@ export type ValidationRule =
   | { value: typeof Rules.maxNumber; max: number }
   | { value: typeof Rules.emailValue }
   | { value: typeof Rules.nameValue }
+  | { value: typeof Rules.phoneValue }
   | { value: typeof Rules.usernameValue }
   | { value: typeof Rules.passwordValue }
   | { value: typeof Rules.passwordConfirmationValue }
@@ -28,6 +30,8 @@ export const minValidator = (min: number): ValidationRule => ({ value: Rules.min
 export const maxLengthValidator = (max: number): ValidationRule => ({ value: Rules.maxLength, max });
 export const maxNumberValidator = (max: number): ValidationRule => ({ value: Rules.maxNumber, max });
 export const emailValidator = (): ValidationRule => ({ value: Rules.emailValue });
+export const nameValidator = (): ValidationRule => ({ value: Rules.nameValue });
+export const phoneValidator = (): ValidationRule => ({ value: Rules.phoneValue });
 export const usernameValidator = (): ValidationRule => ({ value: Rules.usernameValue });
 export const passwordValidator = (): ValidationRule => ({ value: Rules.passwordValue });
 export const passwordConfirmationValidator = (): ValidationRule => ({ 

@@ -24,8 +24,7 @@ export default function Header() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 w-full border-b border-gray-200/70 bg-white/85 shadow-sm shadow-slate-900/5 backdrop-blur-2xl transition-all dark:border-white/5 dark:bg-dark-900/85 lg:hidden">
-        <div className="flex h-[4.5rem] w-full items-center justify-between px-4 text-gray-800 dark:text-white">
-          
+        <div className="flex h-18 w-full items-center justify-between px-4 text-gray-800 dark:text-white">
           {/* Menu Button (Right) */}
           <button
             onClick={() => setIsMenuOpen(true)}
@@ -33,22 +32,15 @@ export default function Header() {
             aria-label="Open Menu"
           >
             <svg
-              className="size-5 transition-transform duration-200 group-hover:scale-110"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
+              className="size-5! transition-transform duration-200 group-hover:scale-110"
               viewBox="0 0 24 24"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M4 6h16M4 12h16M4 18h16"
-              />
+              <path d="M4 6h16M4 12h16M4 18h16" />
             </svg>
           </button>
 
           {/* Logo (Center) */}
-          <div className="flex max-w-[12rem] flex-col items-center leading-none">
+          <div className="flex max-w-48 flex-col items-center leading-none">
             <span className="truncate bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-sm font-black tracking-[0.12em] text-transparent sm:text-base">
               {loading ? "..." : siteName}
             </span>
@@ -67,7 +59,10 @@ export default function Header() {
             }`}
             aria-label="Toggle Search"
           >
-            <svg className="size-5! transition-transform duration-200 group-hover:scale-110" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
+            <svg
+              className="size-5! transition-transform duration-200 group-hover:scale-110"
+              viewBox="0 0 24 24"
+            >
               <path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
             </svg>
           </button>
@@ -87,7 +82,6 @@ export default function Header() {
               fetcher={async (query) => {
                 const products = await getProducts({ search: query });
                 return products.map((product) => {
-                  // استفاده از تابع متمرکز getImagePath
                   const imageUrl = getImagePath(product.img);
                   return { ...product, img: imageUrl };
                 });

@@ -7,6 +7,7 @@ import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import ReviewReply from "./ReviewReply";
 import ReviewReplyForm from "./ReviewReplyForm";
 import ReviewReportModal from "./ReviewReportModal";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 
 interface Review {
   id: number;
@@ -127,7 +128,7 @@ export default function ReviewList({
 
       setPopupState({
         isOpen: true,
-        message: "پاسخ شما با موفقیت ثبت شد و پس از بررسی نمایش داده خواهد شد.",
+        message: SUCCESS_MESSAGES.reviewReplySubmitted,
         type: "success",
       });
 
@@ -135,7 +136,7 @@ export default function ReviewList({
     } catch (error: any) {
       setPopupState({
         isOpen: true,
-        message: error.response?.data?.message || "خطایی در ثبت پاسخ رخ داد.",
+        message: getPersianErrorMessage(error, "خطایی در ثبت پاسخ رخ داد."),
         type: "error",
       });
     }

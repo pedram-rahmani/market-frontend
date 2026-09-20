@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '@/lib/axiosInstance';
+import { getPersianErrorMessage } from '@/lib/errorMapper';
 
 export const fetchReviews = createAsyncThunk(
   'reviews/fetch',
@@ -13,7 +14,7 @@ export const fetchReviews = createAsyncThunk(
 
       return [];
     } catch (error: any) {
-      return rejectWithValue(error.response?.data?.message || 'خطا در دریافت نظرات');
+      return rejectWithValue(getPersianErrorMessage(error, 'خطا در دریافت نظرات'));
     }
   }
 );
