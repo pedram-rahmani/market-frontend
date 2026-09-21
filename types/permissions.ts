@@ -26,9 +26,11 @@ export const PERMISSIONS = {
   INTERACTIONS_MANAGE: "interactions.manage",
   COMMENTS_MANAGE: "comments.manage",
   COMMENTS_APPROVE: "comments.approve",
+  COMMENTS_REPLY: "comments.reply",
   COMMENTS_MEDIA_APPROVE: "comments.media.approve",
   QUESTIONS_MANAGE: "questions.manage",
   QUESTIONS_APPROVE: "questions.approve",
+  QUESTIONS_REPLY: "questions.reply",
   ANSWERS_APPROVE: "answers.approve",
 
   // Support & Tickets
@@ -72,9 +74,11 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.INTERACTIONS_MANAGE]: "مدیریت تعاملات کاربران",
   [PERMISSIONS.COMMENTS_MANAGE]: "مدیریت نظرات",
   [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن نظرات",
+  [PERMISSIONS.COMMENTS_REPLY]: "پاسخ به دیدگاه‌های کاربران",
   [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های نظرات",
   [PERMISSIONS.QUESTIONS_MANAGE]: "پاسخ به سوالات",
   [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌ها",
+  [PERMISSIONS.QUESTIONS_REPLY]: "پاسخ به سوالات کاربران",
   [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
 
   // Support Labels

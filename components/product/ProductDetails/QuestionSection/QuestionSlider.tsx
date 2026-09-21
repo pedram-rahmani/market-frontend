@@ -139,17 +139,20 @@ export default function QuestionSlider({
         body: comment,
       });
 
-      setQuestions((prev) =>
-        prev.map((q) => {
-          if (q.id === questionId) {
-            return {
-              ...q,
-              replies: [...(q.replies || []), data.question || data],
-            };
-          }
-          return q;
-        }),
-      );
+      const createdQuestion = data.question || data;
+      if (createdQuestion.is_approved) {
+        setQuestions((prev) =>
+          prev.map((q) => {
+            if (q.id === questionId) {
+              return {
+                ...q,
+                replies: [...(q.replies || []), createdQuestion],
+              };
+            }
+            return q;
+          }),
+        );
+      }
 
       setShowRepliesMap((prev) => ({ ...prev, [questionId]: true }));
       setReplyTextMap((prev) => ({ ...prev, [questionId]: "" }));

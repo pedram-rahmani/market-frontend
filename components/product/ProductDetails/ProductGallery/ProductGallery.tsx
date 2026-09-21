@@ -102,6 +102,9 @@ export default function ProductGallery({
         alt="Product View"
         fill
         unoptimized
+        onError={(event) => {
+          event.currentTarget.src = FALLBACK_IMAGE_PATH;
+        }}
         className={`w-full h-full object-contain ${
           isLightbox ? "rounded-xl max-h-[58vh]" : "transition-transform duration-300 group-hover:scale-105"
         }`}
@@ -162,6 +165,9 @@ export default function ProductGallery({
                   fill
                   sizes="64px"
                   unoptimized
+                  onError={(event) => {
+                    event.currentTarget.src = FALLBACK_IMAGE_PATH;
+                  }}
                   className="h-full w-full object-cover rounded-lg pointer-events-none"
                 />
                 {item.type === "video" && (

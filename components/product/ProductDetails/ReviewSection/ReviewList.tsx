@@ -113,18 +113,19 @@ export default function ReviewList({
         rating: null,
       });
 
-      setReviews((prevReviews) =>
-        prevReviews.map((review) => {
-          if (review.id === parentId) {
-            const updatedReplies = [...(review.replies || []), data.review];
-            return {
-              ...review,
-              replies: updatedReplies,
-            };
-          }
-          return review;
-        }),
-      );
+      if (data.review?.is_approved) {
+        setReviews((prevReviews) =>
+          prevReviews.map((review) => {
+            if (review.id === parentId) {
+              return {
+                ...review,
+                replies: [...(review.replies || []), data.review],
+              };
+            }
+            return review;
+          }),
+        );
+      }
 
       setShowRepliesMap((prev) => ({ ...prev, [parentId]: true }));
       setVisibleCountMap((prev) => {
