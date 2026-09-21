@@ -79,6 +79,7 @@ export default function ValidationInput({
     (validation) => validation.value === Rules.requiredValue,
   );
   const inputRef = useRef<HTMLInputElement & HTMLTextAreaElement>(null);
+  const hasUserChangedValue = useRef(false);
   const onInputHandlerRef = useRef(onInputHandler);
   const lastReportedValue = useRef<{
     id: string;
@@ -97,6 +98,10 @@ export default function ValidationInput({
 
   // pass information to parent form
   useEffect(() => {
+    if (controlledValue !== undefined && !hasUserChangedValue.current) {
+      return;
+    }
+
     if (
       lastReportedValue.current?.id === id &&
       lastReportedValue.current.value === value &&
@@ -112,6 +117,7 @@ export default function ValidationInput({
   const onChangeHandler = (
     e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>,
   ) => {
+    hasUserChangedValue.current = true;
     dispatch({
       type: "CHANGE",
       value: e.target.value,
@@ -123,7 +129,12 @@ export default function ValidationInput({
   // browser's autofill management (password , email ,...)
   useEffect(() => {
     const timer = setTimeout(() => {
-      if (inputRef.current?.value && !touched) {
+      if (
+        controlledValue === undefined &&
+        inputRef.current?.value &&
+        !touched
+      ) {
+        hasUserChangedValue.current = true;
         dispatch({
           type: "CHANGE",
           value: inputRef.current.value,
@@ -133,7 +144,7 @@ export default function ValidationInput({
       }
     }, 500);
     return () => clearTimeout(timer);
-  }, [touched]);
+  }, [controlledValue, touched]);
 
   const statusClass = touched
     ? isValid

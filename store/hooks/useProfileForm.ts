@@ -42,40 +42,48 @@ export function useProfileForm(
   useEffect(() => {
     if (!isOpen) return;
 
-    setFormData(initialData);
-    setAvatarPreview(initialData.avatar || null);
-    setSelectedAvatarFile(null);
-    setProfileLoading(true);
-    setAvatarLoading(true);
-    setAvatarImageLoading(Boolean(initialData.avatar));
-
-    const fetchUserData = async () => {
+    let storedUser: any = null;
+    if (typeof window !== "undefined") {
       try {
-        const res = await axiosInstance.get("/me");
-        const userData: User = res.data?.user || res.data;
-
-        if (userData) {
-          const fetchedData: EditProfileFormValues = {
-            name: userData.name || "",
-            phone: userData.phone || "",
-            email: userData.email || "",
-            address: userData.address || userData.postal_address || "",
-            avatar: userData.avatar || "",
-          };
-          setFormData(fetchedData);
-          setAvatarPreview(userData.avatar || null);
-          setAvatarImageLoading(Boolean(userData.avatar));
-        }
-      } catch (err) {
-        console.error("Error fetching current user profile:", err);
-      } finally {
-        setProfileLoading(false);
-        setAvatarLoading(false);
+        storedUser = JSON.parse(localStorage.getItem("user") || "null");
+      } catch {
+        storedUser = null;
       }
+    }
+
+    const storedAddress = Array.isArray(storedUser?.addresses)
+      ? storedUser.addresses.find(
+          (address: any) =>
+            address?.is_default === true || address?.is_default === 1,
+        ) || storedUser.addresses[0]
+      : null;
+    const fallbackData: EditProfileFormValues = {
+      name: initialData.name || storedUser?.name || "",
+      phone: initialData.phone || storedUser?.phone || storedAddress?.phone || "",
+      email: initialData.email || storedUser?.email || "",
+      address:
+        initialData.address ||
+        storedUser?.address ||
+        storedUser?.postal_address ||
+        storedAddress?.postal_address ||
+        "",
+      avatar: initialData.avatar || storedUser?.avatar || "",
     };
 
-    fetchUserData();
-  }, [isOpen]);
+    setFormData(fallbackData);
+    setAvatarPreview(fallbackData.avatar || null);
+    setSelectedAvatarFile(null);
+    setProfileLoading(false);
+    setAvatarLoading(false);
+    setAvatarImageLoading(Boolean(fallbackData.avatar));
+  }, [
+    isOpen,
+    initialData.name,
+    initialData.phone,
+    initialData.email,
+    initialData.address,
+    initialData.avatar,
+  ]);
 
   const handleInputChange = (
     field: keyof EditProfileFormValues,
@@ -107,6 +115,11 @@ export function useProfileForm(
       return avatarPreview;
     }
     return getImagePath(avatarPreview);
+  };
+
+  const handleAvatarImageError = () => {
+    setAvatarImageLoading(false);
+    setAvatarPreview(null);
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -171,6 +184,7 @@ export function useProfileForm(
     fileInputRef,
     handleInputChange,
     handleAvatarChange,
+    handleAvatarImageError,
     getAvatarUrl,
     handleSubmit,
   };

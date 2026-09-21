@@ -16,7 +16,7 @@ interface DashboardStats {
 }
 
 export default function Page() {
-  const { user } = useAuth();
+  const { user, token } = useAuth();
 
   const [stats, setStats] = useState<DashboardStats>({
     order_count: 0,
@@ -33,6 +33,11 @@ export default function Page() {
   }, [user]);
 
   useEffect(() => {
+    if (!token) {
+      setLoading(false);
+      return;
+    }
+
     axiosInstance
       .get("/dashboard-stats")
       .then((res) => {
@@ -44,7 +49,7 @@ export default function Page() {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [token]);
 
   const userName =
     (userData as any)?.user?.name || userData?.name || "کاربر عزیز";
@@ -54,6 +59,8 @@ export default function Page() {
     (userData as any)?.addresses?.[0]?.phone || "";
     
   const userEmail = (userData as any)?.user?.email || userData?.email || "";
+  const userAvatar =
+    (userData as any)?.user?.avatar || (userData as any)?.avatar || "";
   
   const rawAddresses = (userData as any)?.addresses || (userData as any)?.user?.addresses;
   const defaultAddressObj = 
@@ -112,6 +119,7 @@ export default function Page() {
       <UserCoupons />
 
       <EditProfileModal
+        key={`${userEmail}-${userName}-${userAvatar}`}
         isOpen={isModalOpen}
         onClose={() => setIsModalOpen(false)}
         initialData={{
@@ -119,6 +127,7 @@ export default function Page() {
           phone: userPhone,
           email: userEmail,
           address: userAddress,
+          avatar: userAvatar,
         }}
         onSuccess={handleUpdateSuccess}
       />

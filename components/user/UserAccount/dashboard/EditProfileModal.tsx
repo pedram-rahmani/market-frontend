@@ -45,6 +45,7 @@ export default function EditProfileModal({
     fileInputRef,
     handleInputChange,
     handleAvatarChange,
+    handleAvatarImageError,
     getAvatarUrl,
     handleSubmit,
   } = useProfileForm(initialData, isOpen, onSuccess, onClose);
@@ -94,7 +95,7 @@ export default function EditProfileModal({
                       sizes="64px"
                       unoptimized
                       onLoad={() => setAvatarImageLoading(false)}
-                      onError={() => setAvatarImageLoading(false)}
+                      onError={handleAvatarImageError}
                       className={`w-full h-full object-cover ${avatarImageLoading ? "opacity-0" : "opacity-100"}`}
                     />
                     {avatarImageLoading && (

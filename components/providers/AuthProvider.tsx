@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUser } from "@/store/slices/authSlice";
+import { logoutUser, setUser } from "@/store/slices/authSlice";
 import axiosInstance from "@/lib/axiosInstance";
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader"; 
 
@@ -32,8 +32,7 @@ export default function AuthProvider({
         }
       } catch (err: any) {
         if (err.response?.status === 401) {
-          localStorage.removeItem("token");
-          sessionStorage.removeItem("token");
+          dispatch(logoutUser());
         }
       } finally {
         setLoading(false);

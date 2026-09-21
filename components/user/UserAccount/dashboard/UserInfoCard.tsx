@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import { useEffect, useState } from "react";
 import { SkeletonAvatar, BaseSkeleton } from "@/components/ui/Skeletons/Skeletons";
 import { getImagePath } from "@/lib/utils";
 
@@ -33,6 +34,11 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
   const fullName = targetUser?.name || "کاربر عزیز";
 
   const currentAvatar = targetUser?.avatar ? getImagePath(targetUser.avatar) : null;
+  const [avatarFailed, setAvatarFailed] = useState(false);
+
+  useEffect(() => {
+    setAvatarFailed(false);
+  }, [currentAvatar]);
 
   return (
     <div className="bg-white dark:bg-dark-900 border border-gray-200/80 dark:border-white/5 p-4 sm:p-6 rounded-2xl shadow-sm space-y-5">
@@ -56,8 +62,16 @@ export default function UserInfoCard({ user, onOpenEditModal }: UserInfoCardProp
         <div className="relative flex size-16 shrink-0 items-center justify-center overflow-hidden rounded-2xl bg-linear-to-tr from-violet-600 to-cyan-500 font-bold text-white shadow-sm ring-4 ring-white dark:ring-white/5">
             {isLoading ? (
               <SkeletonAvatar size="w-16 h-16 rounded-2xl" />
-            ) : currentAvatar ? (
-              <Image src={currentAvatar} alt={fullName} fill sizes="64px" unoptimized className="w-full h-full object-cover" />
+            ) : currentAvatar && !avatarFailed ? (
+              <Image
+                src={currentAvatar}
+                alt={fullName}
+                fill
+                sizes="64px"
+                unoptimized
+                onError={() => setAvatarFailed(true)}
+                className="w-full h-full object-cover"
+              />
             ) : (
               <span className="text-xl">{fullName.charAt(0).toUpperCase()}</span>
             )}
