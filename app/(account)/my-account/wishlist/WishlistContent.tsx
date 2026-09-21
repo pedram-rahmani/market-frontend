@@ -1,7 +1,24 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import ProductBox from "@/components/product/ProductBox/ProductBox";
 import PageHeader from "@/components/user/UserAccount/PageHeader";
+import axiosInstance from "@/lib/axiosInstance";
+import { ProductSummary } from "@/types/product";
 
 export default function WishlistContent() {
+  const [products, setProducts] = useState<ProductSummary[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axiosInstance
+      .get("/wishlist")
+      .then(({ data }) => setProducts(data.items || []))
+      .catch((error) => console.error("Failed to load wishlist:", error))
+      .finally(() => setLoading(false));
+  }, []);
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -18,7 +35,12 @@ export default function WishlistContent() {
         }
       />
 
-      <EmptyState
+      {loading ? (
+        <div className="py-16 text-center text-sm text-gray-500">
+          در حال دریافت علاقه‌مندی‌ها...
+        </div>
+      ) : products.length === 0 ? (
+        <EmptyState
         tone="pink"
         eyebrow="لیست شخصی شما"
         title="هنوز محصولی ذخیره نکرده‌اید"
@@ -34,7 +56,14 @@ export default function WishlistContent() {
             />
           </svg>
         }
-      />
+        />
+      ) : (
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {products.map((product) => (
+            <ProductBox key={product.id} productInfos={product} />
+          ))}
+        </div>
+      )}
     </div>
   );
 }

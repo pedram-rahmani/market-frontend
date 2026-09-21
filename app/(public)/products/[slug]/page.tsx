@@ -7,6 +7,7 @@ import Breadcrumb from "@/components/ui/BreadCrumb/BreadCrumb";
 import ProductGallery, {
   GalleryMedia,
 } from "@/components/product/ProductDetails/ProductGallery/ProductGallery";
+import ProductActions from "@/components/product/ProductDetails/ProductActions/ProductActions";
 
 import { getProduct } from "@/services/product";
 import axiosInstance from "@/lib/axiosInstance";
@@ -113,8 +114,11 @@ export default async function Page({ params }: PageProps) {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-10 mt-6 items-start w-full min-w-0">
         <div className="lg:col-span-6 space-y-4 w-full min-w-0 overflow-hidden">
-          <div className="w-full overflow-hidden">
+          <div className="flex w-full items-start gap-3 overflow-visible">
+            <ProductActions product={product} />
+            <div className="min-w-0 flex-1 overflow-hidden">
             <ProductGallery mediaItems={allMediaItems} />
+            </div>
           </div>
 
           <div className="grid grid-cols-3 gap-2 md:gap-3 bg-white/80 dark:bg-dark-700/70 border border-custom-gray-100/70 dark:border-dark-600 rounded-2xl p-3 md:p-4 text-center text-[11px] md:text-xs text-text-on-light/80 dark:text-text-on-dark/90">

@@ -4,6 +4,7 @@ import React, { useRef, useState, useEffect } from "react";
 import axiosInstance from "@/lib/axiosInstance";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
+import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
 
 interface QuestionSliderProps {
   questions: any[];
@@ -19,6 +20,10 @@ export default function QuestionSlider({
 
   // local state for questions to handle likes/replies dynamically
   const [questions, setQuestions] = useState(initialQuestions);
+  const [reactionLoading, setReactionLoading] = useState<{
+    id: number;
+    type: "like" | "dislike";
+  } | null>(null);
 
   // mouse drag state
   const [isDragging, setIsDragging] = useState(false);
@@ -89,6 +94,9 @@ export default function QuestionSlider({
     questionId: number,
     type: "like" | "dislike",
   ) => {
+    if (reactionLoading?.id === questionId) return;
+    setReactionLoading({ id: questionId, type });
+
     try {
       const { data } = await axiosInstance.post(
         `/questions/${questionId}/react`,
@@ -112,6 +120,8 @@ export default function QuestionSlider({
       );
     } catch (error) {
       console.error("Failed to submit reaction:", error);
+    } finally {
+      setReactionLoading(null);
     }
   };
 
@@ -387,6 +397,8 @@ export default function QuestionSlider({
                 {/* Like / Dislike Buttons */}
                 <div className="flex items-center gap-3">
                   <button
+                    type="button"
+                    disabled={reactionLoading?.id === q.id}
                     onClick={() => handleReaction(q.id, "like")}
                     className={`flex items-center gap-1 transition-colors ${
                       q.user_reaction === "like"
@@ -394,12 +406,21 @@ export default function QuestionSlider({
                         : "hover:text-cyan-500"
                     }`}
                   >
-                    <svg className="size-4!" viewBox="0 0 24 24">
-                      <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2" />
-                    </svg>{" "}
-                    <span>{q.likes_count || 0}</span>
+                    {reactionLoading?.id === q.id &&
+                    reactionLoading?.type === "like" ? (
+                      <SpinnerLoader className="size-4!" />
+                    ) : (
+                      <>
+                        <svg className="size-4!" viewBox="0 0 24 24">
+                          <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2" />
+                        </svg>
+                        <span>{q.likes_count || 0}</span>
+                      </>
+                    )}
                   </button>
                   <button
+                    type="button"
+                    disabled={reactionLoading?.id === q.id}
                     onClick={() => handleReaction(q.id, "dislike")}
                     className={`flex items-center gap-1 transition-colors ${
                       q.user_reaction === "dislike"
@@ -407,10 +428,18 @@ export default function QuestionSlider({
                         : "hover:text-rose-500"
                     }`}
                   >
-                    <svg className="size-4!" viewBox="0 0 24 24">
+                    {reactionLoading?.id === q.id &&
+                    reactionLoading?.type === "dislike" ? (
+                      <SpinnerLoader className="size-4!" />
+                    ) : (
+                      <svg className="size-4!" viewBox="0 0 24 24">
                       <path d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v5a2 2 0 002 2h.095c-.5 0 .905-.405.905-.905 0-.714-.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2" />
-                    </svg>{" "}
-                    <span>{q.dislikes_count || 0}</span>
+                      </svg>
+                    )}
+                    {!(reactionLoading?.id === q.id &&
+                      reactionLoading?.type === "dislike") && (
+                      <span>{q.dislikes_count || 0}</span>
+                    )}
                   </button>
                 </div>
               </div>

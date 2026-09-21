@@ -81,16 +81,19 @@ export default function Page() {
       const updatedUser = { ...targetUser, ...updatedFields };
       
       let updatedAddresses = targetUser.addresses ? [...targetUser.addresses] : [];
-      if (updatedFields.postal_address || updatedFields.phone) {
+      const updatedAddress =
+        updatedFields.address ?? updatedFields.postal_address;
+
+      if (updatedAddress || updatedFields.phone) {
         if (updatedAddresses.length > 0) {
           updatedAddresses[0] = {
             ...updatedAddresses[0],
-            postal_address: updatedFields.postal_address ?? updatedAddresses[0].postal_address,
+            postal_address: updatedAddress ?? updatedAddresses[0].postal_address,
             phone: updatedFields.phone ?? updatedAddresses[0].phone,
           };
         } else {
           updatedAddresses.push({
-            postal_address: updatedFields.postal_address,
+            postal_address: updatedAddress,
             phone: updatedFields.phone,
             is_default: true,
           });
@@ -101,7 +104,7 @@ export default function Page() {
         ...prev,
         user: { ...updatedUser, addresses: updatedAddresses },
         addresses: updatedAddresses,
-        postal_address: updatedFields.postal_address ?? prev?.postal_address,
+        postal_address: updatedAddress ?? prev?.postal_address,
       };
     });
   };

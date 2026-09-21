@@ -6,10 +6,70 @@ import { useSelector } from "react-redux";
 import ProductGallery from "../ProductDetails/ProductGallery/ProductGallery";
 import { Product } from "@/types/product";
 import { getImagePath } from "@/lib/utils";
+import axiosInstance from "@/lib/axiosInstance";
+import { useAuth } from "@/store/hooks/useAuth";
+import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
 
 export default function ProductShowcase() {
   const product = useSelector((state: any) => state.product?.currentProduct) as Product | null;
   const [showGallery, setShowGallery] = useState(false);
+  const { isLoggedIn } = useAuth();
+  const [isFavorite, setIsFavorite] = useState(false);
+  const [favoriteLoading, setFavoriteLoading] = useState(false);
+  const [actionMessage, setActionMessage] = useState("");
+
+  useEffect(() => {
+    if (!isLoggedIn || !product?.id) {
+      setIsFavorite(false);
+      return;
+    }
+
+    axiosInstance
+      .get(`/wishlist/${product.id}/status`)
+      .then(({ data }) => setIsFavorite(Boolean(data.is_favorite)))
+      .catch((error) => console.error("Failed to load wishlist status:", error));
+  }, [isLoggedIn, product?.id]);
+
+  const showActionMessage = (message: string) => {
+    setActionMessage(message);
+    window.setTimeout(() => setActionMessage(""), 2500);
+  };
+
+  const handleToggleFavorite = async () => {
+    if (!isLoggedIn || !product?.id) {
+      showActionMessage("برای افزودن محصول به علاقه‌مندی‌ها وارد حساب شوید.");
+      return;
+    }
+
+    setFavoriteLoading(true);
+    try {
+      const { data } = await axiosInstance.post(`/wishlist/${product.id}/toggle`);
+      setIsFavorite(Boolean(data.is_favorite));
+      showActionMessage(data.message);
+    } catch (error) {
+      console.error("Failed to update wishlist:", error);
+      showActionMessage("تغییر علاقه‌مندی محصول انجام نشد.");
+    } finally {
+      setFavoriteLoading(false);
+    }
+  };
+
+  const handleShare = async () => {
+    const url = window.location.href;
+    try {
+      if (navigator.share) {
+        await navigator.share({ title: product?.name, text: product?.name, url });
+      } else {
+        await navigator.clipboard.writeText(url);
+        showActionMessage("لینک محصول کپی شد.");
+      }
+    } catch (error) {
+      if ((error as DOMException).name !== "AbortError") {
+        console.error("Failed to share product:", error);
+        showActionMessage("اشتراک‌گذاری محصول انجام نشد.");
+      }
+    }
+  };
 
   // disable window scroll
   useEffect(() => {
@@ -25,22 +85,32 @@ export default function ProductShowcase() {
 
   return (
     <>
-      <div className="flex flex-col lg:flex-row-reverse col-span-full lg:col-span-7 w-full max-w-full items-center lg:items-start justify-center gap-4">
+      <div className="flex flex-row-reverse col-span-full lg:col-span-7 w-full max-w-full items-center lg:items-start justify-center gap-3">
 
         <div
-          className="flex flex-row lg:flex-col mx-3 my-1 gap-x-6 lg:gap-x-0 gap-y-4 
+          className="flex flex-col mx-1 my-1 gap-3
                      *:relative *:flex *:items-center *:cursor-pointer
                      [*_svg]:size-4 [*_div:last-child_svg]:stroke-1"
         >
-          <div className="flex flex-row lg:flex-col gap-x-4 lg:gap-y-4 w-full">
+          <div className="flex flex-col gap-3 w-full">
             {/* Favorite */}
-            <div className="flex items-center justify-end gap-x-2 group cursor-pointer">
-              <span className="hidden lg:inline text-[11px] font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                اضافه به علاقمندی‌ها
-              </span>
+            <button
+              type="button"
+              onClick={handleToggleFavorite}
+              disabled={favoriteLoading}
+              className={`flex items-center justify-end gap-x-2 group cursor-pointer disabled:cursor-wait disabled:opacity-60 ${
+                isFavorite ? "text-rose-500" : ""
+              }`}
+              aria-label={isFavorite ? "حذف از علاقه‌مندی‌ها" : "افزودن به علاقه‌مندی‌ها"}
+            >
               <div className="w-6 flex justify-center">
-                <svg
-                  className="size-5 text-gray-500 group-hover:text-red-500 transition-colors shrink-0"
+                {favoriteLoading ? (
+                  <SpinnerLoader className="size-5!" />
+                ) : (
+                  <svg
+                  className={`size-5 transition-colors shrink-0 ${
+                    isFavorite ? "text-rose-500 fill-rose-500" : "text-gray-500 group-hover:text-red-500"
+                  }`}
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -51,15 +121,18 @@ export default function ProductShowcase() {
                     strokeWidth="1.5"
                     d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
                   />
-                </svg>
+                  </svg>
+                )}
               </div>
-            </div>
+            </button>
 
             {/* Share */}
-            <div className="flex items-center justify-end gap-x-2 group cursor-pointer">
-              <span className="hidden lg:inline text-[11px] font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                به اشتراک گذاری کالا
-              </span>
+            <button
+              type="button"
+              onClick={handleShare}
+              className="flex items-center justify-end gap-x-2 group cursor-pointer"
+              aria-label="اشتراک‌گذاری کالا"
+            >
               <div className="w-6 flex justify-center">
                 <svg
                   className="size-5 text-gray-500 group-hover:text-blue-500 transition-colors shrink-0"
@@ -75,13 +148,15 @@ export default function ProductShowcase() {
                   />
                 </svg>
               </div>
-            </div>
+            </button>
+            {actionMessage && (
+              <p className="text-center text-xs text-cyan-500" role="status">
+                {actionMessage}
+              </p>
+            )}
 
             {/* Chart */}
             <div className="flex items-center justify-end gap-x-2 group cursor-pointer">
-              <span className="hidden lg:inline text-[11px] font-medium text-gray-700 dark:text-gray-300 whitespace-nowrap">
-                نمودار قیمت کالا
-              </span>
               <div className="w-6 flex justify-center">
                 <svg
                   className="size-5 text-gray-500 group-hover:text-green-500 transition-colors shrink-0"

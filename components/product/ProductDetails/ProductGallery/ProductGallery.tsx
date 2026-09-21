@@ -45,6 +45,7 @@ export default function ProductGallery({
 
   const [allMedia, setAllMedia] = useState<GalleryMedia[]>(initialMedia);
   const [activeTab, setActiveTab] = useState<"official" | "user">("official");
+  const [activeMediaIndex, setActiveMediaIndex] = useState(0);
   
   const [lightboxIndex, setLightboxIndex] = useState(0);
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
@@ -52,6 +53,7 @@ export default function ProductGallery({
 
   useEffect(() => {
     setAllMedia(initialMedia);
+    setActiveMediaIndex(0);
   }, [mediaItems, images]);
 
   useEffect(() => {
@@ -60,16 +62,16 @@ export default function ProductGallery({
 
   useLockBodyScroll(isLightboxOpen);
 
-  const activeMainMedia = allMedia[0];
+  const activeMainMedia = allMedia[activeMediaIndex] || allMedia[0];
   const activeLightboxMedia = allMedia[lightboxIndex] || allMedia[0];
 
-  // استفاده از تابع متمرکز getImagePath برای مدیریت یکپارچه آدرس‌ها
   const getFullUrl = (path?: string) => {
     if (!path) return FALLBACK_IMAGE_PATH;
     return getImagePath(path);
   };
 
   const openLightbox = (index: number) => {
+    setActiveMediaIndex(index);
     setLightboxIndex(index);
     const clickedMedia = allMedia[index];
     if (clickedMedia?.source === "user") {
@@ -111,8 +113,8 @@ export default function ProductGallery({
     <div className="flex flex-col gap-3 w-full max-w-full rounded-2xl overflow-hidden">
       {/* main media display */}
       <div
-        onClick={() => openLightbox(0)}
-        className="relative aspect-video max-h-64 sm:max-h-80 w-full overflow-hidden rounded-2xl bg-gray-900/85 border border-custom-gray-100/70 dark:border-dark-600 p-2.5 shadow-lg flex items-center justify-center cursor-pointer group mx-auto"
+        onClick={() => openLightbox(activeMediaIndex)}
+        className="relative aspect-4/3 sm:aspect-video max-h-80 w-full overflow-hidden rounded-2xl bg-gray-100 dark:bg-dark-900 border border-gray-200 dark:border-dark-600 p-2.5 shadow-lg flex items-center justify-center cursor-pointer group mx-auto"
       >
         {activeMainMedia ? (
           renderMediaContent(activeMainMedia, false)
@@ -137,6 +139,7 @@ export default function ProductGallery({
         <div className="flex sm:grid grid-cols-5 sm:grid-cols-6 gap-2 overflow-x-auto sm:overflow-visible pb-1 sm:pb-0 max-w-full scrollbar-none">
           {allMedia.slice(0, 6).map((item, index) => {
             const thumbUrl = item.type === "video" && item.thumbnail ? item.thumbnail : item.url;
+            const isSelected = activeMediaIndex === index;
 
             return (
               <button
@@ -145,7 +148,13 @@ export default function ProductGallery({
                 onClick={() => {
                   openLightbox(index);
                 }}
-                className="relative aspect-square size-16 sm:size-auto shrink-0 overflow-hidden rounded-xl border border-white/10 opacity-60 hover:opacity-100 transition-all bg-gray-900/50 p-0.5 cursor-pointer hover:border-cyan-400"
+                aria-label={`نمایش تصویر ${index + 1}`}
+                aria-current={isSelected ? "true" : undefined}
+                className={`relative aspect-square size-16 sm:size-auto shrink-0 overflow-hidden rounded-xl border-2 p-0.5 cursor-pointer bg-gray-100 dark:bg-dark-900 ${
+                  isSelected
+                    ? "border-cyan-500 dark:border-cyan-400 ring-2 ring-cyan-500/20 dark:ring-cyan-400/20"
+                    : "border-gray-200 dark:border-white/10"
+                }`}
               >
                 <Image
                   src={getFullUrl(thumbUrl)}

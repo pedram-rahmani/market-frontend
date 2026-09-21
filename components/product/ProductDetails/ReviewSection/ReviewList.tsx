@@ -8,6 +8,7 @@ import ReviewReply from "./ReviewReply";
 import ReviewReplyForm from "./ReviewReplyForm";
 import ReviewReportModal from "./ReviewReportModal";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
+import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
 
 interface Review {
   id: number;
@@ -36,6 +37,10 @@ export default function ReviewList({
   onReviewAdded,
 }: ReviewListProps) {
   const [reviews, setReviews] = useState<Review[]>(initialReviews);
+  const [reactionLoading, setReactionLoading] = useState<{
+    id: number;
+    type: "like" | "dislike";
+  } | null>(null);
 
   // Report Modal States
   const [reportModalOpen, setReportModalOpen] = useState(false);
@@ -71,6 +76,9 @@ export default function ReviewList({
   }, [initialReviews]);
 
   const handleReaction = async (reviewId: number, type: "like" | "dislike") => {
+    if (reactionLoading?.id === reviewId) return;
+    setReactionLoading({ id: reviewId, type });
+
     try {
       const { data } = await axiosInstance.post(`/reviews/${reviewId}/react`, {
         type,
@@ -91,6 +99,8 @@ export default function ReviewList({
       );
     } catch (error) {
       console.error("Failed to submit reaction:", error);
+    } finally {
+      setReactionLoading(null);
     }
   };
 
@@ -285,6 +295,8 @@ export default function ReviewList({
 
                   <div className="flex items-center gap-4">
                     <button
+                      type="button"
+                      disabled={reactionLoading?.id === review.id}
                       onClick={() => handleReaction(review.id, "like")}
                       className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer ${
                         review.user_reaction === "like"
@@ -292,13 +304,22 @@ export default function ReviewList({
                           : "text-gray-400 hover:text-cyan-400"
                       }`}
                     >
-                      <svg className="size-4!" viewBox="0 0 24 24">
-                        <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2" />
-                      </svg>
-                      <span>{review.likes_count || 0}</span>
+                      {reactionLoading?.id === review.id &&
+                      reactionLoading?.type === "like" ? (
+                        <SpinnerLoader className="size-4!" />
+                      ) : (
+                        <>
+                          <svg className="size-4!" viewBox="0 0 24 24">
+                            <path d="M14 10h4.764a2 2 0 011.789 2.894l-3.5 7A2 2 0 0115.263 21h-4.017c-.163 0-.326-.02-.485-.06L7 20m7-10V5a2 2 0 00-2-2h-.095c-.5 0-.905.405-.905.905 0 .714-.211 1.412-.608 2.006L7 11v9m7-10h-2M7 20H5a2 2 0 01-2-2v-6a2 2 0 012-2h2" />
+                          </svg>
+                          <span>{review.likes_count || 0}</span>
+                        </>
+                      )}
                     </button>
 
                     <button
+                      type="button"
+                      disabled={reactionLoading?.id === review.id}
                       onClick={() => handleReaction(review.id, "dislike")}
                       className={`flex items-center gap-1.5 text-xs transition-colors cursor-pointer ${
                         review.user_reaction === "dislike"
@@ -306,10 +327,18 @@ export default function ReviewList({
                           : "text-gray-400 hover:text-rose-400"
                       }`}
                     >
-                      <svg className="size-4!" viewBox="0 0 24 24">
+                      {reactionLoading?.id === review.id &&
+                      reactionLoading?.type === "dislike" ? (
+                        <SpinnerLoader className="size-4!" />
+                      ) : (
+                        <svg className="size-4!" viewBox="0 0 24 24">
                         <path d="M10 14H5.236a2 2 0 01-1.789-2.894l3.5-7A2 2 0 018.736 3h4.018c.163 0 .326.02.485.06L17 4m-7 10v5a2 2 0 002 2h.095c-.5 0 .905-.405.905-.905 0-.714-.211-1.412.608-2.006L17 13V4m-7 10h2m5-10h2a2 2 0 012 2v6a2 2 0 01-2 2h-2" />
-                      </svg>
-                      <span>{review.dislikes_count || 0}</span>
+                        </svg>
+                      )}
+                      {!(reactionLoading?.id === review.id &&
+                        reactionLoading?.type === "dislike") && (
+                        <span>{review.dislikes_count || 0}</span>
+                      )}
                     </button>
                   </div>
                 </div>

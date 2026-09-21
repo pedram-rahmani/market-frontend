@@ -93,7 +93,7 @@ export default function UserInteractions() {
     try {
       setIsLoading(true);
       const [reviewsRes, questionsRes] = await Promise.all([
-        axiosInstance.get("/user/reviews"),
+        axiosInstance.get("/admin/reviews"),
         axiosInstance.get("/admin/questions"),
       ]);
 

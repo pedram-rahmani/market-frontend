@@ -1,10 +1,11 @@
 "use client";
 
-import { useEffect, forwardRef } from "react";
+import { useEffect, forwardRef, useState } from "react";
 import Link from "next/link";
 import axiosInstance from "@/lib/axiosInstance";
 import Image from "next/image";
 import avatarPlaceHolder from "@/public/images/avatar-placeholder.png";
+import { FALLBACK_IMAGE_PATH, getImagePath } from "@/lib/utils";
 
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
 import { useAppDispatch, useAppSelector } from "@/store/hooks/storeHooks";
@@ -24,6 +25,9 @@ const UserModal = forwardRef<HTMLDivElement, UserModalProps>(
 
     // username info
     const username = (user as any)?.user?.name || user?.name || "کاربر مهمان";
+    const avatarPath = (user as any)?.user?.avatar || (user as any)?.avatar;
+    const avatarUrl = avatarPath ? getImagePath(avatarPath) : FALLBACK_IMAGE_PATH;
+    const [avatarFailed, setAvatarFailed] = useState(false);
 
     const permissions =
       user?.permissions || (user as any)?.user?.permissions || [];
@@ -84,8 +88,11 @@ const UserModal = forwardRef<HTMLDivElement, UserModalProps>(
             {/* avatar */}
             <div className="relative shrink-0">
               <Image
-                src={avatarPlaceHolder}
+                src={avatarFailed ? avatarPlaceHolder : avatarUrl}
                 alt={username}
+                width={48}
+                height={48}
+                onError={() => setAvatarFailed(true)}
                 className="object-cover size-12 rounded-full border-2 border-violet-500/20"
               />
               <div className="absolute bottom-0 right-0 size-3 bg-green-500 border-2 border-white dark:border-[#16161a] rounded-full"></div>
