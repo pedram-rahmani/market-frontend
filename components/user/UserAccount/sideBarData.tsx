@@ -87,6 +87,18 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
     ),
   },
   {
+    link: "/my-account/ticket-management",
+    label: "مدیریت تیکت‌ها",
+    permission: "tickets.view",
+    typeKey: "ticket-management",
+    icon: (
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
+        <path d="M3 11.5a8.5 8.5 0 0 1 17 0v3.25a2.25 2.25 0 0 1-2.25 2.25H16l-3.2 3.2a1.125 1.125 0 0 1-1.925-.796V17H6.25A3.25 3.25 0 0 1 3 13.75V11.5Z" />
+        <path d="M8 11h.01M12 11h.01M16 11h.01" />
+      </svg>
+    ),
+  },
+  {
     link: "/my-account/notifications",
     label: "پیام‌ها",
     typeKey: "notifications",
