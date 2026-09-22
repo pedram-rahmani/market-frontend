@@ -11,7 +11,7 @@ import UserCoupons from "@/components/user/UserAccount/dashboard/UserCoupons"; /
 
 interface DashboardStats {
   order_count: number;
-  ticket_count: number;
+  unread_chat_count: number;
   wallet_balance: number;
 }
 
@@ -20,7 +20,7 @@ export default function Page() {
 
   const [stats, setStats] = useState<DashboardStats>({
     order_count: 0,
-    ticket_count: 0,
+    unread_chat_count: 0,
     wallet_balance: 0,
   });
   const [loading, setLoading] = useState(true);

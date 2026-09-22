@@ -1,11 +1,12 @@
 import Link from "next/link";
 import { SkeletonCard } from "@/components/ui/Skeletons/Skeletons";
+import { openLiveChat } from "@/lib/chatEvents";
 
 interface DashboardStatsGridProps {
   loading: boolean;
   stats: {
     order_count: number;
-    ticket_count: number;
+    unread_chat_count: number;
     wallet_balance: number;
   };
 }
@@ -34,9 +35,9 @@ export default function DashboardStatsGrid({ loading, stats }: DashboardStatsGri
         }
       />
       <DashboardCard
-        title="تیکت‌های پشتیبانی"
-        value={`${stats.ticket_count} مورد`}
-        link="/my-account/support"
+        title="پیام‌های پشتیبانی خوانده‌نشده"
+        value={`${stats.unread_chat_count} مورد`}
+        onClick={openLiveChat}
         icon={
           <svg viewBox="0 0 24 24" className="size-5! text-blue-500">
             <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
@@ -60,16 +61,17 @@ export default function DashboardStatsGrid({ loading, stats }: DashboardStatsGri
 interface DashboardCardProps {
   title: string;
   value: string;
-  link: string;
   icon: React.ReactNode;
+  link?: string;
+  onClick?: () => void;
 }
 
-function DashboardCard({ title, value, link, icon }: DashboardCardProps) {
-  return (
-    <Link
-      href={link}
-      className="group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:border-violet-500/50 dark:border-white/5 dark:bg-ui-blue-900 dark:hover:border-violet-500/50 sm:p-5"
-    >
+function DashboardCard({ title, value, link, onClick, icon }: DashboardCardProps) {
+  const className =
+    "group flex min-w-0 items-center justify-between gap-3 rounded-2xl border border-gray-100 bg-white p-4 shadow-sm transition-all hover:border-violet-500/50 dark:border-white/5 dark:bg-ui-blue-900 dark:hover:border-violet-500/50 sm:p-5";
+
+  const content = (
+    <>
       <div className="min-w-0 space-y-1">
         <p className="truncate text-xs text-gray-500 dark:text-gray-400">{title}</p>
         <p className="break-words text-sm font-bold text-gray-900 transition-colors group-hover:text-violet-600 dark:text-white dark:group-hover:text-violet-400 sm:text-lg">
@@ -79,6 +81,20 @@ function DashboardCard({ title, value, link, icon }: DashboardCardProps) {
       <div className="shrink-0 rounded-xl bg-gray-50 p-2.5 transition-colors group-hover:bg-violet-50 dark:bg-dark-800 dark:group-hover:bg-violet-500/10 sm:p-3">
         {icon}
       </div>
+    </>
+  );
+
+  if (onClick) {
+    return (
+      <button type="button" onClick={onClick} className={`${className} text-right`}>
+        {content}
+      </button>
+    );
+  }
+
+  return (
+    <Link href={link || "#"} className={className}>
+      {content}
     </Link>
   );
 }

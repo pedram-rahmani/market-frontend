@@ -32,10 +32,10 @@ export const PERMISSIONS = {
   QUESTIONS_REPLY: "questions.reply",
   ANSWERS_APPROVE: "answers.approve",
 
-  // Support & Tickets
-  TICKETS_VIEW: "tickets.view",
-  TICKETS_REPLY: "tickets.reply",
-  TICKETS_DELETE: "tickets.delete",
+  // Support & Live Chat
+  CHATS_VIEW: "chats.view",
+  CHATS_REPLY: "chats.reply",
+  CHATS_DELETE: "chats.delete",
 
   // Finance & Reporting
   ORDERS_VIEW: "orders.view",
@@ -84,9 +84,9 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
 
   // Support Labels
-  [PERMISSIONS.TICKETS_VIEW]: "مشاهده تیکت‌ها",
-  [PERMISSIONS.TICKETS_REPLY]: "پاسخ به تیکت‌ها",
-  [PERMISSIONS.TICKETS_DELETE]: "حذف تیکت‌ها",
+  [PERMISSIONS.CHATS_VIEW]: "مشاهده گفتگوهای پشتیبانی",
+  [PERMISSIONS.CHATS_REPLY]: "پاسخ به گفتگوهای پشتیبانی",
+  [PERMISSIONS.CHATS_DELETE]: "حذف گفتگوهای پشتیبانی",
 
   // Transactions Labels
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
@@ -148,11 +148,11 @@ export const PERMISSION_GROUPS = {
     ],
   },
   support: {
-    label: "پشتیبانی و تیکت‌ها",
+    label: "پشتیبانی و گفتگوهای لایو",
     permissions: [
-      PERMISSIONS.TICKETS_VIEW,
-      PERMISSIONS.TICKETS_REPLY,
-      PERMISSIONS.TICKETS_DELETE,
+      PERMISSIONS.CHATS_VIEW,
+      PERMISSIONS.CHATS_REPLY,
+      PERMISSIONS.CHATS_DELETE,
     ],
   },
   finance: {

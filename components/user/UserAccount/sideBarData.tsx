@@ -87,10 +87,10 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
     ),
   },
   {
-    link: "/my-account/ticket-management",
-    label: "مدیریت تیکت‌ها",
-    permission: "tickets.view",
-    typeKey: "ticket-management",
+    link: "/my-account/chat-management",
+    label: "مدیریت گفتگوها",
+    permission: "chats.view",
+    typeKey: "chat-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M3 11.5a8.5 8.5 0 0 1 17 0v3.25a2.25 2.25 0 0 1-2.25 2.25H16l-3.2 3.2a1.125 1.125 0 0 1-1.925-.796V17H6.25A3.25 3.25 0 0 1 3 13.75V11.5Z" />
@@ -139,17 +139,6 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
         <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78L12 21.23l8.84-8.84a5.5 5.5 0 0 0 0-7.78Z" />
-      </svg>
-    ),
-  },
-  {
-    link: "/my-account/support",
-    label: "پشتیبانی",
-    typeKey: "support",
-    icon: (
-      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
-        <path d="M3 18v-6a9 9 0 0 1 18 0v6" />
-        <path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z" />
       </svg>
     ),
   },

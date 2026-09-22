@@ -148,7 +148,6 @@ export function useSettings() {
         items: [
           { label: "درباره ما", url: "/about-us" },
           { label: "تماس با ما", url: "/contact-us" },
-          { label: "پشتیبانی / تیکت", url: "/tickets" },
         ],
       },
     ];

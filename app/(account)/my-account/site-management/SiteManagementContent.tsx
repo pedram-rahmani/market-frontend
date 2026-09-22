@@ -35,7 +35,6 @@ const DEFAULT_FOOTER_LINKS: FooterLinkGroup[] = [
     items: [
       { label: "درباره ما", url: "/about-us" },
       { label: "تماس با ما", url: "/contact-us" },
-      { label: "پشتیبانی / تیکت", url: "/tickets" },
     ],
   },
 ];

@@ -3,6 +3,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/components/providers/ReduxProvider"; 
 import AuthProvider from "@/components/providers/AuthProvider";
 import FaviconManager from "@/components/user/UserAccount/Site-management/FaviconManager";
+import ChatWidget from "@/components/chat/ChatWidget";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex-1 flex flex-col">
               {children}
             </div>
+            <ChatWidget />
           </AuthProvider>
         </ReduxProvider>
       </body>
