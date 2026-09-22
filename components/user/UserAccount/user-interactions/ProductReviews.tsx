@@ -5,7 +5,7 @@ import { useRef, useState } from "react";
 import { InteractionItem } from "./UserInteractions";
 import { getImagePath } from "@/lib/utils";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface ProductReviewsProps {
   items: InteractionItem[];

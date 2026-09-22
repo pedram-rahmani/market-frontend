@@ -1,5 +1,5 @@
 "use client";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface ReviewReplyProps {
   reply: {

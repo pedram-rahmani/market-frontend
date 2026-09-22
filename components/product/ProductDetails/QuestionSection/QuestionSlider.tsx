@@ -5,7 +5,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface QuestionSliderProps {
   questions: any[];

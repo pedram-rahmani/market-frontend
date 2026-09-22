@@ -3,7 +3,7 @@
 import { useRef, useState } from "react";
 import { ProductQuestionItem } from "@/types/interactions";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface ProductQuestionsProps {
   items: ProductQuestionItem[];

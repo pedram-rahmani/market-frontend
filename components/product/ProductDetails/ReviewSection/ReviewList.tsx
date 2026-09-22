@@ -9,7 +9,7 @@ import ReviewReplyForm from "./ReviewReplyForm";
 import ReviewReportModal from "./ReviewReportModal";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface Review {
   id: number;

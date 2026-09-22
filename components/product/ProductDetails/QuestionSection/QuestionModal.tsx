@@ -6,7 +6,7 @@ import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
-import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge/ContentAuthorBadge";
 
 interface QuestionModalProps {
   isOpen: boolean;
