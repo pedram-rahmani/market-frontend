@@ -16,6 +16,10 @@ export interface ProductQuestionReply {
   content: string;
   is_approved: number;
   is_admin_answer: boolean;
+  user?: {
+    name?: string;
+    role?: string;
+  };
 }
 
 export interface ProductQuestionItem {
@@ -23,6 +27,10 @@ export interface ProductQuestionItem {
   productName: string;
   content: string;
   is_approved: number;
+  user?: {
+    name?: string;
+    role?: string;
+  };
   replies?: ProductQuestionReply[];
 }
 

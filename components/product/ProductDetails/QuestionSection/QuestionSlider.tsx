@@ -5,6 +5,7 @@ import axiosInstance from "@/lib/axiosInstance";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
 
 interface QuestionSliderProps {
   questions: any[];
@@ -290,6 +291,13 @@ export default function QuestionSlider({
                       <h4 className="text-xs font-bold text-gray-900 dark:text-white line-clamp-2">
                         {q.body || "بدون متن"}
                       </h4>
+                      <div className="mt-2">
+                        <ContentAuthorBadge
+                          name={q.user?.name}
+                          role={q.user?.role}
+                          publicFacing
+                        />
+                      </div>
                       <span className="text-[10px] text-gray-400 mt-0.5 block">
                         {q.created_at
                           ? new Date(q.created_at).toLocaleDateString("fa-IR")
@@ -329,9 +337,14 @@ export default function QuestionSlider({
                         key={rep.id}
                         className="bg-white dark:bg-dark-800 p-2.5 rounded-xl border border-gray-100 dark:border-white/5 text-[11px] space-y-1"
                       >
-                        <span className="font-semibold text-cyan-500">
-                          {rep.user?.name || "کاربر"}
-                        </span>
+                        <div className="rounded-lg border-r-2 border-violet-500/30 bg-violet-500/5 px-2.5 py-1.5 text-[10px] text-gray-500 dark:text-gray-400">
+                          در پاسخ به این پرسش
+                        </div>
+                        <ContentAuthorBadge
+                          name={rep.user?.name}
+                          role={rep.user?.role}
+                          publicFacing
+                        />
                         <p className="text-gray-600 dark:text-gray-300">
                           {rep.body || rep.comment}
                         </p>

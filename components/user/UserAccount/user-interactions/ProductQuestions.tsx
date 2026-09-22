@@ -1,7 +1,9 @@
 "use client";
 
+import { useRef, useState } from "react";
 import { ProductQuestionItem } from "@/types/interactions";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
 
 interface ProductQuestionsProps {
   items: ProductQuestionItem[];
@@ -10,6 +12,8 @@ interface ProductQuestionsProps {
   onToggleApproval: (id: number, currentStatus: number, isReply?: boolean) => void;
   canApproveQuestions: boolean;
   canApproveAnswers: boolean;
+  canDeleteAll: boolean;
+  onDeleteAll: () => void;
 }
 
 export default function ProductQuestions({
@@ -19,7 +23,11 @@ export default function ProductQuestions({
   onToggleApproval,
   canApproveQuestions,
   canApproveAnswers,
+  canDeleteAll,
+  onDeleteAll,
 }: ProductQuestionsProps) {
+  const itemRefs = useRef<Record<number, HTMLDivElement | null>>({});
+  const [pendingCursor, setPendingCursor] = useState(0);
   const pendingQuestionsCount = items.filter(
     (item) => item.is_approved === 0,
   ).length;
@@ -28,6 +36,24 @@ export default function ProductQuestions({
     if (!item.replies) return total;
     return total + item.replies.filter((r) => r.is_approved === 0).length;
   }, 0);
+
+  const pendingTargets = items.flatMap((item) => [
+    ...(item.is_approved === 0 ? [item.id] : []),
+    ...(item.replies || [])
+      .filter((reply) => reply.is_approved === 0)
+      .map((reply) => reply.id),
+  ]);
+
+  const scrollToNextPending = () => {
+    if (pendingTargets.length === 0) return;
+
+    const targetId = pendingTargets[pendingCursor % pendingTargets.length];
+    itemRefs.current[targetId]?.scrollIntoView({
+      behavior: "smooth",
+      block: "center",
+    });
+    setPendingCursor((cursor) => (cursor + 1) % pendingTargets.length);
+  };
 
   if (items.length === 0) {
     return (
@@ -48,24 +74,44 @@ export default function ProductQuestions({
   return (
     <div className="space-y-4 relative">
       {(pendingQuestionsCount > 0 || pendingRepliesCount > 0) && (
-        <div className="sticky top-48 sm:top-37 z-10 py-2 bg-gray-50/80 dark:bg-dark-900/80 backdrop-blur-md flex items-center gap-3 flex-wrap">
+        <div className="sticky top-49 sm:top-43 z-10 py-2 bg-gray-50/80 dark:bg-dark-900/80 backdrop-blur-md flex items-center gap-3 flex-wrap">
           {pendingQuestionsCount > 0 && (
-            <div className="flex items-center justify-between gap-4 px-4 py-2.5 bg-violet-500/10 border border-violet-500/20 rounded-xl text-xs text-violet-600 dark:text-violet-400 font-medium shadow-sm">
+            <button
+              type="button"
+              onClick={scrollToNextPending}
+              className="flex items-center justify-between gap-4 px-4 py-2.5 bg-violet-500/10 border border-violet-500/20 rounded-xl text-xs text-violet-600 dark:text-violet-400 font-medium shadow-sm cursor-pointer hover:bg-violet-500/15 transition-colors"
+            >
               <span>پرسش‌های در انتظار تایید:</span>
               <span className="px-2 py-0.5 bg-violet-500 text-white rounded-full font-bold text-[10px]">
                 {pendingQuestionsCount}
               </span>
-            </div>
+            </button>
           )}
 
           {pendingRepliesCount > 0 && (
-            <div className="flex items-center justify-between gap-4 px-4 py-2.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-600 dark:text-blue-400 font-medium shadow-sm">
+            <button
+              type="button"
+              onClick={scrollToNextPending}
+              className="flex items-center justify-between gap-4 px-4 py-2.5 bg-blue-500/10 border border-blue-500/20 rounded-xl text-xs text-blue-600 dark:text-blue-400 font-medium shadow-sm cursor-pointer hover:bg-blue-500/15 transition-colors"
+            >
               <span>پاسخ‌های در انتظار تایید:</span>
               <span className="px-2 py-0.5 bg-blue-500 text-white rounded-full font-bold text-[10px]">
                 {pendingRepliesCount}
               </span>
-            </div>
+            </button>
           )}
+        </div>
+      )}
+
+      {canDeleteAll && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={onDeleteAll}
+            className="px-3.5 py-2 rounded-xl bg-rose-500/10 text-rose-500 border border-rose-500/20 text-xs font-medium hover:bg-rose-500/20 transition-colors"
+          >
+            حذف همه پرسش‌ها و پاسخ‌ها
+          </button>
         </div>
       )}
 
@@ -75,12 +121,18 @@ export default function ProductQuestions({
         return (
           <div
             key={item.id}
+            ref={(element) => {
+              itemRefs.current[item.id] = element;
+            }}
             className="p-5 rounded-2xl bg-white dark:bg-dark-800 border border-gray-200 dark:border-white/5 space-y-4 shadow-sm"
           >
             <div className="flex items-center justify-between">
-              <span className="font-bold text-sm text-gray-800 dark:text-white">
-                {item.productName}
-              </span>
+              <div className="space-y-2">
+                <span className="font-bold text-sm text-gray-800 dark:text-white block">
+                  {item.productName}
+                </span>
+                <ContentAuthorBadge name={item.user?.name} role={item.user?.role} />
+              </div>
               <span
                 className={`px-2.5 py-1 rounded-lg text-[10px] border font-medium ${
                   isApproved
@@ -96,7 +148,7 @@ export default function ProductQuestions({
               <span className="text-[11px] font-bold text-violet-600 dark:text-violet-400">
                 سوال:
               </span>
-              <p className="text-xs text-text-on-light/80 dark:text-text-on-dark/80 leading-relaxed bg-gray-50 dark:bg-dark-900/40 p-3 rounded-xl border border-gray-100 dark:border-white/5">
+              <p className="text-sm text-text-on-light/80 dark:text-text-on-dark/80 leading-relaxed bg-gray-50 dark:bg-dark-900/40 p-3 rounded-xl border border-gray-100 dark:border-white/5">
                 {item.content}
               </p>
             </div>
@@ -145,12 +197,16 @@ export default function ProductQuestions({
                   return (
                     <div
                       key={reply.id}
+                      ref={(element) => {
+                        itemRefs.current[reply.id] = element;
+                      }}
                       className="p-3.5 rounded-xl bg-violet-500/5 dark:bg-dark-850 border border-violet-500/15 space-y-2.5"
                     >
                       <div className="flex items-center justify-between">
-                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-blue-500/10 text-blue-600 dark:text-blue-400 border border-blue-500/20">
-                          {reply.is_admin_answer ? "پاسخ ادمین" : "پاسخ کاربر"}
-                        </span>
+                        <ContentAuthorBadge
+                          name={reply.user?.name}
+                          role={reply.user?.role}
+                        />
 
                         <span
                           className={`px-2 py-0.5 rounded-lg text-[9px] border font-medium ${
@@ -167,7 +223,7 @@ export default function ProductQuestions({
                         <span className="text-[10px] font-bold text-emerald-600 dark:text-emerald-400">
                           جواب:
                         </span>
-                        <p className="text-xs text-text-on-light/80 dark:text-text-on-dark/80 leading-relaxed bg-white/60 dark:bg-dark-800 p-2.5 rounded-lg border border-gray-100 dark:border-white/5">
+                        <p className="text-sm text-text-on-light/80 dark:text-text-on-dark/80 leading-relaxed bg-white/60 dark:bg-dark-800 p-2.5 rounded-lg border border-gray-100 dark:border-white/5">
                           {reply.content}
                         </p>
                       </div>

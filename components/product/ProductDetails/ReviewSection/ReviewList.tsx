@@ -9,6 +9,7 @@ import ReviewReplyForm from "./ReviewReplyForm";
 import ReviewReportModal from "./ReviewReportModal";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
 import SpinnerLoader from "@/components/ui/SpinnerLoader/SpinnerLoader";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
 
 interface Review {
   id: number;
@@ -18,6 +19,7 @@ interface Review {
   user?: {
     id?: number;
     name?: string;
+    role?: string;
   };
   likes_count?: number;
   dislikes_count?: number;
@@ -221,13 +223,13 @@ export default function ReviewList({
               <div className="p-5 bg-white dark:bg-dark-700/70 rounded-2xl border border-custom-gray-100/70 dark:border-dark-600 space-y-3 relative group">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-full bg-cyan-500/20 text-cyan-400 border border-cyan-500/30 flex items-center justify-center text-xs font-bold">
-                      {review.user?.name ? review.user.name.charAt(0) : "ک"}
-                    </div>
                     <div>
-                      <span className="text-xs font-medium text-text-on-light/80 dark:text-text-on-dark/90 block">
-                        {review.user?.name || "کاربر مهمان"}
-                      </span>
+                      <ContentAuthorBadge
+                        name={review.user?.name}
+                        role={review.user?.role}
+                        size="md"
+                        publicFacing
+                      />
                       {review.created_at && (
                         <div className="flex items-center gap-1.5 text-[10px] text-text-on-light/60 dark:text-text-on-dark/60 mt-0.5" dir="ltr">
                           <span className="opacity-80">
@@ -377,7 +379,7 @@ export default function ReviewList({
                   {review.replies && review.replies.length > 0 && (
                     <div className="mr-6 sm:mr-10 border-r-2 border-cyan-500/20 pr-4 space-y-3">
                       {currentVisibleReplies.map((reply) => (
-                        <ReviewReply key={reply.id} reply={reply} />
+                        <ReviewReply key={reply.id} reply={reply} parent={review} />
                       ))}
 
                       {hasMoreReplies && (

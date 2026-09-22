@@ -33,7 +33,7 @@ export default function WishlistPanel() {
 
   if (loading) {
     return (
-      <div className="grid gap-4 md:grid-cols-2">
+      <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
         {[1, 2].map((item) => (
           <div
             key={item}
@@ -63,7 +63,7 @@ export default function WishlistPanel() {
   }
 
   return (
-    <div className="grid gap-4 md:grid-cols-2">
+    <div className="grid grid-cols-1 gap-4 lg:grid-cols-2">
       {products.map((product) => (
         <WishlistCard
           key={product.id}

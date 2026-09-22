@@ -27,7 +27,7 @@ export default function PageHeader({
   const isButtonDisabled = isLoading || !canClick;
 
   return (
-    <div className="sticky top-20 md:top-19 z-20 mb-4 flex min-w-0 flex-col gap-3 rounded-2xl border border-gray-100 bg-white/95 p-3 shadow-sm backdrop-blur-md dark:border-white/5 dark:bg-ui-blue-900/95 sm:top-24 sm:mb-6 sm:gap-4 sm:p-5 md:flex-row md:items-center md:justify-between">
+    <div className="sticky top-22 z-30 mb-4 flex min-w-0 flex-col gap-3 rounded-2xl border border-gray-100 bg-white/95 p-3 shadow-sm backdrop-blur-md dark:border-ui-blue-700/70 dark:bg-dark-800/95 dark:shadow-ui-blue-900/30 sm:top-28 sm:mb-6 sm:gap-4 sm:p-5 md:top-22 md:flex-row md:items-center md:justify-between">
       <div className="flex min-w-0 items-center gap-3 sm:gap-4">
         {icon && (
           <div className="hidden size-12 shrink-0 items-center justify-center rounded-2xl bg-violet-500/10 text-violet-500 sm:flex sm:size-14">

@@ -23,13 +23,12 @@ export const PERMISSIONS = {
 
   // User Interactions (Comments & Questions)
   INTERACTIONS_VIEW: "interactions.view",
-  INTERACTIONS_MANAGE: "interactions.manage",
-  COMMENTS_MANAGE: "comments.manage",
   COMMENTS_APPROVE: "comments.approve",
+  COMMENTS_DELETE: "comments.delete",
   COMMENTS_REPLY: "comments.reply",
   COMMENTS_MEDIA_APPROVE: "comments.media.approve",
-  QUESTIONS_MANAGE: "questions.manage",
   QUESTIONS_APPROVE: "questions.approve",
+  QUESTIONS_DELETE: "questions.delete",
   QUESTIONS_REPLY: "questions.reply",
   ANSWERS_APPROVE: "answers.approve",
 
@@ -50,6 +49,7 @@ export const PERMISSIONS = {
 export type PermissionKey = (typeof PERMISSIONS)[keyof typeof PERMISSIONS];
 
 export const PERMISSION_LABELS: Record<PermissionKey, string> = {
+  // User Labels
   [PERMISSIONS.USERS_VIEW]: "مشاهده لیست کاربران",
   [PERMISSIONS.USERS_CREATE]: "افزودن کاربر جدید",
   [PERMISSIONS.USERS_EDIT]: "ویرایش اطلاعات کاربران",
@@ -59,11 +59,13 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.USERS_DEMOTE]: "تنزل نقش کاربران",
   [PERMISSIONS.USERS_FORCE_DELETE]: "حذف دائمی کاربران",
   
+  // Product Labels
   [PERMISSIONS.PRODUCTS_VIEW]: "مشاهده لیست محصولات",
   [PERMISSIONS.PRODUCTS_CREATE]: "افزودن محصول جدید",
   [PERMISSIONS.PRODUCTS_EDIT]: "ویرایش محصولات",
   [PERMISSIONS.PRODUCTS_DELETE]: "حذف محصولات",
 
+  // Category Labels
   [PERMISSIONS.CATEGORIES_VIEW]: "مشاهده دسته‌بندی‌ها",
   [PERMISSIONS.CATEGORIES_CREATE]: "ایجاد دسته‌بندی",
   [PERMISSIONS.CATEGORIES_EDIT]: "ویرایش دسته‌بندی",
@@ -71,13 +73,12 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
 
   // Interactions Labels
   [PERMISSIONS.INTERACTIONS_VIEW]: "مشاهده صفحه تعاملات کاربران",
-  [PERMISSIONS.INTERACTIONS_MANAGE]: "مدیریت تعاملات کاربران",
-  [PERMISSIONS.COMMENTS_MANAGE]: "مدیریت نظرات",
   [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن نظرات",
+  [PERMISSIONS.COMMENTS_DELETE]: "حذف دیدگاه‌ها",
   [PERMISSIONS.COMMENTS_REPLY]: "پاسخ به دیدگاه‌های کاربران",
   [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های نظرات",
-  [PERMISSIONS.QUESTIONS_MANAGE]: "پاسخ به سوالات",
   [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌ها",
+  [PERMISSIONS.QUESTIONS_DELETE]: "حذف پرسش‌ها و پاسخ‌ها",
   [PERMISSIONS.QUESTIONS_REPLY]: "پاسخ به سوالات کاربران",
   [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
 
@@ -85,10 +86,15 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.TICKETS_VIEW]: "مشاهده تیکت‌ها",
   [PERMISSIONS.TICKETS_REPLY]: "پاسخ به تیکت‌ها",
 
+  // Transactions Labels
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
   [PERMISSIONS.ORDERS_EDIT]: "تغییر وضعیت سفارشات",
   [PERMISSIONS.FINANCIAL_REPORTS]: "گزارشات مالی",
+
+  // Settings Labels
   [PERMISSIONS.SETTINGS_EDIT]: "تغییر تنظیمات سایت",
+
+  // Notifications Labels
   [PERMISSIONS.NOTIFICATIONS_MANAGE]: "ارسال و مدیریت پیام‌ها",
 };
 
@@ -129,12 +135,13 @@ export const PERMISSION_GROUPS = {
     label: "تعاملات کاربران (دیدگاه‌ها و پرسش‌ها)",
     permissions: [
       PERMISSIONS.INTERACTIONS_VIEW,
-      PERMISSIONS.INTERACTIONS_MANAGE,
-      PERMISSIONS.COMMENTS_MANAGE,
       PERMISSIONS.COMMENTS_APPROVE,
+      PERMISSIONS.COMMENTS_DELETE,
+      PERMISSIONS.COMMENTS_REPLY,
       PERMISSIONS.COMMENTS_MEDIA_APPROVE,
-      PERMISSIONS.QUESTIONS_MANAGE,
       PERMISSIONS.QUESTIONS_APPROVE,
+      PERMISSIONS.QUESTIONS_DELETE,
+      PERMISSIONS.QUESTIONS_REPLY,
       PERMISSIONS.ANSWERS_APPROVE,
     ],
   },

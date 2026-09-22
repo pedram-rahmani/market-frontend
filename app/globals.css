@@ -185,6 +185,20 @@ svg {
 .scrollbar::-webkit-scrollbar {
   width: 0.3rem;
 }
+.scrollbar-thin::-webkit-scrollbar {
+  width: 0.15rem;
+  height: 0.15rem;
+}
+.scrollbar-thin::-webkit-scrollbar-track {
+  background: none;
+}
+.scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #adadad;
+  border-radius: 10px;
+}
+.dark .scrollbar-thin::-webkit-scrollbar-thumb {
+  background: #28323e;
+}
 .scrollbar::-webkit-scrollbar-track {
   background: none;
   border-radius: 10px;

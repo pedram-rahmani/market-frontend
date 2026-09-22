@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import NotificationRow from "@/components/user/UserAccount/notification-management/NotificationRow";
 import PageHeader from "@/components/user/UserAccount/PageHeader";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
+import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import axiosInstance from "@/lib/axiosInstance";
 import { useNotifications } from "@/store/hooks/useNotifications";
 
@@ -19,6 +21,13 @@ interface Notification {
 export default function NotificationManagementContent() {
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [loading, setLoading] = useState(true);
+  const [popup, setPopup] = useState<{ isOpen: boolean; message: string; type: "success" | "error" }>({
+    isOpen: false,
+    message: "",
+    type: "success",
+  });
+  const [deleteAllOpen, setDeleteAllOpen] = useState(false);
+  const [deletingAll, setDeletingAll] = useState(false);
   const { refetchCounts } = useNotifications();
 
   useEffect(() => {
@@ -27,17 +36,19 @@ export default function NotificationManagementContent() {
       .then((response) => {
         const items = response.data?.data?.data || [];
         setNotifications(
-          items.map((item: { id: number; title: string; message: string; created_at: string; is_read: boolean; type: string }) => ({
+          items.map((item: { id: number; title: string; message: string; created_at: string; is_read: boolean; type: string; level?: string }) => ({
             id: item.id,
             title: item.title,
             message: item.message,
             date: new Date(item.created_at).toLocaleString("fa-IR"),
             isRead: item.is_read,
-            type: item.type === "support"
-              ? "warning"
-              : item.type === "user-interactions"
-                ? "success"
-                : "info",
+            type: item.level === "warning" || item.level === "success" || item.level === "info"
+              ? item.level
+              : item.type === "support"
+                ? "warning"
+                : item.type === "user-interactions"
+                  ? "success"
+                  : "info",
           })),
         );
       })
@@ -67,6 +78,38 @@ export default function NotificationManagementContent() {
     }
   };
 
+  const handleMarkAsRead = async (id: number) => {
+    setNotifications((current) =>
+      current.map((notification) => notification.id === id ? { ...notification, isRead: true } : notification),
+    );
+
+    try {
+      await axiosInstance.post("/notifications/mark-as-read", { notification_id: id });
+      await refetchCounts();
+    } catch (error) {
+      console.error("Failed to mark notification as read", error);
+      setNotifications((current) =>
+        current.map((notification) => notification.id === id ? { ...notification, isRead: false } : notification),
+      );
+    }
+  };
+
+  const handleDeleteAll = async () => {
+    setDeletingAll(true);
+    try {
+      await axiosInstance.delete("/notifications");
+      setNotifications([]);
+      await refetchCounts();
+      setPopup({ isOpen: true, message: "همه پیام‌ها حذف شدند.", type: "success" });
+    } catch (error) {
+      console.error("Failed to delete all notifications", error);
+      setPopup({ isOpen: true, message: "حذف همه پیام‌ها ناموفق بود.", type: "error" });
+    } finally {
+      setDeletingAll(false);
+      setDeleteAllOpen(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -81,6 +124,18 @@ export default function NotificationManagementContent() {
           </svg>
         }
       />
+
+      {!loading && notifications.length > 0 && (
+        <div className="flex justify-end">
+          <button
+            type="button"
+            onClick={() => setDeleteAllOpen(true)}
+            className="rounded-xl border border-danger/20 px-3 py-2 text-xs font-semibold text-danger transition hover:bg-danger/10"
+          >
+            حذف همه پیام‌ها
+          </button>
+        </div>
+      )}
 
       <div className="space-y-3">
         {loading ? (
@@ -105,10 +160,24 @@ export default function NotificationManagementContent() {
               key={notification.id}
               notification={notification}
               onDelete={handleDelete}
+              onRead={handleMarkAsRead}
             />
           ))
         )}
       </div>
+      <SimplePopup
+        isOpen={popup.isOpen}
+        onClose={() => setPopup((current) => ({ ...current, isOpen: false }))}
+        message={popup.message}
+        type={popup.type}
+      />
+      <DeleteConfirmModal
+        isOpen={deleteAllOpen}
+        onClose={() => setDeleteAllOpen(false)}
+        onConfirm={handleDeleteAll}
+        title="حذف همه پیام‌های حساب کاربری"
+        isDeleting={deletingAll}
+      />
     </div>
   );
 }

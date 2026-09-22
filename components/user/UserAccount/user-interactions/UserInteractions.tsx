@@ -20,6 +20,10 @@ export interface ReplyItem {
   status: "approved" | "pending" | "rejected";
   is_approved: number;
   is_admin_answer: boolean;
+  user?: {
+    name?: string;
+    role?: string;
+  };
 }
 
 export interface ReviewMediaItem {
@@ -41,6 +45,10 @@ export interface InteractionItem {
   rating?: number;
   media?: ReviewMediaItem[];
   replies?: ReplyItem[];
+  user?: {
+    name?: string;
+    role?: string;
+  };
 }
 
 export default function UserInteractions() {
@@ -57,6 +65,7 @@ export default function UserInteractions() {
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
   const [itemToDeleteId, setItemToDeleteId] = useState<number | null>(null);
+  const [bulkDeleteType, setBulkDeleteType] = useState<"reviews" | "questions" | null>(null);
   const [popup, setPopup] = useState<{ isOpen: boolean; message: string; type: "success" | "error" }>({
     isOpen: false,
     message: "",
@@ -108,6 +117,17 @@ export default function UserInteractions() {
           is_approved: item.is_approved ? 1 : 0,
           rating: item.rating,
           media: item.media || [],
+          user: item.user,
+          replies: (item.replies || []).map((reply: any) => ({
+            id: reply.id,
+            productName: item.product?.name || "محصول",
+            content: reply.comment || "",
+            date: reply.created_at,
+            status: reply.is_approved ? "approved" : "pending",
+            is_approved: reply.is_approved ? 1 : 0,
+            is_admin_answer: false,
+            user: reply.user,
+          })),
         }))
       );
 
@@ -120,6 +140,7 @@ export default function UserInteractions() {
           date: item.created_at,
           status: item.is_approved ? "approved" : "pending",
           is_approved: item.is_approved ? 1 : 0,
+          user: item.user,
           replies: (item.replies || []).map((reply: any) => ({
             id: reply.id,
             productName: reply.product?.name || item.product?.name || "محصول",
@@ -128,6 +149,7 @@ export default function UserInteractions() {
             status: reply.is_approved ? "approved" : "pending",
             is_approved: reply.is_approved ? 1 : 0,
             is_admin_answer: Boolean(reply.is_admin_answer),
+            user: reply.user,
           })),
         }))
       );
@@ -155,9 +177,9 @@ export default function UserInteractions() {
   const handleOpenEdit = (id: number) => {
     const items = activeTab === "reviews" ? reviewsList : questionsList;
     const item = items.find((i) => i.id === id);
-    const parent = activeTab === "questions"
-      ? items.find((question) => question.replies?.some((reply) => reply.id === id))
-      : undefined;
+    const parent = items.find((question) =>
+      question.replies?.some((reply) => reply.id === id),
+    );
     const reply = parent?.replies?.find((item) => item.id === id);
     if (item) {
       setSelectedItem(item);
@@ -177,14 +199,37 @@ export default function UserInteractions() {
   };
 
   const handleDeleteConfirm = async () => {
-    if (!itemToDeleteId) return;
+    if (!itemToDeleteId && !bulkDeleteType) return;
     setIsDeleting(true);
     try {
+      if (bulkDeleteType) {
+        await axiosInstance.delete(`/admin/${bulkDeleteType}`);
+        if (bulkDeleteType === "reviews") setReviewsList([]);
+        else setQuestionsList([]);
+        setBulkDeleteType(null);
+        setIsDeleteModalOpen(false);
+        setPopup({
+          isOpen: true,
+          message: bulkDeleteType === "reviews"
+            ? "تمام دیدگاه‌ها و پاسخ‌ها حذف شدند."
+            : "تمام پرسش‌ها و پاسخ‌ها حذف شدند.",
+          type: "success",
+        });
+        return;
+      }
+
       const endpoint = activeTab === "reviews" ? `/reviews/${itemToDeleteId}` : `/questions/${itemToDeleteId}`;
       await axiosInstance.delete(endpoint);
 
       if (activeTab === "reviews") {
-        setReviewsList((prev) => prev.filter((item) => item.id !== itemToDeleteId));
+        setReviewsList((prev) =>
+          prev
+            .filter((item) => item.id !== itemToDeleteId)
+            .map((item) => ({
+              ...item,
+              replies: item.replies?.filter((reply) => reply.id !== itemToDeleteId),
+            })),
+        );
       } else {
         setQuestionsList((prev) =>
           prev
@@ -224,7 +269,19 @@ export default function UserInteractions() {
 
       if (activeTab === "reviews") {
         setReviewsList((prev) =>
-          prev.map((item) => (item.id === id ? { ...item, is_approved: newApprovalStatus, status: newStatus } : item))
+          prev.map((item) => {
+            if (item.id === id) {
+              return { ...item, is_approved: newApprovalStatus, status: newStatus };
+            }
+            return {
+              ...item,
+              replies: item.replies?.map((reply) =>
+                reply.id === id
+                  ? { ...reply, is_approved: newApprovalStatus, status: newStatus }
+                  : reply,
+              ),
+            };
+          })
         );
       } else {
         setQuestionsList((prev) =>
@@ -361,6 +418,11 @@ export default function UserInteractions() {
             onToggleMediaApproval={handleToggleMediaApproval}
             canApproveComments={can(PERMISSIONS.COMMENTS_APPROVE)}
             canApproveCommentMedia={can(PERMISSIONS.COMMENTS_MEDIA_APPROVE)}
+            canDeleteAll={can(PERMISSIONS.COMMENTS_DELETE)}
+            onDeleteAll={() => {
+              setBulkDeleteType("reviews");
+              setIsDeleteModalOpen(true);
+            }}
           />
         ) : (
           <ProductQuestions
@@ -370,6 +432,11 @@ export default function UserInteractions() {
             onToggleApproval={handleToggleApproval}
             canApproveQuestions={can(PERMISSIONS.QUESTIONS_APPROVE)}
             canApproveAnswers={can(PERMISSIONS.ANSWERS_APPROVE)}
+            canDeleteAll={can(PERMISSIONS.QUESTIONS_DELETE)}
+            onDeleteAll={() => {
+              setBulkDeleteType("questions");
+              setIsDeleteModalOpen(true);
+            }}
           />
         )
       )}
@@ -383,9 +450,15 @@ export default function UserInteractions() {
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
-        onClose={() => { if (!isDeleting) { setIsDeleteModalOpen(false); setItemToDeleteId(null); } }}
+        onClose={() => { if (!isDeleting) { setIsDeleteModalOpen(false); setItemToDeleteId(null); setBulkDeleteType(null); } }}
         onConfirm={handleDeleteConfirm}
-        title={itemToDeleteTitle}
+        title={
+          bulkDeleteType === "reviews"
+            ? "تمام دیدگاه‌ها و پاسخ‌های آن‌ها"
+            : bulkDeleteType === "questions"
+              ? "تمام پرسش‌ها و پاسخ‌های آن‌ها"
+              : itemToDeleteTitle
+        }
         isDeleting={isDeleting}
       />
 

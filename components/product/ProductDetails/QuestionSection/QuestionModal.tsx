@@ -6,6 +6,7 @@ import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
+import ContentAuthorBadge from "@/components/product/ProductDetails/ContentAuthorBadge";
 
 interface QuestionModalProps {
   isOpen: boolean;
@@ -190,6 +191,11 @@ export default function QuestionModal({
 
                 {/* question body */}
                 <div className="bg-gray-50 dark:bg-dark-700/50 p-4 rounded-2xl border border-gray-100 dark:border-white/5 space-y-2">
+                  <ContentAuthorBadge
+                    name={selectedQuestion.user?.name}
+                    role={selectedQuestion.user?.role}
+                    publicFacing
+                  />
                   <div className="flex items-center gap-2 text-xs font-bold text-gray-900 dark:text-white">
                     <span className="w-6 h-6 bg-violet-500/10 text-violet-600 dark:text-violet-400 rounded-lg flex items-center justify-center text-xs">
                       <svg viewBox="0 0 24 24" className="size-4!">
@@ -219,25 +225,19 @@ export default function QuestionModal({
                   {selectedQuestion.replies &&
                   selectedQuestion.replies.length > 0 ? (
                     selectedQuestion.replies.map((reply: any, idx: number) => {
-                      const userRole = reply.user?.role?.toLowerCase();
-                      const isAdmin =
-                        reply.is_admin_answer === true ||
-                        userRole === "admin" ||
-                        userRole === "co-admin" ||
-                        userRole === "co_admin";
-
                       return (
                         <div
                           key={reply.id || idx}
                           className="bg-gray-50/50 dark:bg-dark-700/30 p-3.5 rounded-xl border border-gray-100 dark:border-white/5 space-y-1 text-xs"
                         >
-                          <span
-                            className={`font-medium block ${isAdmin ? "text-cyan-500" : "text-emerald-500"}`}
-                          >
-                            {isAdmin
-                              ? "پاسخ فروشگاه (ادمین)"
-                              : `پاسخ خریدار (${reply.user?.name || "کاربر"})`}
-                          </span>
+                          <div className="rounded-lg border-r-2 border-violet-500/30 bg-violet-500/5 px-2.5 py-1.5 text-[10px] text-gray-500 dark:text-gray-400">
+                            در پاسخ به این پرسش
+                          </div>
+                          <ContentAuthorBadge
+                            name={reply.user?.name}
+                            role={reply.user?.role}
+                            publicFacing
+                          />
                           <p className="text-gray-600 dark:text-gray-300">
                             {reply.body}
                           </p>

@@ -22,10 +22,10 @@ export default function WishlistCard({
   const isOutOfStock = Number((product as ProductSummary & { stock?: number }).stock) <= 0;
 
   return (
-    <article className="group relative flex min-w-0 flex-col overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-sm transition-all hover:-translate-y-0.5 hover:shadow-lg dark:border-dark-600 dark:bg-dark-800 sm:flex-row">
+    <article className="group relative flex min-h-40 min-w-0 flex-row overflow-hidden rounded-2xl border border-gray-200/80 bg-white shadow-sm transition-all dark:border-dark-600 dark:bg-dark-800">
       <Link
         href={`/products/${product.slug}`}
-        className="relative block aspect-[1.25] w-full shrink-0 overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-700 sm:aspect-auto sm:h-auto sm:w-40"
+        className="relative block h-auto w-32 shrink-0 overflow-hidden bg-linear-to-br from-gray-50 to-gray-100 dark:from-dark-900 dark:to-dark-700 sm:w-40"
       >
         <Image
           src={getImagePath(product.img)}
@@ -33,7 +33,7 @@ export default function WishlistCard({
           fill
           unoptimized
           sizes="(max-width: 640px) 100vw, 176px"
-          className="object-contain p-5 transition-transform duration-300 group-hover:scale-105"
+          className="object-contain p-5 transition-transform duration-300"
         />
         {discount > 0 && (
           <span className="absolute right-3 top-3 rounded-lg bg-rose-500 px-2 py-1 text-[10px] font-bold text-white">
@@ -42,12 +42,12 @@ export default function WishlistCard({
         )}
       </Link>
 
-      <div className="flex min-w-0 flex-1 flex-col justify-between gap-4 p-4 sm:p-5">
+      <div className="flex min-w-0 flex-1 flex-col justify-between gap-3 p-3 sm:gap-4 sm:p-5">
         <div className="space-y-2">
           <div className="flex items-start justify-between gap-3">
             <Link
               href={`/products/${product.slug}`}
-              className="line-clamp-2 text-sm font-bold leading-7 text-gray-800 transition-colors hover:text-cyan-500 dark:text-white"
+              className="line-clamp-2 text-xs font-bold leading-6 text-gray-800 transition-colors hover:text-cyan-500 dark:text-white sm:text-sm sm:leading-7"
             >
               {product.name}
             </Link>
@@ -70,7 +70,7 @@ export default function WishlistCard({
           </div>
 
           {product.description && (
-            <p className="line-clamp-2 text-xs leading-6 text-gray-500 dark:text-gray-400">
+            <p className="line-clamp-2 text-[11px] leading-5 text-gray-500 dark:text-gray-400 sm:text-xs sm:leading-6">
               {product.description}
             </p>
           )}
@@ -79,7 +79,7 @@ export default function WishlistCard({
         <div className="flex flex-wrap items-end justify-between gap-3 border-t border-gray-100 pt-3 dark:border-white/10">
           <div>
             <span className="block text-[10px] text-gray-400">قیمت نهایی</span>
-            <strong className="text-base text-cyan-500">
+            <strong className="text-sm text-cyan-500 sm:text-base">
               {finalPrice.toLocaleString("fa-IR")} تومان
             </strong>
             {discount > 0 && (

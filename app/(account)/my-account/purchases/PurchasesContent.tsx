@@ -8,15 +8,16 @@ import ReturnedOrders from "@/components/user/UserAccount/purchases/returned/Ret
 import CancelledOrders from "@/components/user/UserAccount/purchases/cancelled/CancelledOrders";
 
 const tabs = [
-  { id: "current", label: "جاری", count: 0 },
-  { id: "delivered", label: "تحویل شده", count: 1 },
-  { id: "returned", label: "مرجوع شده", count: 0 },
-  { id: "cancelled", label: "لغو شده", count: 0 },
+  { id: "current", label: "جاری" },
+  { id: "delivered", label: "تحویل شده" },
+  { id: "returned", label: "مرجوع شده" },
+  { id: "cancelled", label: "لغو شده" },
 ];
 
 export default function PurchasesContent() {
   const [activeTab, setActiveTab] = useState("current");
   const [orders, setOrders] = useState<any[]>([]);
+  const [orderCounts, setOrderCounts] = useState<Record<string, number>>({});
   const [loading, setLoading] = useState(false);
 
   useEffect(() => {
@@ -40,6 +41,25 @@ export default function PurchasesContent() {
     fetchOrders();
   }, [activeTab]);
 
+  useEffect(() => {
+    async function fetchOrderCounts() {
+      try {
+        const responses = await Promise.all(
+          tabs.map((tab) => axiosInstance.get("/user/orders", { params: { status: tab.id } })),
+        );
+        setOrderCounts(
+          Object.fromEntries(
+            tabs.map((tab, index) => [tab.id, responses[index].data?.data?.length ?? 0]),
+          ),
+        );
+      } catch (error) {
+        console.error("Error fetching order counts:", error);
+      }
+    }
+
+    fetchOrderCounts();
+  }, []);
+
   const renderContent = () => {
     switch (activeTab) {
       case "current":
@@ -62,7 +82,7 @@ export default function PurchasesContent() {
           تاریخچه سفارشات
         </h2>
         {/* tabs container */}
-        <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 no-scrollbar">
+        <div className="w-full md:w-auto overflow-x-auto pb-1 md:pb-0 scrollbar-thin">
           <div className="flex items-center gap-2 min-w-max">
             {tabs.map((tab) => {
               const isActive = activeTab === tab.id;
@@ -84,7 +104,7 @@ export default function PurchasesContent() {
                         : "bg-white/5 text-gray-500"
                     }`}
                   >
-                    {tab.count}
+                    {orderCounts[tab.id] ?? 0}
                   </span>
                 </button>
               );
