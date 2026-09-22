@@ -15,6 +15,7 @@ interface SupportTicketCardProps {
   ticket: Ticket;
   onClick: () => void;
   ownerName?: string;
+  onDelete?: () => void;
 }
 
 const statusConfig = {
@@ -63,7 +64,7 @@ const departmentLabels: Record<string, string> = {
   sales: "فروش و پشتیبانی خرید",
 };
 
-export default function SupportTicketCard({ ticket, onClick, ownerName }: SupportTicketCardProps) {
+export default function SupportTicketCard({ ticket, onClick, ownerName, onDelete }: SupportTicketCardProps) {
   const status = statusConfig[ticket.status];
   const priority = priorityConfig[ticket.priority];
 
@@ -112,6 +113,21 @@ export default function SupportTicketCard({ ticket, onClick, ownerName }: Suppor
         <span className="text-[11px] text-gray-400">
           {new Date(ticket.updated_at).toLocaleString("fa-IR", { dateStyle: "medium", timeStyle: "short" })}
         </span>
+        {onDelete && (
+          <button
+            type="button"
+            onClick={(e) => {
+              e.stopPropagation();
+              onDelete();
+            }}
+            title="حذف تیکت"
+            className="flex size-8 shrink-0 items-center justify-center rounded-lg text-gray-400 transition hover:bg-rose-500/10 hover:text-rose-500"
+          >
+            <svg viewBox="0 0 24 24" className="size-4" fill="none" stroke="currentColor" strokeWidth="1.7">
+              <path strokeLinecap="round" strokeLinejoin="round" d="M6 7h12M9.5 7V5.5A1.5 1.5 0 0 1 11 4h2a1.5 1.5 0 0 1 1.5 1.5V7m2 0-.65 11.05A2 2 0 0 1 13.86 20h-3.72a2 2 0 0 1-1.99-1.95L7.5 7" />
+            </svg>
+          </button>
+        )}
       </div>
     </div>
   );

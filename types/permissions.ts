@@ -35,6 +35,7 @@ export const PERMISSIONS = {
   // Support & Tickets
   TICKETS_VIEW: "tickets.view",
   TICKETS_REPLY: "tickets.reply",
+  TICKETS_DELETE: "tickets.delete",
 
   // Finance & Reporting
   ORDERS_VIEW: "orders.view",
@@ -85,6 +86,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   // Support Labels
   [PERMISSIONS.TICKETS_VIEW]: "مشاهده تیکت‌ها",
   [PERMISSIONS.TICKETS_REPLY]: "پاسخ به تیکت‌ها",
+  [PERMISSIONS.TICKETS_DELETE]: "حذف تیکت‌ها",
 
   // Transactions Labels
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
@@ -150,6 +152,7 @@ export const PERMISSION_GROUPS = {
     permissions: [
       PERMISSIONS.TICKETS_VIEW,
       PERMISSIONS.TICKETS_REPLY,
+      PERMISSIONS.TICKETS_DELETE,
     ],
   },
   finance: {

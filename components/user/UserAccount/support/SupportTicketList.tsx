@@ -6,9 +6,10 @@ import EmptyState from "@/components/ui/emptyState/EmptyState";
 interface SupportTicketListProps {
   tickets: any[];
   onSelectTicket: (ticket: any) => void;
+  onDeleteTicket?: (ticket: any) => void;
 }
 
-export default function SupportTicketList({ tickets, onSelectTicket }: SupportTicketListProps) {
+export default function SupportTicketList({ tickets, onSelectTicket, onDeleteTicket }: SupportTicketListProps) {
   if (!tickets || tickets.length === 0) {
     return (
       <EmptyState
@@ -33,6 +34,7 @@ export default function SupportTicketList({ tickets, onSelectTicket }: SupportTi
           key={ticket.id}
           ticket={ticket}
           onClick={() => onSelectTicket(ticket)}
+          onDelete={onDeleteTicket ? () => onDeleteTicket(ticket) : undefined}
         />
       ))}
     </div>

@@ -6,8 +6,11 @@ import PageHeader from "@/components/user/UserAccount/PageHeader";
 import SupportTicketCard from "@/components/user/UserAccount/support/SupportTicketCard";
 import AdminTicketDetailModal from "@/components/user/UserAccount/support/AdminTicketDetailModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
-import { getPersianErrorMessage } from "@/lib/errorMapper";
+import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
+import { usePermissions } from "@/store/hooks/usePermissions";
+import { PERMISSIONS } from "@/types/permissions";
 
 const statusTabs = [
   { value: "all", label: "همه" },
@@ -22,6 +25,9 @@ export default function TicketManagementContent() {
   const [activeTab, setActiveTab] = useState("all");
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
+  const [ticketToDelete, setTicketToDelete] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const { can } = usePermissions();
 
   const [popup, setPopup] = useState<{
     isOpen: boolean;
@@ -39,7 +45,9 @@ export default function TicketManagementContent() {
       const response = await axiosInstance.get("/admin/tickets");
       setTickets(response.data || []);
     } catch (error) {
-      showError(getPersianErrorMessage(error, "خطا در دریافت لیست تیکت‌ها."));
+      // خطای دریافت لیست را فقط لاگ می‌کنیم؛ نمایش خالی بودن به عهده emptyState است
+      console.error("خطا در دریافت تیکت‌ها:", error);
+      setTickets([]);
     } finally {
       setLoading(false);
     }
@@ -60,6 +68,25 @@ export default function TicketManagementContent() {
   const handleUpdate = (updatedTicket: any) => {
     setSelectedTicket(updatedTicket);
     setTickets((prev) => prev.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)));
+  };
+
+  const handleDeleteConfirm = async () => {
+    if (!ticketToDelete) return;
+    setIsDeleting(true);
+    try {
+      const response = await axiosInstance.delete(`/tickets/${ticketToDelete.id}`);
+      setTickets((prev) => prev.filter((t) => t.id !== ticketToDelete.id));
+      setPopup({
+        isOpen: true,
+        message: response.data.message || SUCCESS_MESSAGES.deleted,
+        type: "success",
+      });
+      setTicketToDelete(null);
+    } catch (error) {
+      showError(getPersianErrorMessage(error, "خطا در حذف تیکت."));
+    } finally {
+      setIsDeleting(false);
+    }
   };
 
   return (
@@ -129,6 +156,7 @@ export default function TicketManagementContent() {
                 setSelectedTicket(ticket);
                 setIsDetailModalOpen(true);
               }}
+              onDelete={can(PERMISSIONS.TICKETS_DELETE) ? () => setTicketToDelete(ticket) : undefined}
             />
           ))}
         </div>
@@ -143,6 +171,14 @@ export default function TicketManagementContent() {
         ticket={selectedTicket}
         onUpdate={handleUpdate}
         onError={showError}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!ticketToDelete}
+        onClose={() => { if (!isDeleting) setTicketToDelete(null); }}
+        onConfirm={handleDeleteConfirm}
+        title={ticketToDelete?.subject || ""}
+        isDeleting={isDeleting}
       />
 
       <SimplePopup

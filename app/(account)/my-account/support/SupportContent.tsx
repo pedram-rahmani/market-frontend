@@ -5,6 +5,7 @@ import SupportTicketList from "@/components/user/UserAccount/support/SupportTick
 import CreateTicketModal from "@/components/user/UserAccount/support/CreateTicketModal";
 import TicketDetailModal from "@/components/user/UserAccount/support/TicketDetailModal";
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
+import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirmModal";
 import axiosInstance from "@/lib/axiosInstance";
 import PageHeader from "@/components/user/UserAccount/PageHeader";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
@@ -15,6 +16,8 @@ export default function SupportContent() {
   const [selectedTicket, setSelectedTicket] = useState<any>(null);
   const [tickets, setTickets] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
+  const [ticketToDelete, setTicketToDelete] = useState<any>(null);
+  const [isDeleting, setIsDeleting] = useState(false);
 
   const [popup, setPopup] = useState<{
     isOpen: boolean;
@@ -31,12 +34,9 @@ export default function SupportContent() {
       const response = await axiosInstance.get("/tickets");
       setTickets(response.data);
     } catch (error) {
+      // خطای دریافت لیست را فقط لاگ می‌کنیم؛ نمایش خالی بودن به عهده emptyState است
       console.error("خطا در دریافت تیکت‌ها:", error);
-      setPopup({
-        isOpen: true,
-        message: getPersianErrorMessage(error, "خطا در دریافت لیست تیکت‌ها"),
-        type: "error",
-      });
+      setTickets([]);
     } finally {
       setLoading(false);
     }
@@ -73,6 +73,29 @@ export default function SupportContent() {
     }
   };
 
+  const handleDeleteConfirm = async () => {
+    if (!ticketToDelete) return;
+    setIsDeleting(true);
+    try {
+      const response = await axiosInstance.delete(`/tickets/${ticketToDelete.id}`);
+      setTickets((prev) => prev.filter((t) => t.id !== ticketToDelete.id));
+      setPopup({
+        isOpen: true,
+        message: response.data.message || SUCCESS_MESSAGES.deleted,
+        type: "success",
+      });
+      setTicketToDelete(null);
+    } catch (error) {
+      setPopup({
+        isOpen: true,
+        message: getPersianErrorMessage(error, "خطا در حذف تیکت."),
+        type: "error",
+      });
+    } finally {
+      setIsDeleting(false);
+    }
+  };
+
   return (
     <div className="space-y-6">
       <PageHeader
@@ -98,6 +121,7 @@ export default function SupportContent() {
             setSelectedTicket(ticket);
             setIsDetailModalOpen(true);
           }}
+          onDeleteTicket={(ticket) => setTicketToDelete(ticket)}
         />
       )}
 
@@ -119,6 +143,14 @@ export default function SupportContent() {
           setSelectedTicket(updatedTicket);
           setTickets(tickets.map((t) => (t.id === updatedTicket.id ? updatedTicket : t)));
         }}
+      />
+
+      <DeleteConfirmModal
+        isOpen={!!ticketToDelete}
+        onClose={() => { if (!isDeleting) setTicketToDelete(null); }}
+        onConfirm={handleDeleteConfirm}
+        title={ticketToDelete?.subject || ""}
+        isDeleting={isDeleting}
       />
 
       <SimplePopup
