@@ -74,14 +74,14 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
 
   // Interactions Labels
   [PERMISSIONS.INTERACTIONS_VIEW]: "مشاهده صفحه تعاملات کاربران",
-  [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن نظرات",
+  [PERMISSIONS.COMMENTS_APPROVE]: "تایید متن دیدگاه‌ها",
   [PERMISSIONS.COMMENTS_DELETE]: "حذف دیدگاه‌ها",
   [PERMISSIONS.COMMENTS_REPLY]: "پاسخ به دیدگاه‌های کاربران",
-  [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های نظرات",
-  [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌ها",
+  [PERMISSIONS.COMMENTS_MEDIA_APPROVE]: "تایید فایل‌های دیدگاه‌ها",
+  [PERMISSIONS.QUESTIONS_APPROVE]: "تایید پرسش‌های کاربران",
   [PERMISSIONS.QUESTIONS_DELETE]: "حذف پرسش‌ها و پاسخ‌ها",
   [PERMISSIONS.QUESTIONS_REPLY]: "پاسخ به سوالات کاربران",
-  [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌ها",
+  [PERMISSIONS.ANSWERS_APPROVE]: "تایید پاسخ‌های کاربران",
 
   // Support Labels
   [PERMISSIONS.CHATS_VIEW]: "مشاهده گفتگوهای پشتیبانی",
@@ -91,7 +91,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   // Transactions Labels
   [PERMISSIONS.ORDERS_VIEW]: "مشاهده سفارشات",
   [PERMISSIONS.ORDERS_EDIT]: "تغییر وضعیت سفارشات",
-  [PERMISSIONS.FINANCIAL_REPORTS]: "گزارشات مالی",
+  [PERMISSIONS.FINANCIAL_REPORTS]: "مشاهده گزارشات مالی و درآمد",
 
   // Settings Labels
   [PERMISSIONS.SETTINGS_EDIT]: "تغییر تنظیمات سایت",

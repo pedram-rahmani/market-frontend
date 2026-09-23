@@ -1,6 +1,14 @@
 import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
+  async rewrites() {
+    return [
+      {
+        source: "/api/:path*",
+        destination: "https://my-market-backend.liara.run/api/:path*",
+      },
+    ];
+  },
   images: {
     remotePatterns: [
       {

@@ -113,51 +113,60 @@ export default function SideBar({
         </div>
 
         <nav className="account-nav flex-1 overflow-y-auto px-4 space-y-1 ml-1">
-          {filteredItems.map((item, index) => {
-            const badgeCount = notificationCounts[item.typeKey] || 0;
-            return (
-              <Link
-                key={index}
-                href={item.link}
-                onClick={() => {
-                  if (badgeCount > 0 && item.typeKey)
-                    markAsReadByType(item.typeKey);
-                  onClose();
-                }}
-                className={`flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 group ${
-                  isActive(item.link)
-                    ? "bg-violet-500/10 text-violet-500 font-bold"
-                    : "text-text-on-light/90 dark:text-custom-gray-400 hover:bg-ui-purple/5 dark:hover:bg-ui-purple/8"
-                }`}
-              >
-                <div className="flex items-center gap-x-3 [&_svg]:size-5!">
-                  <span
-                    className={
-                      isActive(item.link)
-                        ? "text-violet-500"
-                        : "text-gray-400 group-hover:text-ui-purple/80"
-                    }
-                  >
-                    {item.icon}
-                  </span>
-                  <span className="text-sm group-hover:text-ui-purple">
-                    {item.label}
-                  </span>
-                </div>
-                <div className="flex items-center gap-2">
-                  {badgeCount > 0 && (
-                    <span className="min-w-5 h-5 px-1.5 pt-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
-                      {badgeCount}
-                    </span>
-                  )}
-                  {isActive(item.link) && (
-                    <div className="w-1.5 h-1.5 rounded-full bg-ui-purple"></div>
-                  )}
-                </div>
-              </Link>
-            );
-          })}
-        </nav>
+  {filteredItems.map((item, index) => {
+    const badgeCount = notificationCounts[item.typeKey] || 0;
+    
+    // تشخیص اینکه آیا این آیتم مربوط به ادمین است یا خیر
+    const isAdminItem = Boolean(item.permission || item.link.includes("admin"));
+    // تشخیص اینکه آیا این آیتم، آخرین آیتمِ ادمین در لیست است یا خیر
+    const nextItem = filteredItems[index + 1];
+    const isLastAdminItem = isAdminItem && nextItem && !Boolean(nextItem.permission || nextItem.link.includes("admin"));
+
+    return (
+      <div key={index}>
+        <Link
+          href={item.link}
+          onClick={onClose}
+          className={`flex items-center justify-between px-4 py-3.5 rounded-xl transition-all duration-200 group ${
+            isActive(item.link)
+              ? "bg-violet-500/10 text-violet-500 font-bold"
+              : "text-text-on-light/90 dark:text-custom-gray-400 hover:bg-ui-purple/5 dark:hover:bg-ui-purple/8"
+          }`}
+        >
+          <div className="flex items-center gap-x-3 [&_svg]:size-5!">
+            <span
+              className={
+                isActive(item.link)
+                  ? "text-violet-500"
+                  : "text-gray-400 group-hover:text-ui-purple/80"
+              }
+            >
+              {item.icon}
+            </span>
+            <span className="text-sm group-hover:text-ui-purple">
+              {item.label}
+            </span>
+          </div>
+          <div className="flex items-center gap-2">
+            {badgeCount > 0 && (
+              <span className="min-w-5 h-5 px-1.5 pt-0.5 bg-rose-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center shadow-sm">
+                {badgeCount}
+              </span>
+            )}
+            {isActive(item.link) && (
+              <div className="w-1.5 h-1.5 rounded-full bg-ui-purple"></div>
+            )}
+          </div>
+        </Link>
+
+        {/* خط جداکننده دقیقاً بعد از آخرین آیتم ادمین */}
+        {isLastAdminItem && (
+          <div className="my-3 border-t border-gray-100 dark:border-white/10 mx-3" />
+        )}
+      </div>
+    );
+  })}
+</nav>
 
         {isAuthenticated && (
           <div className="px-4 mt-auto pt-4 border-t border-gray-200 dark:border-white/5">

@@ -8,7 +8,7 @@ The customer-facing web application for the Marketplace project. It is built wit
 - Authentication flows: registration, login, logout, forgot password, and password reset
 - Product detail pages with galleries, specifications, warranties, reviews, questions, reactions, and reports
 - Shopping cart and checkout flows with address and shipping/payment selections
-- User account area with orders, wallet and transactions, coupons, notifications, support tickets, wishlist, profile, and security settings
+- User account area with orders, wallet and transactions, coupons, notifications, live chat, wishlist, profile, and security settings
 - Role-aware management screens for products, categories, users, coupons, reviews, questions, notifications, and site settings
 - Client-side image compression before upload
 - Persian/Jalali date support and a Persian-first responsive interface

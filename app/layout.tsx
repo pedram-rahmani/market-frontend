@@ -3,7 +3,7 @@ import "./globals.css";
 import { ReduxProvider } from "@/components/providers/ReduxProvider"; 
 import AuthProvider from "@/components/providers/AuthProvider";
 import FaviconManager from "@/components/user/UserAccount/Site-management/FaviconManager";
-import ChatWidget from "@/components/chat/ChatWidget";
+import SupportChatWidget from "@/components/chat/SupportChatWidget"; // 👈 اضافه کردن ویجت
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -16,7 +16,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <div className="flex-1 flex flex-col">
               {children}
             </div>
-            <ChatWidget />
+            
+            {/* 👈 دکمه شناور و ویجت چت حالا در تمام صفحات حضور خواهد داشت */}
+            <SupportChatWidget />
           </AuthProvider>
         </ReduxProvider>
       </body>

@@ -1,12 +1,3 @@
-/**
- * Single source of truth for every user-facing message in the app:
- * - VALIDATION_MESSAGES: client-side (regex based) form validation strings used by Validator.ts
- * - SUCCESS_MESSAGES: fallback success strings shown after a request resolves
- * - ERROR_MAPPINGS: server/API error codes, HTTP statuses and Laravel messages translated to Persian
- *
- * Every request/response in the app should resolve its message through this file
- * (getPersianErrorMessage / getSuccessMessage) instead of hardcoding Persian strings elsewhere.
- */
 export const VALIDATION_MESSAGES = {
   required: "این فیلد نمی‌تواند خالی باشد.",
   minLength: (min: number) => `تعداد کاراکترها نمی‌تواند کمتر از ${min} باشد.`,
@@ -33,7 +24,7 @@ export const SUCCESS_MESSAGES = {
 
   userCreated: "کاربر جدید با موفقیت افزوده شد.",
   userDeleted: "کاربر با موفقیت حذف شد.",
-  userPromoted: "کاربر با موفقیت به ادمین ارشد ارتقا یافت.",
+  userPromoted: "کاربر با موفقیت ارتقا یافت.",
   userDemoted: "کاربر تنزل درجه یافت.",
 
   categoryDeleted: "دسته‌بندی با موفقیت حذف شد.",
@@ -46,7 +37,7 @@ export const SUCCESS_MESSAGES = {
 
   siteSettingsSaved: "تنظیمات با موفقیت ذخیره شدند.",
   notificationSent: "پیام با موفقیت ارسال شد.",
-  ticketCreated: "پیام شما با موفقیت ثبت شد.",
+  chatReplied: "پاسخ به گفتگو با موفقیت ارسال شد.",
 
   addressUpdated: "اطلاعات آدرس با موفقیت بروز شد.",
   orderPlaced: "سفارش شما با موفقیت ثبت شد. در حال انتقال به درگاه...",
@@ -132,6 +123,7 @@ const FIELD_NAMES: Record<string, string> = {
   username: "نام کاربری",
   phone: "تلفن",
   role: "نقش کاربر",
+  permissions: "دسترسی‌ها",
   title: "عنوان",
   description: "توضیحات",
   price: "قیمت",

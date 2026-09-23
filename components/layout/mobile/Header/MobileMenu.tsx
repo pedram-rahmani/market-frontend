@@ -2,12 +2,14 @@
 
 import { useRef } from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { useSelector } from "react-redux";
 import useClickOutside from "@/store/hooks/useClickOutside";
 import useLockBodyScroll from "@/store/hooks/useLockBodyScroll";
 import { RootState } from "@/store";
 import MobileMenuItems from "./MobileMenuItems";
 import { useSettings } from "@/store/hooks/useSettings";
+import { getImagePath } from "@/lib/utils";
 
 interface MobileMenuProps {
   isOpen: boolean;
@@ -17,7 +19,7 @@ interface MobileMenuProps {
 export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
   const menuRef = useRef<HTMLDivElement>(null);
   const isLoggedIn = useSelector((state: RootState) => !!state.auth.user);
-  const { siteName, footerText, loading } = useSettings();
+  const { siteName, logoUrl, footerText, loading } = useSettings();
 
   useClickOutside(() => {
     if (isOpen) onClose();
@@ -40,14 +42,38 @@ export default function MobileMenu({ isOpen, onClose }: MobileMenuProps) {
           isOpen ? "translate-x-0" : "translate-x-full"
         }`}
       >
+        {/* Header - انتقال لوگو به بالای منو */}
         <div className="sticky top-0 z-10 shrink-0 border-b border-gray-100 bg-white/95 px-6 pb-5 pt-6 backdrop-blur-xl dark:border-white/10 dark:bg-dark-800/95">
           <div className="flex items-center justify-between">
-            <span className="max-w-[12rem] truncate bg-linear-to-r from-violet-600 to-cyan-500 bg-clip-text text-sm font-black tracking-[0.12em] text-transparent">
-              {loading ? "..." : siteName}
-            </span>
+            
+            {/* نمایش لوگو یا نام سایت در منو */}
+            <Link
+              href="/"
+              onClick={onClose}
+              className="flex items-center max-w-[180px]"
+            >
+              {logoUrl ? (
+                <div className="relative h-9 w-28">
+                  <Image
+                    src={getImagePath(logoUrl)}
+                    alt={siteName || "دمِ دست"}
+                    unoptimized
+                    fill
+                    className="object-contain object-right"
+                    priority
+                  />
+                </div>
+              ) : (
+                <span className="truncate text-base font-black tracking-tight text-gray-900 dark:text-white">
+                  {loading ? "..." : siteName}
+                </span>
+              )}
+            </Link>
+
+            {/* دکمه بستن منو */}
             <button
               onClick={onClose}
-              className="w-9 h-9 rounded-xl bg-gray-100 dark:bg-dark-700 flex items-center justify-center text-gray-500 hover:text-gray-900 dark:hover:text-white transition-colors"
+              className="flex size-10 items-center justify-center rounded-2xl border border-gray-200/80 bg-gray-50 text-gray-500 transition-all hover:bg-gray-100 dark:border-white/5 dark:bg-dark-700 dark:text-gray-300 dark:hover:bg-dark-600"
               aria-label="Close Menu"
             >
               <svg viewBox="0 0 24 24" className="size-5!" fill="none" stroke="currentColor" strokeWidth="2">

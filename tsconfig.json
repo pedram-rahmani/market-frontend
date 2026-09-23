@@ -18,6 +18,9 @@
     "incremental": true,
     "isolatedModules": true,
     "resolveJsonModule": true,
+    "baseUrl": ".",
+    // اضافه کردن این خط برای بستن دهان هر دو اخطار منسوخ شدن
+    "ignoreDeprecations": "6.0",
     "paths": {
       "@/*": [
         "./*"

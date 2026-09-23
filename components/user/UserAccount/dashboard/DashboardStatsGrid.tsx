@@ -35,16 +35,6 @@ export default function DashboardStatsGrid({ loading, stats }: DashboardStatsGri
         }
       />
       <DashboardCard
-        title="پیام‌های پشتیبانی خوانده‌نشده"
-        value={`${stats.unread_chat_count} مورد`}
-        onClick={openLiveChat}
-        icon={
-          <svg viewBox="0 0 24 24" className="size-5! text-blue-500">
-            <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z" />
-          </svg>
-        }
-      />
-      <DashboardCard
         title="موجودی کیف پول"
         value={`${(stats.wallet_balance || 0).toLocaleString()} تومان`}
         link="/my-account/transactions"

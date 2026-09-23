@@ -52,7 +52,19 @@ export function useSettings() {
 
     return actualArray.reduce((acc: Record<string, any>, item: any) => {
       if (item && item.key) {
-        acc[item.key] = item.value || "";
+        let parsedValue = item.value;
+
+        // تلاش برای تبدیل مقادیر JSON رشته‌ای به آرایه یا شیء واقعی
+        if (typeof item.value === "string") {
+          try {
+            parsedValue = JSON.parse(item.value);
+          } catch (e) {
+            // اگر JSON نبود، همان مقدار متنی ساده را نگه دار
+            parsedValue = item.value;
+          }
+        }
+
+        acc[item.key] = parsedValue !== undefined ? parsedValue : "";
       }
       return acc;
     }, {});
@@ -85,7 +97,8 @@ export function useSettings() {
         if (str.includes("ایتا") || str.includes("eitaa")) return "eitaa";
         if (str.includes("سروش") || str.includes("soroush")) return "soroush";
         const youtubeVariants = ["یوتیوب", "یوتوب", "youtube"];
-  if (youtubeVariants.some(variant => str.includes(variant))) return "youtube";
+        if (youtubeVariants.some((variant) => str.includes(variant)))
+          return "youtube";
         return str;
       };
 
@@ -154,8 +167,7 @@ export function useSettings() {
   }, [settingsObject]);
 
   const trustBadge: TrustBadge = {
-    image_url:
-      settingsObject?.trust_badges?.image_url || "/images/Enamad.png",
+    image_url: settingsObject?.trust_badges?.image_url || "/images/Enamad.png",
     link_url: settingsObject?.trust_badges?.link_url || "#",
     alt: settingsObject?.trust_badges?.alt || "نماد اعتماد",
   };
