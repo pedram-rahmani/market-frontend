@@ -78,8 +78,8 @@ The frontend expects the Laravel API to be available at `NEXT_PUBLIC_API_URL`. S
 
 ## Live Demo
 
-- [Open the Marketplace website](https://my-market-frontend.liara.run/)
-- [Backend API](https://my-market-backend.liara.run/api)
+- [Open the Marketplace website](https://pashm-store.ir)
+- [Backend API](https://api.pashm-store.ir)
 
 ## Related documentation
 

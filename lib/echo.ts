@@ -32,29 +32,16 @@ export function getEcho(): Echo<"pusher"> | null {
 
   window.Pusher = Pusher;
 
-  // فعال‌سازی لاگ برای دیباگ
-  //Pusher.logToConsole = true;
-
-  /*
-    ========================================================================
-    راهنمای تولید (Production / لیارا):
-    هنگام انتشار روی سرور، این مقادیر را پویا کنید:
-    const isProduction = process.env.NODE_ENV === "production";
-    wsHost: isProduction ? "my-market-backend.liara.run" : "localhost",
-    wsPort: isProduction ? 443 : 8080,
-    forceTLS: isProduction,
-    ========================================================================
-  */
+  const isProduction = process.env.NODE_ENV === "production";
 
   echoInstance = new Echo({
     broadcaster: "pusher",
     key: pusherKey,
     cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER || "mt1",
-    wsHost: "localhost",
-    wsPort: 8080,
-    // استفاده از پورت wsPort برای جلوگیری از تلاش برای اتصال به 443
-    wssPort: 8080, 
-    forceTLS: false,
+    wsHost: isProduction ? "api.pashm-store.ir" : "localhost",
+    wsPort: isProduction ? 443 : 8080,
+    wssPort: isProduction ? 443 : 8080,
+    forceTLS: isProduction,
     enabledTransports: ["ws", "wss"],
     authorizer: (channel: { name: string }) => ({
       authorize: (socketId: string, callback: (error: Error | null, data: ChannelAuthData | null) => void) => {

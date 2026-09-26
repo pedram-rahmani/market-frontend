@@ -1,11 +1,9 @@
 import axios from "axios";
 
-const rawBaseUrl = process.env.NEXT_PUBLIC_API_URL || "https://my-market-backend.liara.run/api";
-
-const cleanBaseUrl = rawBaseUrl.replace(/\/api\/?$/, "").replace(/\/$/, "");
+import { API_BASE_URL } from "./utils";
 
 const axiosInstance = axios.create({
-  baseURL: `${cleanBaseUrl}/api`,
+  baseURL: API_BASE_URL,
 });
 
 axiosInstance.interceptors.request.use((config) => {
@@ -17,6 +15,5 @@ axiosInstance.interceptors.request.use((config) => {
   }
   return config;
 });
-
 
 export default axiosInstance;

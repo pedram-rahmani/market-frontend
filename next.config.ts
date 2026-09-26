@@ -5,7 +5,7 @@ const nextConfig: NextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: "https://my-market-backend.liara.run/api/:path*",
+        destination: "https://api.pashm-store.ir/api/:path*",
       },
     ];
   },
@@ -13,7 +13,7 @@ const nextConfig: NextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: "my-market-backend.liara.run",
+        hostname: "api.pashm-store.ir",
         pathname: "/storage/**",
       },
       {
