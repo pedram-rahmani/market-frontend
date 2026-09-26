@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import axiosInstance from "@/lib/axiosInstance";
 import { Category } from "@/types/category";
 
-// تابع کمکی برای تبدیل آرایه تخت به درختی
+// tree builder structure
 const buildCategoryTree = (categories: Category[]): any[] => {
   const map = new Map();
   const roots: any[] = [];
@@ -26,7 +26,7 @@ const buildCategoryTree = (categories: Category[]): any[] => {
 };
 
 interface CategoryState {
-  categories: any[]; // حالا شامل ساختار درختی children است
+  categories: any[];
   loading: boolean;
   error: string | null;
 }
@@ -42,7 +42,7 @@ export const fetchCategories = createAsyncThunk(
   async () => {
     const { data } = await axiosInstance.get("/categories");
     const rawList = Array.isArray(data) ? data : data.data || [];
-    // تبدیل خودکار به ساختار درختی قبل از ذخیره در استور
+
     return buildCategoryTree(rawList);
   }
 );
