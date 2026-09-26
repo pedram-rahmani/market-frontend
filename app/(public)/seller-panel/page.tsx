@@ -14,7 +14,6 @@ export default function SellerPanelPage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // اینجا می‌تونی بعداً درخواست رو به بک‌اند بفرستی
     setSubmitted(true);
   };
 

@@ -40,7 +40,6 @@ export default function OffersPage() {
         </div>
       </div>
 
-      {/* حالت لودینگ */}
       {loading ? (
         <div className="text-center py-20 text-gray-500 font-medium">در حال دریافت پیشنهادهای ویژه...</div>
       ) : products.length === 0 ? (
