@@ -16,13 +16,17 @@ const UserEntryLayout = ({ children }: UserEntryLayoutProps) => {
   }, []);
 
   return (
-    <div className="relative  w-full flex items-center justify-center overflow-hidden">
+    <div className="relative w-screen h-screen flex items-center justify-center overflow-hidden">
+      {/* Background Image */}
       <div
         className="absolute inset-0 bg-cover bg-center"
         style={{ backgroundImage: "url('/images/auth-bg.png')" }}
       />
+      {/* Overlay */}
       <div className="absolute inset-0 bg-[#050b1e]/80 backdrop-blur-sm" />
-      <div className="relative z-10 w-full h-screen flex flex-col justify-center max-w-md  overflow-hidden">
+
+      {/* Form Container */}
+      <div className="relative z-10 w-full max-w-md flex items-center justify-center">
         {children}
       </div>
     </div>

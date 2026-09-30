@@ -9,8 +9,11 @@ import DeleteConfirmModal from "@/components/feedback/MessageModal/DeleteConfirm
 import SimplePopup from "@/components/feedback/MessageModal/SimplePopup";
 import EmptyState from "@/components/ui/emptyState/EmptyState";
 import { getPersianErrorMessage, SUCCESS_MESSAGES } from "@/lib/errorMapper";
+import { PERMISSIONS } from "@/types/permissions";
+import { usePermissions } from "@/store/hooks/usePermissions";
 
 export default function CouponManagement() {
+  const { can } = usePermissions();
   const [coupons, setCoupons] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -27,6 +30,10 @@ export default function CouponManagement() {
   }>({ isOpen: false, message: "", type: "success" });
 
   const fetchCoupons = () => {
+    if (!can(PERMISSIONS.DISCOUNTS_VIEW)) {
+      setLoading(false);
+      return;
+    }
     setLoading(true);
     axiosInstance
       .get("/admin/coupons")
@@ -42,7 +49,7 @@ export default function CouponManagement() {
   }, []);
 
   const executeDelete = async () => {
-    if (!deleteId) return;
+    if (!deleteId || !can(PERMISSIONS.DISCOUNTS_MANAGE)) return;
     try {
       await axiosInstance.delete(`/admin/coupons/${deleteId}`);
       setPopup({
@@ -52,36 +59,53 @@ export default function CouponManagement() {
       });
       fetchCoupons();
     } catch (error) {
-      setPopup({ isOpen: true, message: getPersianErrorMessage(error, "خطا در حذف کد تخفیف"), type: "error" });
+      setPopup({
+        isOpen: true,
+        message: getPersianErrorMessage(error, "خطا در حذف کد تخفیف"),
+        type: "error",
+      });
     } finally {
       setIsDeleteModalOpen(false);
     }
   };
 
+  if (!can(PERMISSIONS.DISCOUNTS_VIEW)) {
+    return (
+      <div className="text-center py-12 bg-rose-500/10 rounded-2xl border border-rose-500/20">
+        <p className="text-xs text-rose-400">شما به این بخش دسترسی ندارید.</p>
+      </div>
+    );
+  }
+
+  const canManage = can(PERMISSIONS.DISCOUNTS_MANAGE);
+
   return (
     <div>
       <PageHeader
         title="مدیریت کدهای تخفیف"
-        buttonText={"+ افزودن کد تخفیف"}
-        canClick={true}
+        buttonText={canManage ? "+ افزودن کد تخفیف" : undefined}
+        canClick={canManage}
         isLoading={loading}
         onButtonClick={() => {
+          if (!canManage) return;
           setEditingCoupon(null);
           setIsModalOpen(true);
         }}
       />
 
-      {/* فرم و مودال کوپن به صورت یکجا */}
-      <CouponForm
-        isOpen={isModalOpen}
-        onClose={() => {
-          setIsModalOpen(false);
-          setEditingCoupon(null);
-        }}
-        onSuccess={fetchCoupons}
-        editingCoupon={editingCoupon}
-        setPopup={setPopup}
-      />
+      {/* coupon form and modal */}
+      {canManage && (
+        <CouponForm
+          isOpen={isModalOpen}
+          onClose={() => {
+            setIsModalOpen(false);
+            setEditingCoupon(null);
+          }}
+          onSuccess={fetchCoupons}
+          editingCoupon={editingCoupon}
+          setPopup={setPopup}
+        />
+      )}
 
       <DeleteConfirmModal
         isOpen={isDeleteModalOpen}
@@ -114,9 +138,9 @@ export default function CouponManagement() {
             title="هیچ کد تخفیفی ثبت نشده است"
             description="کدهای تخفیف فروشگاه را از این بخش ایجاد و مدیریت کنید."
             icon={
-              <svg viewBox="0 0 24 24" className="size-12" fill="none" stroke="currentColor" strokeWidth="1.5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V5.257c0-1.105.895-2 2-2h15c1.105 0 2 .895 2 2Z" />
-                <path strokeLinecap="round" strokeLinejoin="round" d="M9 9.75h.008v.008H9V9.75Zm6 4.5h.008v.008H15v-.008Z" />
+              <svg viewBox="0 0 24 24" className="size-12!">
+                <path d="m9 14.25 6-6m4.5-3.493V21.75l-3.75-1.5-3.75 1.5-3.75-1.5-3.75 1.5V5.257c0-1.105.895-2 2-2h15c1.105 0 2 .895 2 2Z" />
+                <path d="M9 9.75h.008v.008H9V9.75Zm6 4.5h.008v.008H15v-.008Z" />
               </svg>
             }
           />
@@ -140,6 +164,7 @@ export default function CouponManagement() {
                   <CouponRow
                     key={coupon.id}
                     coupon={coupon}
+                    canManage={canManage}
                     onEdit={() => {
                       setEditingCoupon(coupon);
                       setIsModalOpen(true);

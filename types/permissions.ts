@@ -21,6 +21,10 @@ export const PERMISSIONS = {
   CATEGORIES_EDIT: "categories.edit",
   CATEGORIES_DELETE: "categories.delete",
 
+  // Discount Management
+  DISCOUNTS_VIEW: "discounts.view",
+  DISCOUNTS_MANAGE: "discounts.manage",
+
   // User Interactions (Comments & Questions)
   INTERACTIONS_VIEW: "interactions.view",
   COMMENTS_APPROVE: "comments.approve",
@@ -59,7 +63,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.USERS_PROMOTE]: "ارتقا نقش کاربران",
   [PERMISSIONS.USERS_DEMOTE]: "تنزل نقش کاربران",
   [PERMISSIONS.USERS_FORCE_DELETE]: "حذف دائمی کاربران",
-  
+
   // Product Labels
   [PERMISSIONS.PRODUCTS_VIEW]: "مشاهده لیست محصولات",
   [PERMISSIONS.PRODUCTS_CREATE]: "افزودن محصول جدید",
@@ -71,6 +75,10 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.CATEGORIES_CREATE]: "ایجاد دسته‌بندی",
   [PERMISSIONS.CATEGORIES_EDIT]: "ویرایش دسته‌بندی",
   [PERMISSIONS.CATEGORIES_DELETE]: "حذف دسته‌بندی",
+
+  // Discount Management
+  [PERMISSIONS.DISCOUNTS_VIEW]: "مشاهده تخفیف‌ها",
+  [PERMISSIONS.DISCOUNTS_MANAGE]: "مدیریت تخفیف‌ها",
 
   // Interactions Labels
   [PERMISSIONS.INTERACTIONS_VIEW]: "مشاهده صفحه تعاملات کاربران",
@@ -131,6 +139,13 @@ export const PERMISSION_GROUPS = {
       PERMISSIONS.CATEGORIES_CREATE,
       PERMISSIONS.CATEGORIES_EDIT,
       PERMISSIONS.CATEGORIES_DELETE,
+    ],
+  },
+  discounts: {
+    label: "مدیریت کدهای تخفیف",
+    permissions: [
+      PERMISSIONS.DISCOUNTS_VIEW,
+      PERMISSIONS.DISCOUNTS_MANAGE,
     ],
   },
   interactions: {

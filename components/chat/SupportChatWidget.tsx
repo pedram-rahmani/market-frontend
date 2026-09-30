@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { createPortal } from "react-dom";
+import { usePathname } from "next/navigation";
 import ChatToggleButton from "./ChatToggleButton";
 import ChatBox from "./ChatBox";
 import { useAuth } from "@/store/hooks/useAuth";
@@ -9,6 +10,7 @@ import axiosInstance from "@/lib/axiosInstance";
 
 export default function SupportChatWidget() {
   const { user, isLoggedIn } = useAuth();
+  const pathname = usePathname(); // ۲. گرفتن مسیر فعلی صفحه
   const [isChatOpen, setIsChatOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   const [conversationId, setConversationId] = useState<number | null>(null);
@@ -30,7 +32,7 @@ export default function SupportChatWidget() {
       });
   }, [isLoggedIn]);
 
-  if (!isLoggedIn) return null;
+  if (!isLoggedIn || pathname === "/login" || pathname === "/register") return null;
 
   const isAdminOrStaff = user?.role === "admin" || user?.role === "co-admin";
 

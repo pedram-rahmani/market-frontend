@@ -1,6 +1,6 @@
-# Marketplace Frontend
+# Market Frontend
 
-The customer-facing web application for the Marketplace project. It is built with Next.js and TypeScript and communicates with the Laravel REST API in the [market-backend repository](https://github.com/pedram-rahmani/market-backend).
+The customer-facing web application for the Market project. It is built with Next.js and TypeScript and communicates with the Laravel REST API in the [market-backend repository](https://github.com/pedram-rahmani/market-backend).
 
 ## Features
 
@@ -78,7 +78,7 @@ The frontend expects the Laravel API to be available at `NEXT_PUBLIC_API_URL`. S
 
 ## Live Demo
 
-- [Open the Marketplace website](https://pashm-store.ir)
+- [Open the Market website](https://pashm-store.ir)
 - [Backend API](https://api.pashm-store.ir)
 
 ## Related documentation
