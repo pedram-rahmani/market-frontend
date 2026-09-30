@@ -38,11 +38,16 @@ export function getEcho(): Echo<"pusher"> | null {
     broadcaster: "pusher",
     key: pusherKey,
     cluster: process.env.NEXT_PUBLIC_PUSHER_APP_CLUSTER || "mt1",
+    
+    // تنظیمات زیر برای استفاده مستقیم از سرویس Pusher کامنت شدند (چون پویشر به wsHost اختصاصی نیاز ندارد)
+    /*
     wsHost: isProduction ? "api.pashm-store.ir" : "localhost",
     wsPort: isProduction ? 443 : 8080,
     wssPort: isProduction ? 443 : 8080,
-    forceTLS: isProduction,
     enabledTransports: ["ws", "wss"],
+    */
+
+    forceTLS: isProduction,
     authorizer: (channel: { name: string }) => ({
       authorize: (socketId: string, callback: (error: Error | null, data: ChannelAuthData | null) => void) => {
         axiosInstance

@@ -75,7 +75,7 @@ export default function AdminChatDetails({
         className="flex h-full w-full flex-col bg-white dark:bg-dark-900 sm:h-144 sm:max-w-xl sm:rounded-3xl sm:shadow-2xl"
       >
         {/* Modal Header */}
-        <div className="flex items-center justify-between gap-3 border-b border-gray-100! p-4 dark:border-white/10">
+        <div className="flex items-center justify-between gap-3 border-b border-gray-100 p-4 dark:border-white/10">
           <div className="min-w-0">
             <p className="truncate text-sm font-bold text-gray-800 dark:text-white">
               {conversationInfo?.user
