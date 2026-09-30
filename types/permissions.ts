@@ -47,6 +47,7 @@ export const PERMISSIONS = {
   FINANCIAL_REPORTS: "financial.reports",
 
   // System Settings
+  SETTINGS_VIEW: "settings.view",
   SETTINGS_EDIT: "settings.edit",
   NOTIFICATIONS_MANAGE: "notifications.manage",
 } as const;
@@ -102,6 +103,7 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   [PERMISSIONS.FINANCIAL_REPORTS]: "مشاهده گزارشات مالی و درآمد",
 
   // Settings Labels
+  [PERMISSIONS.SETTINGS_VIEW]: "مشاهده تنظیمات سایت",
   [PERMISSIONS.SETTINGS_EDIT]: "تغییر تنظیمات سایت",
 
   // Notifications Labels
@@ -180,7 +182,7 @@ export const PERMISSION_GROUPS = {
   },
   settings: {
     label: "تنظیمات سایت",
-    permissions: [PERMISSIONS.SETTINGS_EDIT],
+    permissions: [PERMISSIONS.SETTINGS_VIEW, PERMISSIONS.SETTINGS_EDIT],
   },
   notifications: {
     label: "مدیریت پیام‌ها",

@@ -45,7 +45,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/coupon-management",
     label: "مدیریت کدهای تخفیف",
-    permission: "orders.edit",
+    permission: "discounts.view",
     typeKey: "coupon-management",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
@@ -101,6 +101,7 @@ export const getSideBarItems = (notificationCounts: Record<string, number>): Sid
   {
     link: "/my-account/notifications",
     label: "پیام‌ها",
+    permission: "notifications.view",
     typeKey: "notifications",
     icon: (
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5">
